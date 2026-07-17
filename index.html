@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sistema Financiero · ACIF</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#2C3E50; --slate:#34495E; --dark:#1A252F; --ink:#1B2631; --muted:#7B8794;
+  --line:#E4E8EC; --bg:#F4F6F8; --card:#FFFFFF; --cardline:#EDF0F3;
+  --green:#1E8449; --green-bg:#E8F6EF; --red:#C0392B; --red-bg:#FDECEA;
+  --amber:#B9770E; --amber-bg:#FCF3E3; --gold:#C9A227; --blue:#2471A3;
+  --shadow:0 1px 2px rgba(20,30,45,.06),0 8px 24px rgba(20,30,45,.06);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+.tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+input,select{font-family:inherit;font-size:14px}
+.app{display:flex;min-height:100vh}
+
+/* SIDEBAR */
+.side{width:236px;background:var(--navy);color:#DDE4EA;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:20}
+.brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
+.brand h1{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:#fff;letter-spacing:.2px}
+.brand span{font-size:11px;color:#8FA0AF;letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
+.nav{padding:12px 12px;flex:1;overflow-y:auto}
+.nav a{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:9px;color:#B7C4CF;font-weight:500;font-size:13.5px;margin-bottom:2px;transition:.15s;text-decoration:none}
+.nav a .ic{width:17px;text-align:center;opacity:.85}
+.nav a:hover{background:rgba(255,255,255,.06);color:#fff}
+.nav a.active{background:var(--gold);color:var(--dark);font-weight:700}
+.nav a.active .ic{opacity:1}
+.side-foot{padding:14px 18px;font-size:11px;color:#7A8895;border-top:1px solid rgba(255,255,255,.08)}
+.side-foot b{color:#AEB9C4}
+
+/* MAIN */
+.main{margin-left:236px;flex:1;min-width:0}
+.topbar{background:var(--card);border-bottom:1px solid var(--line);padding:16px 30px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
+.topbar h2{font-size:17px;font-weight:700;color:var(--navy)}
+.topbar .sub{font-size:12px;color:var(--muted);margin-top:1px}
+.content{padding:26px 30px 60px;max-width:1240px}
+.hidden{display:none!important}
+
+/* CARDS */
+.grid{display:grid;gap:16px}
+.card{background:var(--card);border:1px solid var(--cardline);border-radius:14px;box-shadow:var(--shadow)}
+.card-pad{padding:20px 22px}
+.card h3{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:700;margin-bottom:14px}
+
+/* KPI */
+.kpis{grid-template-columns:repeat(4,1fr)}
+.kpi{padding:18px 20px}
+.kpi .lab{font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700}
+.kpi .val{font-family:'Fraunces',serif;font-size:27px;font-weight:600;margin-top:7px;letter-spacing:-.3px}
+.kpi .val.big{font-size:30px}
+.kpi .meta{font-size:12px;color:var(--muted);margin-top:4px}
+.pos{color:var(--green)} .neg{color:var(--red)} .amb{color:var(--amber)}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.pill.g{background:var(--green-bg);color:var(--green)} .pill.r{background:var(--red-bg);color:var(--red)} .pill.a{background:var(--amber-bg);color:var(--amber)}
+
+/* TABLES */
+table{width:100%;border-collapse:collapse}
+th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;text-align:left;padding:9px 12px;border-bottom:1.5px solid var(--line)}
+td{padding:10px 12px;border-bottom:1px solid var(--cardline);font-size:13px}
+tbody tr:hover{background:#FAFBFC}
+th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
+.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.tag.ing{background:var(--green-bg);color:var(--green)} .tag.egr{background:var(--red-bg);color:var(--red)}
+.tag.tra{background:#EAF2F8;color:var(--blue)} .tag.inv{background:#F4ECFB;color:#7D3C98}
+.tag.prog{background:#FEF5E7;color:var(--amber)} .tag.ejec{background:#EAF2EC;color:#4A6B54}
+.wallet-chip{display:inline-flex;align-items:center;gap:6px}
+
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 18px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field.full{grid-column:1/-1}
+label{font-size:12px;font-weight:600;color:var(--slate)}
+input,select{padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);transition:.15s}
+input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(44,62,80,.08)}
+.btn{padding:10px 18px;border-radius:9px;font-weight:700;font-size:13.5px;transition:.15s;display:inline-flex;align-items:center;gap:7px}
+.btn.primary{background:var(--navy);color:#fff}
+.btn.primary:hover{background:var(--dark)}
+.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--slate)}
+.btn.ghost:hover{border-color:var(--navy);color:var(--navy)}
+.btn.gold{background:var(--gold);color:var(--dark)}
+.btn.sm{padding:6px 12px;font-size:12px}
+.btn.danger{color:var(--red)} .btn.danger:hover{background:var(--red-bg)}
+.row-actions{display:flex;gap:6px;justify-content:flex-end}
+.icon-btn{width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px}
+.icon-btn:hover{background:var(--bg);color:var(--navy)}
+
+/* SALDO BARS */
+.saldo-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--cardline)}
+.saldo-row:last-child{border:none}
+.saldo-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;background:var(--bg);flex-shrink:0}
+.saldo-name{flex:1;min-width:0}
+.saldo-name .n{font-weight:600;font-size:13px}
+.saldo-name .t{font-size:11px;color:var(--muted)}
+.saldo-val{font-weight:700;font-variant-numeric:tabular-nums;font-size:14px}
+
+/* PROGRESS */
+.prog-wrap{height:10px;background:var(--line);border-radius:20px;overflow:hidden;margin-top:8px}
+.prog-bar{height:100%;background:linear-gradient(90deg,var(--green),#27AE60);border-radius:20px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+
+/* SIM */
+.sim-out{margin-top:14px;padding:14px 16px;border-radius:11px;font-weight:600;font-size:13.5px;line-height:1.4}
+.sim-out.ok{background:var(--green-bg);color:var(--green)}
+.sim-out.warn{background:var(--amber-bg);color:var(--amber)}
+.sim-out.bad{background:var(--red-bg);color:var(--red)}
+
+/* PROJECTION */
+.proj-scroll{overflow-x:auto}
+.proj table{min-width:900px}
+.proj td.cat{font-weight:500;white-space:nowrap}
+.proj tr.head td{background:#F0F2F5;font-weight:700;color:var(--navy)}
+.proj tr.tot td{background:var(--slate);color:#fff;font-weight:700}
+.proj tr.acc td{background:var(--dark);color:#fff;font-weight:700}
+.proj td.num{font-variant-numeric:tabular-nums}
+.proj td.zero{color:transparent}
+
+/* TABS in config */
+.subtabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid var(--line)}
+.subtabs button{padding:9px 15px;font-size:13px;font-weight:600;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-1px}
+.subtabs button.active{color:var(--navy);border-color:var(--gold)}
+.section-title{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 4px}
+.section-sub{font-size:12.5px;color:var(--muted);margin-bottom:16px}
+
+/* MODAL */
+.modal-bg{position:fixed;inset:0;background:rgba(26,37,47,.5);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal{background:#fff;border-radius:16px;width:100%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}
+.modal-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.modal-head h3{font-size:16px;font-weight:700;color:var(--navy);text-transform:none;letter-spacing:0;margin:0}
+.modal-body{padding:22px 24px}
+.modal-foot{padding:16px 24px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px}
+.empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty .big{font-size:34px;margin-bottom:10px;opacity:.5}
+.mono{font-variant-numeric:tabular-nums}
+.toast{position:fixed;bottom:26px;right:26px;background:var(--dark);color:#fff;padding:13px 20px;border-radius:11px;font-weight:600;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:60;transform:translateY(80px);opacity:0;transition:.35s}
+.toast.show{transform:translateY(0);opacity:1}
+
+.menu-toggle{display:none}
+@media(max-width:900px){
+  .side{transform:translateX(-100%);transition:.3s;width:250px}
+  .side.open{transform:translateX(0)}
+  .main{margin-left:0}
+  .menu-toggle{display:inline-flex}
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .form-grid{grid-template-columns:1fr}
+  .content{padding:18px 16px 60px}
+  .topbar{padding:14px 16px}
+  .two-col{grid-template-columns:1fr!important}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <aside class="side" id="side">
+    <div class="brand">
+      <span>Finanzas Personales</span>
+      <h1>ACIF Cashflow</h1>
+    </div>
+    <nav class="nav" id="nav">
+      <a data-view="dashboard" class="active"><span class="ic">◈</span> Dashboard</a>
+      <a data-view="movimientos"><span class="ic">↹</span> Movimientos</a>
+      <a data-view="proyeccion"><span class="ic">↗</span> Proyección 12M</a>
+      <a data-view="deudas"><span class="ic">▤</span> Deudas y Tarjetas</a>
+      <a data-view="inversiones"><span class="ic">◆</span> Inversiones</a>
+      <a data-view="config"><span class="ic">⚙</span> Configuración</a>
+    </nav>
+    <div class="side-foot">
+      Presupuesto Base Cero<br>Flujo de caja proyectado · <b>12M</b>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <div class="topbar">
+      <div style="display:flex;align-items:center;gap:14px">
+        <button class="icon-btn menu-toggle" onclick="document.getElementById('side').classList.toggle('open')" style="font-size:20px">☰</button>
+        <div>
+          <h2 id="viewTitle">Dashboard financiero</h2>
+          <div class="sub" id="viewSub">Patrimonio, liquidez e indicadores clave</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px">
+        <button class="btn ghost sm" onclick="exportCSV()">⬇ CSV</button>
+        <button class="btn primary sm" onclick="openMov()">+ Movimiento</button>
+      </div>
+    </div>
+    <div class="content" id="content"></div>
+  </main>
+</div>
+
+<div id="modalRoot"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================ ESTADO / DATOS ============================ */
+const LS_KEY = 'acif_finanzas_v1';
+const fmt = (n,dec=2)=> (n<0?'-':'')+'S/ '+Math.abs(+n||0).toLocaleString('es-PE',{minimumFractionDigits:dec,maximumFractionDigits:dec});
+const pct = n => ((+n||0)*100).toFixed(1)+'%';
+const uid = ()=> Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const mesKey = f => (f||'').slice(0,7);
+const nombreMes = ym => { const [y,m]=ym.split('-'); return ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][+m-1]+' '+y.slice(2); };
+
+const DEFAULTS = {
+  carteras:[
+    {id:uid(),nombre:'Efectivo',tipo:'Efectivo',moneda:'PEN',saldoInicial:850,icon:'💵'},
+    {id:uid(),nombre:'Yape',tipo:'Billetera Digital',moneda:'PEN',saldoInicial:1240,icon:'📱'},
+    {id:uid(),nombre:'Plin',tipo:'Billetera Digital',moneda:'PEN',saldoInicial:430,icon:'📲'},
+    {id:uid(),nombre:'BCP Ahorros',tipo:'Cuenta Ahorro',moneda:'PEN',saldoInicial:8600,icon:'🏦'},
+    {id:uid(),nombre:'Interbank Sueldo',tipo:'Cuenta Sueldo',moneda:'PEN',saldoInicial:3200,icon:'🏛️'},
+    {id:uid(),nombre:'Fondo Emergencia',tipo:'Cuenta Ahorro',moneda:'PEN',saldoInicial:6000,icon:'🛟'},
+    {id:uid(),nombre:'Inversión Fondo Mutuo',tipo:'Inversión',moneda:'PEN',saldoInicial:5000,icon:'📈'},
+  ],
+  categorias:[
+    {id:uid(),nombre:'Sueldo',grupo:'Ingreso',clase:'Activo'},
+    {id:uid(),nombre:'Bono / Comisión',grupo:'Ingreso',clase:'Activo'},
+    {id:uid(),nombre:'Ingreso Freelance',grupo:'Ingreso',clase:'Activo'},
+    {id:uid(),nombre:'Rendimiento Inversión',grupo:'Ingreso',clase:'Activo'},
+    {id:uid(),nombre:'Vivienda / Alquiler',grupo:'Egreso',clase:'Necesidad'},
+    {id:uid(),nombre:'Alimentación',grupo:'Egreso',clase:'Necesidad'},
+    {id:uid(),nombre:'Servicios (luz, agua, internet)',grupo:'Egreso',clase:'Necesidad'},
+    {id:uid(),nombre:'Transporte',grupo:'Egreso',clase:'Necesidad'},
+    {id:uid(),nombre:'Salud',grupo:'Egreso',clase:'Necesidad'},
+    {id:uid(),nombre:'Educación',grupo:'Egreso',clase:'Necesidad'},
+    {id:uid(),nombre:'Pago Tarjeta / Deuda',grupo:'Egreso',clase:'Pasivo'},
+    {id:uid(),nombre:'Restaurantes / Delivery',grupo:'Egreso',clase:'Deseo'},
+    {id:uid(),nombre:'Compras / Ropa',grupo:'Egreso',clase:'Deseo'},
+    {id:uid(),nombre:'Suscripciones',grupo:'Egreso',clase:'Deseo'},
+    {id:uid(),nombre:'Viajes',grupo:'Egreso',clase:'Deseo'},
+    {id:uid(),nombre:'Ocio / Entretenimiento',grupo:'Egreso',clase:'Deseo'},
+    {id:uid(),nombre:'Provisión Anual',grupo:'Egreso',clase:'Necesidad'},
+    {id:uid(),nombre:'Aporte Inversión',grupo:'Inversión',clase:'Activo'},
+    {id:uid(),nombre:'Transferencia interna',grupo:'Transferencia',clase:'—'},
+    {id:uid(),nombre:'Otros Egresos',grupo:'Egreso',clase:'Deseo'},
+  ],
+  tiposMov:['Ingreso','Egreso','Transferencia','Inversión'],
+  tiposGasto:['Costo Fijo / Necesidad','Costo Variable / Deseo','Deuda / Pasivo','Ahorro / Inversión'],
+  medios:['Efectivo','Yape','Plin','Tarjeta Débito','Tarjeta Crédito','Transferencia','Débito automático'],
+  estados:['Ejecutado','Programado'],
+  divisas:[
+    {id:uid(),cod:'PEN',nombre:'Sol Peruano',tc:1},
+    {id:uid(),cod:'USD',nombre:'Dólar EEUU',tc:3.75},
+    {id:uid(),cod:'EUR',nombre:'Euro',tc:4.05},
+    {id:uid(),cod:'CLP',nombre:'Peso Chileno',tc:0.0040},
+  ],
+  tarjetas:[
+    {id:uid(),nombre:'Tarjeta BCP Visa',banco:'BCP',linea:6000,cierre:25,pago:15,tasa:0.65,moneda:'PEN'},
+    {id:uid(),nombre:'Tarjeta Interbank MC',banco:'Interbank',linea:4500,cierre:5,pago:20,tasa:0.72,moneda:'PEN'},
+  ],
+  prestamos:[
+    {id:uid(),nombre:'Crédito Vehicular',entidad:'BBVA',monto:28000,tasa:0.145,cuotas:36,inicio:'2025-09-01'},
+    {id:uid(),nombre:'Préstamo Personal',entidad:'Interbank',monto:9000,tasa:0.28,cuotas:18,inicio:'2026-01-15'},
+  ],
+  inversiones:[
+    {id:uid(),nombre:'Fondo Mutuo BCP',invertido:5000,valorActual:5420,rendimiento:180},
+    {id:uid(),nombre:'Depósito a Plazo IBK',invertido:8000,valorActual:8360,rendimiento:0},
+    {id:uid(),nombre:'Acciones BVL',invertido:3000,valorActual:2740,rendimiento:60},
+  ],
+  provisiones:[
+    {id:uid(),concepto:'Seguro Vehicular',anual:1400,meses:8},
+    {id:uid(),concepto:'Impuesto Predial',anual:600,meses:5},
+    {id:uid(),concepto:'Matrícula anual',anual:2400,meses:4},
+  ],
+  movimientos:[
+    m('2026-01-02','Sueldo enero','Ingreso','Sueldo','Interbank Sueldo','','Transferencia','PEN',4200,'Ejecutado'),
+    m('2026-01-03','Alquiler depto','Egreso','Vivienda / Alquiler','Interbank Sueldo','','Transferencia','PEN',1300,'Ejecutado'),
+    m('2026-01-05','Compras supermercado','Egreso','Alimentación','Yape','','Yape','PEN',520,'Ejecutado'),
+    m('2026-01-07','Combustible','Egreso','Transporte','Tarjeta BCP Visa','','Tarjeta Crédito','PEN',180,'Ejecutado'),
+    m('2026-01-10','Internet + cable','Egreso','Servicios (luz, agua, internet)','BCP Ahorros','','Débito automático','PEN',149,'Ejecutado'),
+    m('2026-01-12','Cena restaurante','Egreso','Restaurantes / Delivery','Tarjeta BCP Visa','','Tarjeta Crédito','PEN',145,'Ejecutado'),
+    m('2026-01-15','Aporte fondo mutuo','Inversión','Aporte Inversión','BCP Ahorros','','Transferencia','PEN',600,'Ejecutado'),
+    m('2026-01-18','Freelance diseño','Ingreso','Ingreso Freelance','Yape','','Yape','PEN',850,'Ejecutado'),
+    m('2026-01-20','Suscripción software','Egreso','Suscripciones','Tarjeta Interbank MC','','Tarjeta Crédito','USD',29,'Ejecutado'),
+    m('2026-01-25','Pago tarjeta BCP','Transferencia','Pago Tarjeta / Deuda','BCP Ahorros','Tarjeta BCP Visa','Transferencia','PEN',470,'Ejecutado'),
+    m('2026-02-02','Sueldo febrero','Ingreso','Sueldo','Interbank Sueldo','','Transferencia','PEN',4200,'Ejecutado'),
+    m('2026-02-03','Alquiler depto','Egreso','Vivienda / Alquiler','Interbank Sueldo','','Transferencia','PEN',1300,'Ejecutado'),
+    m('2026-02-06','Compras mes','Egreso','Alimentación','Yape','','Yape','PEN',610,'Ejecutado'),
+    m('2026-02-14','Regalo','Egreso','Compras / Ropa','Tarjeta BCP Visa','','Tarjeta Crédito','PEN',220,'Ejecutado'),
+    m('2026-02-28','Bono trimestral','Ingreso','Bono / Comisión','Interbank Sueldo','','Transferencia','PEN',1500,'Ejecutado'),
+    m('2026-03-02','Sueldo marzo','Ingreso','Sueldo','Interbank Sueldo','','Transferencia','PEN',4200,'Programado'),
+    m('2026-03-03','Alquiler depto','Egreso','Vivienda / Alquiler','Interbank Sueldo','','Transferencia','PEN',1300,'Programado'),
+    m('2026-03-10','Matrícula curso','Egreso','Educación','BCP Ahorros','','Transferencia','PEN',480,'Programado'),
+    m('2026-04-02','Sueldo abril','Ingreso','Sueldo','Interbank Sueldo','','Transferencia','PEN',4200,'Programado'),
+    m('2026-04-15','Viaje feriado','Egreso','Viajes','Fondo Emergencia','','Transferencia','PEN',1200,'Programado'),
+    m('2026-06-02','Sueldo junio','Ingreso','Sueldo','Interbank Sueldo','','Transferencia','PEN',4200,'Programado'),
+    m('2026-06-20','Seguro auto (anual)','Egreso','Provisión Anual','BCP Ahorros','','Transferencia','PEN',1400,'Programado'),
+  ],
+  fondoMesesMeta:6,
+  projStart:'2026-01',
+};
+function m(fecha,desc,tipo,cat,orig,dest,medio,mon,monto,est){
+  return {id:uid(),fecha,desc,tipo,categoria:cat,ctaOrigen:orig,ctaDestino:dest,medio,moneda:mon,monto,estado:est};
+}
+
+let DB;
+function load(){
+  try{ const raw=localStorage.getItem(LS_KEY); DB = raw?JSON.parse(raw):structuredClone(DEFAULTS); }
+  catch(e){ DB=structuredClone(DEFAULTS); }
+}
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(DB)); }catch(e){} }
+function resetDB(){ if(confirm('¿Restaurar los datos de ejemplo? Se perderán tus cambios.')){ DB=structuredClone(DEFAULTS); save(); render(); toast('Datos restaurados'); } }
+
+/* ============================ CÁLCULOS ============================ */
+const tc = cod => { const d=DB.divisas.find(x=>x.cod===cod); return d?d.tc:1; };
+const base = mv => (+mv.monto||0)*tc(mv.moneda);
+const ejec = mv => mv.estado==='Ejecutado';
+
+function saldoCartera(nombre, soloEjecutado=true){
+  const c=DB.carteras.find(x=>x.nombre===nombre); if(!c) return 0;
+  let s=+c.saldoInicial||0;
+  for(const mv of DB.movimientos){
+    if(soloEjecutado && !ejec(mv)) continue;
+    if(mv.ctaOrigen===nombre){
+      if(mv.tipo==='Ingreso') s+=base(mv);
+      else if(mv.tipo==='Egreso'||mv.tipo==='Inversión'||mv.tipo==='Transferencia') s-=base(mv);
+    }
+    if(mv.ctaDestino===nombre && mv.tipo==='Transferencia') s+=base(mv);
+  }
+  return s;
+}
+const totalLiquido = ()=> DB.carteras.reduce((a,c)=>a+saldoCartera(c.nombre),0);
+
+function consumoTarjeta(nombre){
+  let s=0;
+  for(const mv of DB.movimientos){ if(!ejec(mv)) continue;
+    if(mv.ctaOrigen===nombre && mv.tipo==='Egreso') s+=base(mv);
+    if(mv.ctaDestino===nombre && mv.tipo==='Transferencia') s-=base(mv);
+  }
+  return s;
+}
+const deudaTarjetas = ()=> DB.tarjetas.reduce((a,t)=>a+Math.max(0,consumoTarjeta(t.nombre)),0);
+
+function saldoPrestamo(p){
+  const i=(+p.tasa)/12, n=+p.cuotas;
+  const cuota = i>0 ? p.monto*i/(1-Math.pow(1+i,-n)) : p.monto/n;
+  const meses = mesesTranscurridos(p.inicio);
+  const rest = Math.max(0, n-Math.min(n,meses));
+  const saldo = i>0 ? cuota*(1-Math.pow(1+i,-rest))/i : cuota*rest;
+  return {cuota,pagadas:Math.min(n,meses),rest,saldo};
+}
+function mesesTranscurridos(fecha){
+  if(!fecha) return 0;
+  const d=new Date(fecha), now=new Date();
+  return Math.max(0,(now.getFullYear()-d.getFullYear())*12+(now.getMonth()-d.getMonth()));
+}
+const saldoPrestamos = ()=> DB.prestamos.reduce((a,p)=>a+saldoPrestamo(p).saldo,0);
+
+function sumaMov(tipo, estado){
+  return DB.movimientos.filter(x=>x.tipo===tipo && (!estado||x.estado===estado)).reduce((a,x)=>a+base(x),0);
+}
+function kpis(){
+  const ing=sumaMov('Ingreso','Ejecutado'), egr=sumaMov('Egreso','Ejecutado');
+  const dt=deudaTarjetas(), sp=saldoPrestamos(), liq=totalLiquido();
+  const invVal=DB.inversiones.reduce((a,x)=>a+(+x.valorActual||0),0);
+  return {
+    ing,egr, tasaAhorro: ing?(ing-egr)/ing:0,
+    deudaTarjetas:dt, saldoPrestamos:sp, liquido:liq,
+    patrimonio: liq-dt-sp,
+    ratio: (liq+invVal)?(dt+sp)/(liq+invVal):0,
+  };
+}
+function egresoMensualProm(){
+  const meses=new Set(DB.movimientos.filter(x=>x.tipo==='Egreso'&&ejec(x)).map(x=>mesKey(x.fecha)));
+  const egr=sumaMov('Egreso','Ejecutado');
+  return meses.size?egr/meses.size:0;
+}
+
+/* ============================ RENDER ============================ */
+const $ = id => document.getElementById(id);
+const content = $('content');
+let currentView='dashboard';
+let configTab='carteras';
+
+function render(){
+  save();
+  const v=currentView;
+  const titles={dashboard:['Dashboard financiero','Patrimonio, liquidez e indicadores clave'],
+    movimientos:['Movimientos','Historial y registro de transacciones'],
+    proyeccion:['Proyección a 12 meses','Flujo de caja proyectado mes a mes'],
+    deudas:['Deudas y tarjetas','Consumo, fechas de pago y amortización'],
+    inversiones:['Inversiones y provisiones','ROI y aprovisionamiento de gastos anuales'],
+    config:['Configuración','Carteras, categorías, tarjetas, préstamos y divisas']};
+  $('viewTitle').textContent=titles[v][0]; $('viewSub').textContent=titles[v][1];
+  document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('active',a.dataset.view===v));
+  ({dashboard:renderDashboard,movimientos:renderMovimientos,proyeccion:renderProyeccion,
+    deudas:renderDeudas,inversiones:renderInversiones,config:renderConfig}[v])();
+}
+
+/* --------- DASHBOARD --------- */
+function renderDashboard(){
+  const k=kpis();
+  const meta=egresoMensualProm()*DB.fondoMesesMeta;
+  const fondoAct=saldoCartera('Fondo Emergencia');
+  const prog=meta?Math.min(fondoAct/meta,1):0;
+  const ratioPill = k.ratio>0.5?'r':k.ratio>0.35?'a':'g';
+  const ahorroPill = k.tasaAhorro>=0.2?'g':k.tasaAhorro>=0.1?'a':'r';
+
+  content.innerHTML=`
+  <div class="grid kpis" style="margin-bottom:16px">
+    <div class="card kpi">
+      <div class="lab">Patrimonio Neto Líquido</div>
+      <div class="val big ${k.patrimonio>=0?'':'neg'}">${fmt(k.patrimonio)}</div>
+      <div class="meta">Líquido ${fmt(k.liquido)} − deuda ${fmt(k.deudaTarjetas+k.saldoPrestamos)}</div>
+    </div>
+    <div class="card kpi">
+      <div class="lab">Tasa de Ahorro</div>
+      <div class="val">${pct(k.tasaAhorro)} <span class="pill ${ahorroPill}" style="font-size:11px;vertical-align:middle">${k.tasaAhorro>=0.2?'Saludable':k.tasaAhorro>=0.1?'Ajustada':'Baja'}</span></div>
+      <div class="meta">Ingresos ${fmt(k.ing)} · Egresos ${fmt(k.egr)}</div>
+    </div>
+    <div class="card kpi">
+      <div class="lab">Ratio de Endeudamiento</div>
+      <div class="val">${pct(k.ratio)} <span class="pill ${ratioPill}" style="font-size:11px;vertical-align:middle">${k.ratio>0.5?'Alto':k.ratio>0.35?'Medio':'Sano'}</span></div>
+      <div class="meta">Deuda ${fmt(k.deudaTarjetas+k.saldoPrestamos)} / activos</div>
+    </div>
+    <div class="card kpi">
+      <div class="lab">Deuda Total</div>
+      <div class="val neg">${fmt(k.deudaTarjetas+k.saldoPrestamos)}</div>
+      <div class="meta">Tarjetas ${fmt(k.deudaTarjetas)} · Préstamos ${fmt(k.saldoPrestamos)}</div>
+    </div>
+  </div>
+
+  <div class="grid two-col" style="grid-template-columns:1.15fr .85fr;margin-bottom:16px">
+    <div class="card card-pad">
+      <h3>Saldos por cartera</h3>
+      <div>${DB.carteras.map(c=>{const s=saldoCartera(c.nombre);return `
+        <div class="saldo-row">
+          <div class="saldo-ic">${c.icon||'💼'}</div>
+          <div class="saldo-name"><div class="n">${esc(c.nombre)}</div><div class="t">${esc(c.tipo)} · ${c.moneda}</div></div>
+          <div class="saldo-val ${s<0?'neg':''}">${fmt(s)}</div>
+        </div>`;}).join('')}
+        <div class="saldo-row" style="border-top:2px solid var(--line);margin-top:4px">
+          <div class="saldo-ic" style="background:var(--navy);color:#fff">Σ</div>
+          <div class="saldo-name"><div class="n">Total líquido</div></div>
+          <div class="saldo-val">${fmt(k.liquido)}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-pad">
+      <h3>Fondo de Emergencia</h3>
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-family:'Fraunces',serif;font-size:26px;font-weight:600">${fmt(fondoAct)}</span>
+        <span class="meta" style="color:var(--muted);font-size:12px">meta ${fmt(meta)}</span>
+      </div>
+      <div class="prog-wrap"><div class="prog-bar" style="width:${(prog*100).toFixed(1)}%"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:7px;font-size:12px;color:var(--muted)">
+        <span>${pct(prog)} cubierto</span><span>${DB.fondoMesesMeta} meses de egresos</span>
+      </div>
+      <hr style="border:none;border-top:1px solid var(--cardline);margin:18px 0">
+      <h3>Asesor de simulación de compra</h3>
+      <div class="field" style="margin-bottom:10px">
+        <label>Monto de la compra</label>
+        <input id="simMonto" type="number" value="1500" oninput="runSim()">
+      </div>
+      <div class="field" style="margin-bottom:10px">
+        <label>Cuenta de origen</label>
+        <select id="simCta" onchange="runSim()">${DB.carteras.map(c=>`<option ${c.nombre==='BCP Ahorros'?'selected':''}>${esc(c.nombre)}</option>`).join('')}</select>
+      </div>
+      <div id="simOut"></div>
+    </div>
+  </div>
+
+  <div class="card card-pad">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <h3 style="margin:0">Últimos movimientos</h3>
+      <button class="btn ghost sm" onclick="go('movimientos')">Ver todos →</button>
+    </div>
+    ${tablaMovimientos(DB.movimientos.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha)).slice(0,7),false)}
+  </div>`;
+  runSim();
+}
+
+function runSim(){
+  const monto=+($('simMonto')?.value||0);
+  const cta=$('simCta')?.value;
+  if(!cta) return;
+  const saldo=saldoCartera(cta);
+  const result=saldo-monto;
+  const meta=egresoMensualProm()*DB.fondoMesesMeta;
+  const critico=meta*0.5;
+  // compromisos programados que salen de esta cuenta
+  const prog=DB.movimientos.filter(x=>x.ctaOrigen===cta&&x.tipo==='Egreso'&&x.estado==='Programado').reduce((a,x)=>a+base(x),0);
+  let cls,msg;
+  if(result<0){cls='bad';msg=`⛔ RECHAZADO · La compra deja <b>${esc(cta)}</b> en saldo negativo (${fmt(result)}).`;}
+  else if(result<critico){cls='warn';msg=`⚠ PRECAUCIÓN · Quedarías con ${fmt(result)}, por debajo de tu fondo crítico (${fmt(critico)}).`;}
+  else if((result-prog)<critico){cls='warn';msg=`⚠ REVISAR · Con tus egresos programados (${fmt(prog)}) quedarías bajo el fondo crítico.`;}
+  else{cls='ok';msg=`✅ APROBADO · Saldo tras la compra: ${fmt(result)}. Tu liquidez y fondo quedan protegidos.`;}
+  $('simOut').innerHTML=`<div class="sim-out ${cls}">${msg}</div>`;
+}
+
+/* --------- MOVIMIENTOS --------- */
+let filtroTipo='', filtroEstado='';
+function renderMovimientos(){
+  let list=DB.movimientos.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  if(filtroTipo) list=list.filter(x=>x.tipo===filtroTipo);
+  if(filtroEstado) list=list.filter(x=>x.estado===filtroEstado);
+  content.innerHTML=`
+  <div class="card card-pad" style="margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+    <button class="btn primary sm" onclick="openMov()">+ Nuevo movimiento</button>
+    <select onchange="filtroTipo=this.value;render()" style="max-width:170px">
+      <option value="">Todos los tipos</option>${DB.tiposMov.map(t=>`<option ${filtroTipo===t?'selected':''}>${t}</option>`).join('')}
+    </select>
+    <select onchange="filtroEstado=this.value;render()" style="max-width:170px">
+      <option value="">Todos los estados</option>${DB.estados.map(t=>`<option ${filtroEstado===t?'selected':''}>${t}</option>`).join('')}
+    </select>
+    <span style="margin-left:auto;color:var(--muted);font-size:12.5px">${list.length} registros</span>
+  </div>
+  <div class="card card-pad">${tablaMovimientos(list,true)}</div>`;
+}
+function tablaMovimientos(list,acciones){
+  if(!list.length) return `<div class="empty"><div class="big">◎</div>Sin movimientos todavía. Agrega el primero con “+ Movimiento”.</div>`;
+  const tagCls={Ingreso:'ing',Egreso:'egr',Transferencia:'tra','Inversión':'inv'};
+  return `<table><thead><tr>
+    <th>Fecha</th><th>Descripción</th><th>Categoría</th><th>Cuenta</th><th>Medio</th><th>Tipo</th><th class="num">Monto</th><th>Estado</th>${acciones?'<th></th>':''}
+    </tr></thead><tbody>${list.map(mv=>{
+      const neg=mv.tipo==='Egreso'||mv.tipo==='Inversión';
+      return `<tr>
+        <td class="mono">${mv.fecha}</td>
+        <td>${esc(mv.desc)}</td>
+        <td>${esc(mv.categoria)}</td>
+        <td>${esc(mv.ctaOrigen)}${mv.ctaDestino?' → '+esc(mv.ctaDestino):''}</td>
+        <td style="color:var(--muted)">${esc(mv.medio||'')}</td>
+        <td><span class="tag ${tagCls[mv.tipo]}">${mv.tipo}</span></td>
+        <td class="num ${neg?'neg':(mv.tipo==='Ingreso'?'pos':'')}">${neg?'−':''}${fmt(base(mv))}${mv.moneda!=='PEN'?`<div style="font-size:10px;color:var(--muted)">${mv.monto} ${mv.moneda}</div>`:''}</td>
+        <td><span class="tag ${mv.estado==='Ejecutado'?'ejec':'prog'}">${mv.estado}</span></td>
+        ${acciones?`<td><div class="row-actions">
+          <button class="icon-btn" onclick="openMov('${mv.id}')">✎</button>
+          <button class="icon-btn" onclick="delMov('${mv.id}')">✕</button></div></td>`:''}
+      </tr>`;}).join('')}</tbody></table>`;
+}
+function delMov(id){ if(confirm('¿Eliminar este movimiento?')){ DB.movimientos=DB.movimientos.filter(x=>x.id!==id); render(); toast('Movimiento eliminado'); } }
+
+function openMov(id){
+  const mv = id?DB.movimientos.find(x=>x.id===id):{fecha:new Date().toISOString().slice(0,10),tipo:'Egreso',estado:'Ejecutado',moneda:'PEN',ctaDestino:''};
+  const opt=(arr,sel,val)=>arr.map(x=>{const v=val?x[val]:x;return `<option ${v===sel?'selected':''}>${esc(v)}</option>`}).join('');
+  modal(id?'Editar movimiento':'Nuevo movimiento', `
+    <div class="form-grid">
+      <div class="field"><label>Fecha</label><input id="f_fecha" type="date" value="${mv.fecha||''}"></div>
+      <div class="field"><label>Tipo de movimiento</label><select id="f_tipo">${opt(DB.tiposMov,mv.tipo)}</select></div>
+      <div class="field full"><label>Descripción</label><input id="f_desc" value="${esc(mv.desc||'')}" placeholder="Ej. Compras del mes"></div>
+      <div class="field"><label>Categoría</label><select id="f_cat">${opt(DB.categorias,mv.categoria,'nombre')}</select></div>
+      <div class="field"><label>Medio de pago</label><select id="f_medio">${opt(DB.medios,mv.medio)}</select></div>
+      <div class="field"><label>Cuenta origen</label><select id="f_orig">${opt([...DB.carteras.map(c=>c.nombre),...DB.tarjetas.map(t=>t.nombre)],mv.ctaOrigen)}</select></div>
+      <div class="field"><label>Cuenta destino <span style="color:var(--muted);font-weight:400">(transferencias)</span></label><select id="f_dest"><option value=""></option>${opt([...DB.carteras.map(c=>c.nombre),...DB.tarjetas.map(t=>t.nombre)],mv.ctaDestino)}</select></div>
+      <div class="field"><label>Moneda</label><select id="f_mon">${opt(DB.divisas,mv.moneda,'cod')}</select></div>
+      <div class="field"><label>Monto</label><input id="f_monto" type="number" step="0.01" value="${mv.monto||''}"></div>
+      <div class="field"><label>Estado</label><select id="f_est">${opt(DB.estados,mv.estado)}</select></div>
+    </div>`,
+    ()=>{
+      const nm={fecha:$('f_fecha').value,desc:$('f_desc').value,tipo:$('f_tipo').value,categoria:$('f_cat').value,
+        ctaOrigen:$('f_orig').value,ctaDestino:$('f_dest').value,medio:$('f_medio').value,moneda:$('f_mon').value,
+        monto:+$('f_monto').value,estado:$('f_est').value};
+      if(!nm.fecha||!nm.monto){toast('Completa fecha y monto');return false;}
+      if(id){ Object.assign(DB.movimientos.find(x=>x.id===id),nm); } else { DB.movimientos.push({id:uid(),...nm}); }
+      render(); toast(id?'Movimiento actualizado':'Movimiento agregado'); return true;
+    });
+}
+
+/* --------- PROYECCIÓN --------- */
+function renderProyeccion(){
+  const start=DB.projStart;
+  const meses=[]; let [y,mo]=start.split('-').map(Number);
+  for(let i=0;i<12;i++){ meses.push(`${y}-${String(mo).padStart(2,'0')}`); mo++; if(mo>12){mo=1;y++;} }
+  const egCats=DB.categorias.filter(c=>c.grupo==='Egreso').map(c=>c.nombre);
+  const sum=(pred)=>meses.map(mk=>DB.movimientos.filter(x=>mesKey(x.fecha)===mk&&pred(x)).reduce((a,x)=>a+base(x),0));
+  const ingresos=sum(x=>x.tipo==='Ingreso');
+  const egrRows=egCats.map(cat=>({cat,vals:sum(x=>x.tipo==='Egreso'&&x.categoria===cat)}));
+  const totEgr=meses.map((_,i)=>egrRows.reduce((a,r)=>a+r.vals[i],0));
+  const inv=sum(x=>x.tipo==='Inversión');
+  const flujo=meses.map((_,i)=>ingresos[i]-totEgr[i]-inv[i]);
+  const inicial=DB.carteras.reduce((a,c)=>a+(+c.saldoInicial||0),0);
+  const acum=[]; flujo.reduce((p,f,i)=>acum[i]=p+f, inicial);
+  const cell=(v)=> v===0?`<td class="num zero">·</td>`:`<td class="num ${v<0?'neg':''}">${fmt(v,0)}</td>`;
+
+  content.innerHTML=`
+  <div class="card card-pad" style="margin-bottom:16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+    <label style="font-weight:600">Mes de inicio</label>
+    <input type="month" value="${start}" onchange="DB.projStart=this.value;render()" style="max-width:180px">
+    <span style="color:var(--muted);font-size:12.5px;margin-left:auto">Incluye ejecutados y programados · meses sin datos quedan vacíos</span>
+  </div>
+  <div class="card card-pad proj">
+    <div class="proj-scroll"><table>
+      <thead><tr><th>Concepto / Categoría</th>${meses.map(mk=>`<th class="num">${nombreMes(mk)}</th>`).join('')}</tr></thead>
+      <tbody>
+        <tr class="head"><td class="cat">INGRESOS TOTALES</td>${ingresos.map(v=>v===0?`<td class="num zero">·</td>`:`<td class="num pos">${fmt(v,0)}</td>`).join('')}</tr>
+        <tr class="head"><td class="cat">EGRESOS</td>${meses.map(()=>'<td></td>').join('')}</tr>
+        ${egrRows.map(r=>`<tr><td class="cat" style="padding-left:24px;font-weight:400">${esc(r.cat)}</td>${r.vals.map(cell).join('')}</tr>`).join('')}
+        <tr class="head"><td class="cat">TOTAL EGRESOS</td>${totEgr.map(v=>v===0?`<td class="num zero">·</td>`:`<td class="num neg">${fmt(v,0)}</td>`).join('')}</tr>
+        <tr><td class="cat" style="padding-left:24px;font-weight:400">Aportes a inversión</td>${inv.map(cell).join('')}</tr>
+        <tr class="tot"><td class="cat">FLUJO NETO DEL MES</td>${flujo.map(v=>`<td class="num">${v===0?'·':fmt(v,0)}</td>`).join('')}</tr>
+        <tr class="acc"><td class="cat">SALDO ACUMULADO</td>${acum.map(v=>`<td class="num">${fmt(v,0)}</td>`).join('')}</tr>
+      </tbody>
+    </table></div>
+  </div>`;
+}
+
+/* --------- DEUDAS --------- */
+function renderDeudas(){
+  content.innerHTML=`
+  <div class="card card-pad" style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <h3 style="margin:0">Tarjetas de crédito</h3>
+      <button class="btn ghost sm" onclick="openTarjeta()">+ Tarjeta</button>
+    </div>
+    <table><thead><tr><th>Tarjeta</th><th class="num">Línea</th><th class="num">Consumo</th><th class="num">Disponible</th><th class="num">Uso</th><th class="num">Cierre</th><th class="num">Días</th><th></th></tr></thead>
+    <tbody>${DB.tarjetas.map(t=>{
+      const cons=Math.max(0,consumoTarjeta(t.nombre)), disp=t.linea-cons, uso=t.linea?cons/t.linea:0;
+      const dias=diasParaCierre(t.cierre);
+      const upill=uso>0.7?'r':uso>0.4?'a':'g';
+      return `<tr>
+        <td><b>${esc(t.nombre)}</b><div style="font-size:11px;color:var(--muted)">${esc(t.banco)}</div></td>
+        <td class="num">${fmt(t.linea,0)}</td><td class="num neg">${fmt(cons)}</td>
+        <td class="num pos">${fmt(disp)}</td>
+        <td class="num"><span class="pill ${upill}">${pct(uso)}</span></td>
+        <td class="num">día ${t.cierre}</td><td class="num">${dias} d</td>
+        <td><div class="row-actions"><button class="icon-btn" onclick="openTarjeta('${t.id}')">✎</button><button class="icon-btn" onclick="delItem('tarjetas','${t.id}')">✕</button></div></td>
+      </tr>`;}).join('')||`<tr><td colspan="8" class="empty">Sin tarjetas</td></tr>`}</tbody></table>
+  </div>
+
+  <div class="card card-pad">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <h3 style="margin:0">Amortización de préstamos (método francés)</h3>
+      <button class="btn ghost sm" onclick="openPrestamo()">+ Préstamo</button>
+    </div>
+    <table><thead><tr><th>Préstamo</th><th class="num">Cuota</th><th class="num">Pagadas</th><th class="num">Restantes</th><th class="num">Saldo pendiente</th><th></th></tr></thead>
+    <tbody>${DB.prestamos.map(p=>{const s=saldoPrestamo(p);return `<tr>
+      <td><b>${esc(p.nombre)}</b><div style="font-size:11px;color:var(--muted)">${esc(p.entidad)} · ${pct(p.tasa)} anual</div></td>
+      <td class="num">${fmt(s.cuota)}</td><td class="num">${s.pagadas} / ${p.cuotas}</td>
+      <td class="num">${s.rest}</td><td class="num neg">${fmt(s.saldo)}</td>
+      <td><div class="row-actions"><button class="icon-btn" onclick="openPrestamo('${p.id}')">✎</button><button class="icon-btn" onclick="delItem('prestamos','${p.id}')">✕</button></div></td>
+    </tr>`;}).join('')||`<tr><td colspan="6" class="empty">Sin préstamos</td></tr>`}
+    <tr class="tot" style="background:var(--slate)"><td colspan="4" style="color:#fff;font-weight:700">SALDO TOTAL PRÉSTAMOS</td><td class="num" style="color:#fff;font-weight:700">${fmt(saldoPrestamos())}</td><td></td></tr>
+    </tbody></table>
+  </div>`;
+}
+function diasParaCierre(cierre){
+  const hoy=new Date().getDate(); const finMes=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
+  return hoy<=cierre?cierre-hoy:cierre+finMes-hoy;
+}
+
+/* --------- INVERSIONES --------- */
+function renderInversiones(){
+  const totInv=DB.inversiones.reduce((a,x)=>a+(+x.invertido||0),0);
+  const totVal=DB.inversiones.reduce((a,x)=>a+(+x.valorActual||0),0);
+  const totGan=DB.inversiones.reduce((a,x)=>a+((+x.valorActual||0)+(+x.rendimiento||0)-(+x.invertido||0)),0);
+  const roiTot=totInv?totGan/totInv:0;
+  const totProvM=DB.provisiones.reduce((a,p)=>a+(+p.anual||0)/12,0);
+  content.innerHTML=`
+  <div class="card card-pad" style="margin-bottom:16px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <h3 style="margin:0">Registro de activos · ROI</h3>
+      <button class="btn ghost sm" onclick="openInv()">+ Activo</button>
+    </div>
+    <table><thead><tr><th>Activo</th><th class="num">Invertido</th><th class="num">Valor actual</th><th class="num">Rendim.</th><th class="num">Ganancia</th><th class="num">ROI</th><th></th></tr></thead>
+    <tbody>${DB.inversiones.map(x=>{const gan=(+x.valorActual||0)+(+x.rendimiento||0)-(+x.invertido||0);const roi=x.invertido?gan/x.invertido:0;return `<tr>
+      <td><b>${esc(x.nombre)}</b></td><td class="num">${fmt(x.invertido)}</td><td class="num">${fmt(x.valorActual)}</td>
+      <td class="num">${fmt(x.rendimiento)}</td><td class="num ${gan<0?'neg':'pos'}">${fmt(gan)}</td>
+      <td class="num"><span class="pill ${roi<0?'r':'g'}">${pct(roi)}</span></td>
+      <td><div class="row-actions"><button class="icon-btn" onclick="openInv('${x.id}')">✎</button><button class="icon-btn" onclick="delItem('inversiones','${x.id}')">✕</button></div></td>
+    </tr>`;}).join('')}
+    <tr class="tot" style="background:var(--slate)"><td style="color:#fff;font-weight:700">TOTALES</td><td class="num" style="color:#fff;font-weight:700">${fmt(totInv)}</td><td class="num" style="color:#fff;font-weight:700">${fmt(totVal)}</td><td></td><td class="num" style="color:#fff;font-weight:700">${fmt(totGan)}</td><td class="num" style="color:#fff;font-weight:700">${pct(roiTot)}</td><td></td></tr>
+    </tbody></table>
+  </div>
+  <div class="card card-pad">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <h3 style="margin:0">Provisiones · fracciona gastos anuales</h3>
+      <button class="btn ghost sm" onclick="openProv()">+ Provisión</button>
+    </div>
+    <table><thead><tr><th>Concepto</th><th class="num">Monto anual</th><th class="num">Provisión mensual</th><th class="num">Meses</th><th class="num">Acumulado</th><th></th></tr></thead>
+    <tbody>${DB.provisiones.map(p=>{const men=(+p.anual||0)/12;return `<tr>
+      <td><b>${esc(p.concepto)}</b></td><td class="num">${fmt(p.anual)}</td><td class="num">${fmt(men)}</td>
+      <td class="num">${p.meses}</td><td class="num pos">${fmt(men*p.meses)}</td>
+      <td><div class="row-actions"><button class="icon-btn" onclick="openProv('${p.id}')">✎</button><button class="icon-btn" onclick="delItem('provisiones','${p.id}')">✕</button></div></td>
+    </tr>`;}).join('')}
+    <tr class="tot" style="background:var(--slate)"><td colspan="2" style="color:#fff;font-weight:700">TOTAL PROVISIÓN MENSUAL</td><td class="num" style="color:#fff;font-weight:700">${fmt(totProvM)}</td><td colspan="3"></td></tr>
+    </tbody></table>
+  </div>`;
+}
+
+/* --------- CONFIG --------- */
+function renderConfig(){
+  const tabs=[['carteras','Carteras'],['categorias','Categorías'],['tarjetas','Tarjetas'],['prestamos','Préstamos'],['divisas','Divisas'],['listas','Listas & Fondo']];
+  content.innerHTML=`
+  <div class="subtabs">${tabs.map(([k,l])=>`<button class="${configTab===k?'active':''}" onclick="configTab='${k}';render()">${l}</button>`).join('')}</div>
+  <div id="cfgBody"></div>`;
+  const b=$('cfgBody');
+  if(configTab==='carteras') b.innerHTML=cfgCarteras();
+  else if(configTab==='categorias') b.innerHTML=cfgCategorias();
+  else if(configTab==='tarjetas') b.innerHTML=cfgTarjetas();
+  else if(configTab==='prestamos') b.innerHTML=cfgPrestamos();
+  else if(configTab==='divisas') b.innerHTML=cfgDivisas();
+  else b.innerHTML=cfgListas();
+}
+function cfgCarteras(){return `<div class="card card-pad">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><div class="section-title">Carteras y cuentas</div><div class="section-sub">Define tus billeteras y su saldo inicial (punto de partida del sistema).</div></div><button class="btn primary sm" onclick="openCartera()">+ Cartera</button></div>
+  <table><thead><tr><th>Cuenta</th><th>Tipo</th><th>Moneda</th><th class="num">Saldo inicial</th><th class="num">Saldo actual</th><th></th></tr></thead>
+  <tbody>${DB.carteras.map(c=>`<tr>
+    <td>${c.icon||'💼'} <b>${esc(c.nombre)}</b></td><td style="color:var(--muted)">${esc(c.tipo)}</td><td>${c.moneda}</td>
+    <td class="num">${fmt(c.saldoInicial)}</td><td class="num"><b>${fmt(saldoCartera(c.nombre))}</b></td>
+    <td><div class="row-actions"><button class="icon-btn" onclick="openCartera('${c.id}')">✎</button><button class="icon-btn" onclick="delItem('carteras','${c.id}')">✕</button></div></td>
+  </tr>`).join('')}</tbody></table></div>`;}
+function cfgCategorias(){return `<div class="card card-pad">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><div class="section-title">Categorías</div><div class="section-sub">Ingresos (Activos/Pasivos) y egresos (Necesidades/Deseos) que alimentan el formulario.</div></div><button class="btn primary sm" onclick="openCat()">+ Categoría</button></div>
+  <table><thead><tr><th>Categoría</th><th>Grupo</th><th>Clasificación</th><th></th></tr></thead>
+  <tbody>${DB.categorias.map(c=>`<tr><td><b>${esc(c.nombre)}</b></td>
+    <td><span class="tag ${({Ingreso:'ing',Egreso:'egr',Transferencia:'tra','Inversión':'inv'})[c.grupo]||''}">${c.grupo}</span></td>
+    <td style="color:var(--muted)">${esc(c.clase)}</td>
+    <td><div class="row-actions"><button class="icon-btn" onclick="openCat('${c.id}')">✎</button><button class="icon-btn" onclick="delItem('categorias','${c.id}')">✕</button></div></td>
+  </tr>`).join('')}</tbody></table></div>`;}
+function cfgTarjetas(){return `<div class="card card-pad">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><div class="section-title">Tarjetas de crédito</div><div class="section-sub">Línea, días de cierre y pago, y tasa anual de cada tarjeta.</div></div><button class="btn primary sm" onclick="openTarjeta()">+ Tarjeta</button></div>
+  <table><thead><tr><th>Tarjeta</th><th>Banco</th><th class="num">Línea</th><th class="num">Cierre</th><th class="num">Pago</th><th class="num">Tasa anual</th><th></th></tr></thead>
+  <tbody>${DB.tarjetas.map(t=>`<tr><td><b>${esc(t.nombre)}</b></td><td>${esc(t.banco)}</td><td class="num">${fmt(t.linea,0)}</td>
+    <td class="num">día ${t.cierre}</td><td class="num">día ${t.pago}</td><td class="num">${pct(t.tasa)}</td>
+    <td><div class="row-actions"><button class="icon-btn" onclick="openTarjeta('${t.id}')">✎</button><button class="icon-btn" onclick="delItem('tarjetas','${t.id}')">✕</button></div></td>
+  </tr>`).join('')}</tbody></table></div>`;}
+function cfgPrestamos(){return `<div class="card card-pad">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><div class="section-title">Préstamos activos</div><div class="section-sub">La cuota mensual se calcula sola con el método francés.</div></div><button class="btn primary sm" onclick="openPrestamo()">+ Préstamo</button></div>
+  <table><thead><tr><th>Préstamo</th><th>Entidad</th><th class="num">Monto</th><th class="num">Tasa anual</th><th class="num">Cuotas</th><th>Inicio</th><th class="num">Cuota mensual</th><th></th></tr></thead>
+  <tbody>${DB.prestamos.map(p=>`<tr><td><b>${esc(p.nombre)}</b></td><td>${esc(p.entidad)}</td><td class="num">${fmt(p.monto,0)}</td>
+    <td class="num">${pct(p.tasa)}</td><td class="num">${p.cuotas}</td><td class="mono">${p.inicio}</td><td class="num"><b>${fmt(saldoPrestamo(p).cuota)}</b></td>
+    <td><div class="row-actions"><button class="icon-btn" onclick="openPrestamo('${p.id}')">✎</button><button class="icon-btn" onclick="delItem('prestamos','${p.id}')">✕</button></div></td>
+  </tr>`).join('')}</tbody></table></div>`;}
+function cfgDivisas(){return `<div class="card card-pad">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><div class="section-title">Divisas</div><div class="section-sub">Tipo de cambio a Soles. Todos los montos se convierten a S/ automáticamente.</div></div><button class="btn primary sm" onclick="openDivisa()">+ Divisa</button></div>
+  <table><thead><tr><th>Código</th><th>Moneda</th><th class="num">Tipo de cambio (a S/)</th><th></th></tr></thead>
+  <tbody>${DB.divisas.map(d=>`<tr><td><b>${d.cod}</b></td><td>${esc(d.nombre)}</td><td class="num mono">${(+d.tc).toFixed(4)}</td>
+    <td><div class="row-actions"><button class="icon-btn" onclick="openDivisa('${d.id}')">✎</button>${d.cod!=='PEN'?`<button class="icon-btn" onclick="delItem('divisas','${d.id}')">✕</button>`:''}</div></td>
+  </tr>`).join('')}</tbody></table></div>`;}
+function cfgListas(){return `<div class="grid two-col" style="grid-template-columns:1fr 1fr;gap:16px">
+  <div class="card card-pad"><div class="section-title">Tipos de movimiento</div><div class="section-sub">Motor de la lógica de saldos.</div>
+    ${DB.tiposMov.map(t=>`<div class="saldo-row"><div class="saldo-name"><div class="n">${t}</div></div></div>`).join('')}</div>
+  <div class="card card-pad"><div class="section-title">Tipos de gasto</div><div class="section-sub">Clasificación base cero.</div>
+    ${DB.tiposGasto.map(t=>`<div class="saldo-row"><div class="saldo-name"><div class="n">${t}</div></div></div>`).join('')}</div>
+  <div class="card card-pad"><div class="section-title">Medios de pago</div>
+    ${DB.medios.map(t=>`<div class="saldo-row"><div class="saldo-name"><div class="n">${t}</div></div></div>`).join('')}</div>
+  <div class="card card-pad"><div class="section-title">Fondo de emergencia</div><div class="section-sub">Meta en meses de egresos.</div>
+    <div class="field"><label>Meses de cobertura objetivo</label><input type="number" value="${DB.fondoMesesMeta}" onchange="DB.fondoMesesMeta=+this.value;save();toast('Guardado')"></div>
+    <hr style="border:none;border-top:1px solid var(--cardline);margin:18px 0">
+    <button class="btn ghost sm danger" onclick="resetDB()">↺ Restaurar datos de ejemplo</button>
+  </div>
+</div>`;}
+
+/* ---- CRUD editores config ---- */
+function openCartera(id){const c=id?DB.carteras.find(x=>x.id===id):{tipo:'Cuenta Ahorro',moneda:'PEN',icon:'💼'};
+  modal(id?'Editar cartera':'Nueva cartera',`<div class="form-grid">
+    <div class="field full"><label>Nombre</label><input id="c_n" value="${esc(c.nombre||'')}"></div>
+    <div class="field"><label>Tipo</label><input id="c_t" value="${esc(c.tipo||'')}" placeholder="Efectivo / Ahorro..."></div>
+    <div class="field"><label>Moneda</label><select id="c_m">${DB.divisas.map(d=>`<option ${d.cod===c.moneda?'selected':''}>${d.cod}</option>`).join('')}</select></div>
+    <div class="field"><label>Ícono (emoji)</label><input id="c_i" value="${c.icon||'💼'}" maxlength="2"></div>
+    <div class="field"><label>Saldo inicial</label><input id="c_s" type="number" step="0.01" value="${c.saldoInicial||0}"></div>
+  </div>`,()=>{const nm={nombre:$('c_n').value,tipo:$('c_t').value,moneda:$('c_m').value,icon:$('c_i').value,saldoInicial:+$('c_s').value};
+    if(!nm.nombre){toast('Falta el nombre');return false;} saveItem('carteras',id,nm);return true;});}
+function openCat(id){const c=id?DB.categorias.find(x=>x.id===id):{grupo:'Egreso',clase:'Necesidad'};
+  modal(id?'Editar categoría':'Nueva categoría',`<div class="form-grid">
+    <div class="field full"><label>Nombre</label><input id="k_n" value="${esc(c.nombre||'')}"></div>
+    <div class="field"><label>Grupo</label><select id="k_g">${DB.tiposMov.map(t=>`<option ${t===c.grupo?'selected':''}>${t}</option>`).join('')}</select></div>
+    <div class="field"><label>Clasificación</label><input id="k_c" value="${esc(c.clase||'')}" placeholder="Necesidad / Deseo / Activo / Pasivo"></div>
+  </div>`,()=>{const nm={nombre:$('k_n').value,grupo:$('k_g').value,clase:$('k_c').value};
+    if(!nm.nombre){toast('Falta el nombre');return false;} saveItem('categorias',id,nm);return true;});}
+function openTarjeta(id){const t=id?DB.tarjetas.find(x=>x.id===id):{moneda:'PEN',cierre:25,pago:15,tasa:0.65};
+  modal(id?'Editar tarjeta':'Nueva tarjeta',`<div class="form-grid">
+    <div class="field full"><label>Nombre</label><input id="t_n" value="${esc(t.nombre||'')}"></div>
+    <div class="field"><label>Banco</label><input id="t_b" value="${esc(t.banco||'')}"></div>
+    <div class="field"><label>Línea de crédito</label><input id="t_l" type="number" value="${t.linea||0}"></div>
+    <div class="field"><label>Día de cierre</label><input id="t_c" type="number" min="1" max="31" value="${t.cierre}"></div>
+    <div class="field"><label>Día de pago</label><input id="t_p" type="number" min="1" max="31" value="${t.pago}"></div>
+    <div class="field"><label>Tasa anual (%)</label><input id="t_ta" type="number" step="0.01" value="${(t.tasa*100).toFixed(0)}"></div>
+  </div>`,()=>{const nm={nombre:$('t_n').value,banco:$('t_b').value,linea:+$('t_l').value,cierre:+$('t_c').value,pago:+$('t_p').value,tasa:(+$('t_ta').value)/100,moneda:t.moneda||'PEN'};
+    if(!nm.nombre){toast('Falta el nombre');return false;} saveItem('tarjetas',id,nm);return true;});}
+function openPrestamo(id){const p=id?DB.prestamos.find(x=>x.id===id):{tasa:0.15,cuotas:12,inicio:new Date().toISOString().slice(0,10)};
+  modal(id?'Editar préstamo':'Nuevo préstamo',`<div class="form-grid">
+    <div class="field full"><label>Nombre</label><input id="p_n" value="${esc(p.nombre||'')}"></div>
+    <div class="field"><label>Entidad</label><input id="p_e" value="${esc(p.entidad||'')}"></div>
+    <div class="field"><label>Monto original</label><input id="p_m" type="number" value="${p.monto||0}"></div>
+    <div class="field"><label>Tasa anual (%)</label><input id="p_t" type="number" step="0.01" value="${(p.tasa*100).toFixed(1)}"></div>
+    <div class="field"><label>N° de cuotas</label><input id="p_c" type="number" value="${p.cuotas}"></div>
+    <div class="field"><label>Fecha de inicio</label><input id="p_f" type="date" value="${p.inicio}"></div>
+  </div>`,()=>{const nm={nombre:$('p_n').value,entidad:$('p_e').value,monto:+$('p_m').value,tasa:(+$('p_t').value)/100,cuotas:+$('p_c').value,inicio:$('p_f').value};
+    if(!nm.nombre){toast('Falta el nombre');return false;} saveItem('prestamos',id,nm);return true;});}
+function openDivisa(id){const d=id?DB.divisas.find(x=>x.id===id):{tc:1};
+  modal(id?'Editar divisa':'Nueva divisa',`<div class="form-grid">
+    <div class="field"><label>Código</label><input id="d_c" value="${d.cod||''}" maxlength="4" ${d.cod==='PEN'?'readonly':''}></div>
+    <div class="field"><label>Moneda</label><input id="d_n" value="${esc(d.nombre||'')}"></div>
+    <div class="field full"><label>Tipo de cambio a Soles</label><input id="d_t" type="number" step="0.0001" value="${d.tc}" ${d.cod==='PEN'?'readonly':''}></div>
+  </div>`,()=>{const nm={cod:$('d_c').value.toUpperCase(),nombre:$('d_n').value,tc:+$('d_t').value};
+    if(!nm.cod){toast('Falta el código');return false;} saveItem('divisas',id,nm);return true;});}
+function openInv(id){const x=id?DB.inversiones.find(a=>a.id===id):{};
+  modal(id?'Editar activo':'Nuevo activo',`<div class="form-grid">
+    <div class="field full"><label>Activo / instrumento</label><input id="i_n" value="${esc(x.nombre||'')}"></div>
+    <div class="field"><label>Monto invertido</label><input id="i_i" type="number" value="${x.invertido||0}"></div>
+    <div class="field"><label>Valor actual</label><input id="i_v" type="number" value="${x.valorActual||0}"></div>
+    <div class="field full"><label>Rendimiento inyectado al flujo</label><input id="i_r" type="number" value="${x.rendimiento||0}"></div>
+  </div>`,()=>{const nm={nombre:$('i_n').value,invertido:+$('i_i').value,valorActual:+$('i_v').value,rendimiento:+$('i_r').value};
+    if(!nm.nombre){toast('Falta el nombre');return false;} saveItem('inversiones',id,nm);return true;});}
+function openProv(id){const p=id?DB.provisiones.find(a=>a.id===id):{meses:0};
+  modal(id?'Editar provisión':'Nueva provisión',`<div class="form-grid">
+    <div class="field full"><label>Concepto</label><input id="v_c" value="${esc(p.concepto||'')}"></div>
+    <div class="field"><label>Monto anual</label><input id="v_a" type="number" value="${p.anual||0}"></div>
+    <div class="field"><label>Meses provisionados</label><input id="v_m" type="number" value="${p.meses||0}"></div>
+  </div>`,()=>{const nm={concepto:$('v_c').value,anual:+$('v_a').value,meses:+$('v_m').value};
+    if(!nm.concepto){toast('Falta el concepto');return false;} saveItem('provisiones',id,nm);return true;});}
+
+function saveItem(coll,id,data){ if(id){Object.assign(DB[coll].find(x=>x.id===id),data);}else{DB[coll].push({id:uid(),...data});} render(); toast('Guardado'); }
+function delItem(coll,id){ if(confirm('¿Eliminar este registro?')){ DB[coll]=DB[coll].filter(x=>x.id!==id); render(); toast('Eliminado'); } }
+
+/* ============================ UI HELPERS ============================ */
+function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
+function go(v){currentView=v;window.scrollTo(0,0);render();document.getElementById('side').classList.remove('open');}
+document.getElementById('nav').addEventListener('click',e=>{const a=e.target.closest('a');if(a){go(a.dataset.view);}});
+
+let modalOnSave=null;
+function modal(title,body,onSave){
+  modalOnSave=onSave;
+  $('modalRoot').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
+    <div class="modal"><div class="modal-head"><h3>${title}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
+    <div class="modal-body">${body}</div>
+    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn primary" onclick="confirmModal()">Guardar</button></div></div></div>`;
+}
+function closeModal(){ $('modalRoot').innerHTML=''; modalOnSave=null; }
+function confirmModal(){ if(modalOnSave){ const ok=modalOnSave(); if(ok!==false) closeModal(); } else closeModal(); }
+
+let toastT;
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200); }
+
+function exportCSV(){
+  const head=['Fecha','Mes','Descripcion','Tipo','Categoria','CuentaOrigen','CuentaDestino','Medio','Moneda','Monto','MontoBaseSoles','Estado'];
+  const rows=DB.movimientos.slice().sort((a,b)=>a.fecha.localeCompare(b.fecha)).map(m=>[
+    m.fecha,mesKey(m.fecha),m.desc,m.tipo,m.categoria,m.ctaOrigen,m.ctaDestino,m.medio,m.moneda,m.monto,base(m).toFixed(2),m.estado
+  ].map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(','));
+  const csv=[head.join(','),...rows].join('\n');
+  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='movimientos_acif.csv'; a.click();
+  toast('CSV exportado');
+}
+
+/* ============================ INIT ============================ */
+load(); render();
+</script>
+</body>
+</html>
