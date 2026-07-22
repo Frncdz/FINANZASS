@@ -166,6 +166,8 @@ input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 
     <nav class="nav" id="nav">
       <a data-view="dashboard" class="active"><span class="ic">◈</span> Dashboard</a>
       <a data-view="movimientos"><span class="ic">↹</span> Movimientos</a>
+      <a data-view="recurrentes"><span class="ic">↻</span> Recurrentes</a>
+      <a data-view="nomina"><span class="ic">🧾</span> Nómina</a>
       <a data-view="proyeccion"><span class="ic">↗</span> Proyección 12M</a>
       <a data-view="deudas"><span class="ic">▤</span> Deudas y Tarjetas</a>
       <a data-view="inversiones"><span class="ic">◆</span> Inversiones</a>
@@ -200,7 +202,7 @@ input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 
 
 <script>
 /* ============================ ESTADO / DATOS ============================ */
-const LS_KEY = 'acif_finanzas_v1';
+const LS_KEY = 'acif_finanzas_v2';
 const fmt = (n,dec=2)=> (n<0?'-':'')+'S/ '+Math.abs(+n||0).toLocaleString('es-PE',{minimumFractionDigits:dec,maximumFractionDigits:dec});
 const pct = n => ((+n||0)*100).toFixed(1)+'%';
 const uid = ()=> Date.now().toString(36)+Math.random().toString(36).slice(2,6);
@@ -268,29 +270,44 @@ const DEFAULTS = {
     {id:uid(),concepto:'Matrícula anual',anual:2400,meses:4},
   ],
   movimientos:[
-    m('2026-01-02','Sueldo enero','Ingreso','Sueldo','Interbank Sueldo','','Transferencia','PEN',4200,'Ejecutado'),
+    m('2026-01-02','Sueldo enero','Ingreso','Sueldo','','Interbank Sueldo','Transferencia','PEN',3604.70,'Ejecutado'),
     m('2026-01-03','Alquiler depto','Egreso','Vivienda / Alquiler','Interbank Sueldo','','Transferencia','PEN',1300,'Ejecutado'),
     m('2026-01-05','Compras supermercado','Egreso','Alimentación','Yape','','Yape','PEN',520,'Ejecutado'),
     m('2026-01-07','Combustible','Egreso','Transporte','Tarjeta BCP Visa','','Tarjeta Crédito','PEN',180,'Ejecutado'),
     m('2026-01-10','Internet + cable','Egreso','Servicios (luz, agua, internet)','BCP Ahorros','','Débito automático','PEN',149,'Ejecutado'),
     m('2026-01-12','Cena restaurante','Egreso','Restaurantes / Delivery','Tarjeta BCP Visa','','Tarjeta Crédito','PEN',145,'Ejecutado'),
-    m('2026-01-15','Aporte fondo mutuo','Inversión','Aporte Inversión','BCP Ahorros','','Transferencia','PEN',600,'Ejecutado'),
-    m('2026-01-18','Freelance diseño','Ingreso','Ingreso Freelance','Yape','','Yape','PEN',850,'Ejecutado'),
+    m('2026-01-15','Aporte fondo mutuo','Inversión','Aporte Inversión','BCP Ahorros','Inversión Fondo Mutuo','Transferencia','PEN',600,'Ejecutado'),
+    m('2026-01-18','Freelance diseño','Ingreso','Ingreso Freelance','','Yape','Yape','PEN',850,'Ejecutado'),
     m('2026-01-20','Suscripción software','Egreso','Suscripciones','Tarjeta Interbank MC','','Tarjeta Crédito','USD',29,'Ejecutado'),
     m('2026-01-25','Pago tarjeta BCP','Transferencia','Pago Tarjeta / Deuda','BCP Ahorros','Tarjeta BCP Visa','Transferencia','PEN',470,'Ejecutado'),
-    m('2026-02-02','Sueldo febrero','Ingreso','Sueldo','Interbank Sueldo','','Transferencia','PEN',4200,'Ejecutado'),
+    m('2026-02-02','Sueldo febrero','Ingreso','Sueldo','','Interbank Sueldo','Transferencia','PEN',3604.70,'Ejecutado'),
     m('2026-02-03','Alquiler depto','Egreso','Vivienda / Alquiler','Interbank Sueldo','','Transferencia','PEN',1300,'Ejecutado'),
     m('2026-02-06','Compras mes','Egreso','Alimentación','Yape','','Yape','PEN',610,'Ejecutado'),
     m('2026-02-14','Regalo','Egreso','Compras / Ropa','Tarjeta BCP Visa','','Tarjeta Crédito','PEN',220,'Ejecutado'),
-    m('2026-02-28','Bono trimestral','Ingreso','Bono / Comisión','Interbank Sueldo','','Transferencia','PEN',1500,'Ejecutado'),
-    m('2026-03-02','Sueldo marzo','Ingreso','Sueldo','Interbank Sueldo','','Transferencia','PEN',4200,'Programado'),
-    m('2026-03-03','Alquiler depto','Egreso','Vivienda / Alquiler','Interbank Sueldo','','Transferencia','PEN',1300,'Programado'),
     m('2026-03-10','Matrícula curso','Egreso','Educación','BCP Ahorros','','Transferencia','PEN',480,'Programado'),
-    m('2026-04-02','Sueldo abril','Ingreso','Sueldo','Interbank Sueldo','','Transferencia','PEN',4200,'Programado'),
     m('2026-04-15','Viaje feriado','Egreso','Viajes','Fondo Emergencia','','Transferencia','PEN',1200,'Programado'),
-    m('2026-06-02','Sueldo junio','Ingreso','Sueldo','Interbank Sueldo','','Transferencia','PEN',4200,'Programado'),
-    m('2026-06-20','Seguro auto (anual)','Egreso','Provisión Anual','BCP Ahorros','','Transferencia','PEN',1400,'Programado'),
   ],
+  recurrentes:[
+    {id:uid(),concepto:'Sueldo neto (nómina)',tipo:'Ingreso',categoria:'Sueldo',cuenta:'Interbank Sueldo',fuente:'nomina_neto',monto:0,frecuencia:'Mensual',dia:30,inicio:'2026-03-01',fin:'',activo:true},
+    {id:uid(),concepto:'Alquiler departamento',tipo:'Egreso',categoria:'Vivienda / Alquiler',cuenta:'Interbank Sueldo',fuente:'manual',monto:1300,frecuencia:'Mensual',dia:3,inicio:'2026-03-01',fin:'',activo:true},
+    {id:uid(),concepto:'Letra crédito vehicular',tipo:'Egreso',categoria:'Pago Tarjeta / Deuda',cuenta:'BCP Ahorros',fuente:'manual',monto:963.79,frecuencia:'Mensual',dia:10,inicio:'2026-03-01',fin:'',activo:true},
+    {id:uid(),concepto:'Pensión de enseñanza',tipo:'Egreso',categoria:'Educación',cuenta:'BCP Ahorros',fuente:'manual',monto:450,frecuencia:'Mensual',dia:5,inicio:'2026-03-01',fin:'',activo:true},
+    {id:uid(),concepto:'Internet + cable',tipo:'Egreso',categoria:'Servicios (luz, agua, internet)',cuenta:'BCP Ahorros',fuente:'manual',monto:149,frecuencia:'Mensual',dia:10,inicio:'2026-03-01',fin:'',activo:true},
+    {id:uid(),concepto:'Suscripción software',tipo:'Egreso',categoria:'Suscripciones',cuenta:'Tarjeta Interbank MC',fuente:'manual',monto:108.75,frecuencia:'Mensual',dia:20,inicio:'2026-03-01',fin:'',activo:true},
+    {id:uid(),concepto:'Seguro vehicular',tipo:'Egreso',categoria:'Provisión Anual',cuenta:'BCP Ahorros',fuente:'manual',monto:1400,frecuencia:'Anual',dia:20,inicio:'2026-06-01',fin:'',activo:true},
+    {id:uid(),concepto:'Gratificación + bonif. 9%',tipo:'Ingreso',categoria:'Bono / Comisión',cuenta:'Interbank Sueldo',fuente:'nomina_grati',monto:0,frecuencia:'Semestral',dia:15,inicio:'2026-07-01',fin:'',activo:true},
+    {id:uid(),concepto:'Depósito CTS',tipo:'Ingreso',categoria:'Otros Egresos',cuenta:'Fondo Emergencia',fuente:'nomina_cts',monto:0,frecuencia:'Semestral',dia:15,inicio:'2026-05-01',fin:'',activo:true},
+  ],
+  nomina:{
+    sueldoBasico:4200, asignacionFamiliar:true, sistema:'AFP', afp:'Integra',
+    otrosAfectos:0, otrosDescuentos:0, cuentaAbono:'Interbank Sueldo', diaPago:30,
+  },
+  params:{
+    uit:5500, rmv:1130, tasaONP:0.13, afpAporte:0.10, afpPrima:0.0137, rmaTope:12598.91,
+    afpComisiones:{Habitat:0.0147, Integra:0.0155, Prima:0.0160, Profuturo:0.0169},
+    tramos:[[5,0.08],[20,0.14],[35,0.17],[45,0.20],[Infinity,0.30]],
+    deduccionUIT:7,
+  },
   fondoMesesMeta:6,
   projStart:'2026-01',
 };
@@ -316,13 +333,114 @@ function saldoCartera(nombre, soloEjecutado=true){
   let s=+c.saldoInicial||0;
   for(const mv of DB.movimientos){
     if(soloEjecutado && !ejec(mv)) continue;
-    if(mv.ctaOrigen===nombre){
-      if(mv.tipo==='Ingreso') s+=base(mv);
-      else if(mv.tipo==='Egreso'||mv.tipo==='Inversión'||mv.tipo==='Transferencia') s-=base(mv);
+    // Ingreso: entra en la cuenta DESTINO. Egreso: sale de la cuenta ORIGEN.
+    if(mv.tipo==='Ingreso' && mv.ctaDestino===nombre) s+=base(mv);
+    if(mv.tipo==='Egreso' && mv.ctaOrigen===nombre) s-=base(mv);
+    if(mv.tipo==='Transferencia'||mv.tipo==='Inversión'){
+      if(mv.ctaOrigen===nombre) s-=base(mv);
+      if(mv.ctaDestino===nombre) s+=base(mv);
     }
-    if(mv.ctaDestino===nombre && mv.tipo==='Transferencia') s+=base(mv);
   }
   return s;
+}
+
+/* ---- NÓMINA: sueldo bruto → neto en mano (régimen privado, Perú) ---- */
+function calcNomina(){
+  const p=DB.params, n=DB.nomina;
+  const basico=+n.sueldoBasico||0;
+  const asig = n.asignacionFamiliar ? p.rmv*0.10 : 0;
+  const otrosAfectos=+n.otrosAfectos||0;
+  const bruto=basico+asig+otrosAfectos;
+  let aporte=0,comision=0,prima=0,onp=0;
+  if(n.sistema==='ONP'){ onp=bruto*p.tasaONP; }
+  else {
+    aporte=bruto*p.afpAporte;
+    comision=bruto*(p.afpComisiones[n.afp]||0);
+    prima=Math.min(bruto,p.rmaTope)*p.afpPrima;   // prima con tope asegurable
+  }
+  const pension=aporte+comision+prima+onp;
+  // Renta de 5ta: proyección anual = 12 sueldos + 2 gratificaciones + bonif. 9%
+  const remComp=basico+asig;
+  const proy12=(remComp+otrosAfectos)*12;
+  const gratis=remComp*2;
+  const bonifAnual=gratis*0.09;
+  const rentaBruta=proy12+gratis+bonifAnual;
+  const rni=Math.max(0,rentaBruta-p.uit*p.deduccionUIT);
+  let prev=0, impAnual=0; const detalle=[];
+  for(const [hastaUIT,tasa] of p.tramos){
+    const techo = hastaUIT===Infinity ? Infinity : hastaUIT*p.uit;
+    const piso  = prev*p.uit;
+    const monto = Math.max(0, Math.min(rni,techo)-piso);
+    detalle.push({tasa,monto,imp:monto*tasa});
+    impAnual+=monto*tasa;
+    prev = hastaUIT===Infinity ? prev : hastaUIT;
+  }
+  const retencion=impAnual/12;
+  const otrosDesc=+n.otrosDescuentos||0;
+  const totalDesc=pension+retencion+otrosDesc;
+  const neto=bruto-totalDesc;
+  // Gratificación (inafecta a AFP/ONP) + bonificación extraordinaria 9%
+  const grati=remComp, bonifGrati=grati*0.09, netoGrati=grati+bonifGrati;
+  const cts=(remComp+grati/6)/2;   // depósito semestral
+  return {basico,asig,otrosAfectos,bruto,aporte,comision,prima,onp,pension,remComp,
+          proy12,gratis,bonifAnual,rentaBruta,rni,detalle,impAnual,retencion,
+          otrosDesc,totalDesc,neto,grati,bonifGrati,netoGrati,cts};
+}
+
+/* ---- RECURRENTES ---- */
+const PERIODO={Mensual:1,Quincenal:1,Bimestral:2,Trimestral:3,Semestral:6,Anual:12};
+function montoRecurrente(r){
+  const n=calcNomina();
+  if(r.fuente==='nomina_neto')  return n.neto;
+  if(r.fuente==='nomina_grati') return n.netoGrati;
+  if(r.fuente==='nomina_cts')   return n.cts;
+  return +r.monto||0;
+}
+function ocurrencias(r, mesesAdelante=12){
+  if(!r.activo||!r.inicio) return [];
+  const per=PERIODO[r.frecuencia]||1;
+  const ini=new Date(r.inicio+'T00:00:00');
+  const fin=r.fin?new Date(r.fin+'T00:00:00'):null;
+  const limite=new Date(); limite.setMonth(limite.getMonth()+mesesAdelante);
+  const out=[];
+  for(let k=0;k<120;k++){
+    if(k%per!==0) continue;
+    const d=new Date(ini.getFullYear(), ini.getMonth()+k, 1);
+    if(d>limite) break;
+    if(fin && d>fin) break;
+    const ultimoDia=new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+    const dia=Math.min(+r.dia||1, ultimoDia);
+    out.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`);
+  }
+  return out;
+}
+function generarRecurrentes(meses=12){
+  let creados=0;
+  const existentes=new Set(DB.movimientos.filter(x=>x.recurrenteId).map(x=>x.recurrenteId+':'+mesKey(x.fecha)));
+  for(const r of DB.recurrentes){
+    const monto=montoRecurrente(r);
+    if(!monto) continue;
+    for(const fecha of ocurrencias(r,meses)){
+      const clave=r.id+':'+mesKey(fecha);
+      if(existentes.has(clave)) continue;
+      existentes.add(clave);
+      DB.movimientos.push({
+        id:uid(), recurrenteId:r.id, fecha, desc:r.concepto, tipo:r.tipo, categoria:r.categoria,
+        ctaOrigen: r.tipo==='Ingreso'?'':r.cuenta,
+        ctaDestino: r.tipo==='Ingreso'?r.cuenta:'',
+        medio:'Transferencia', moneda:'PEN', monto, estado:'Programado'
+      });
+      creados++;
+    }
+  }
+  render();
+  toast(creados?`${creados} movimientos generados`:'Todo estaba al día, nada que generar');
+}
+function borrarGenerados(){
+  if(!confirm('¿Eliminar todos los movimientos generados desde recurrentes? Los registrados a mano se mantienen.')) return;
+  const antes=DB.movimientos.length;
+  DB.movimientos=DB.movimientos.filter(x=>!x.recurrenteId);
+  render(); toast(`${antes-DB.movimientos.length} movimientos eliminados`);
 }
 const totalLiquido = ()=> DB.carteras.reduce((a,c)=>a+saldoCartera(c.nombre),0);
 
@@ -382,13 +500,16 @@ function render(){
   const v=currentView;
   const titles={dashboard:['Dashboard financiero','Patrimonio, liquidez e indicadores clave'],
     movimientos:['Movimientos','Historial y registro de transacciones'],
+    recurrentes:['Ingresos y egresos recurrentes','Nómina, letras, pensiones y suscripciones'],
+    nomina:['Nómina','De sueldo bruto a neto en mano'],
     proyeccion:['Proyección a 12 meses','Flujo de caja proyectado mes a mes'],
     deudas:['Deudas y tarjetas','Consumo, fechas de pago y amortización'],
     inversiones:['Inversiones y provisiones','ROI y aprovisionamiento de gastos anuales'],
     config:['Configuración','Carteras, categorías, tarjetas, préstamos y divisas']};
   $('viewTitle').textContent=titles[v][0]; $('viewSub').textContent=titles[v][1];
   document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('active',a.dataset.view===v));
-  ({dashboard:renderDashboard,movimientos:renderMovimientos,proyeccion:renderProyeccion,
+  ({dashboard:renderDashboard,movimientos:renderMovimientos,recurrentes:renderRecurrentes,
+    nomina:renderNomina,proyeccion:renderProyeccion,
     deudas:renderDeudas,inversiones:renderInversiones,config:renderConfig}[v])();
 }
 
@@ -524,7 +645,7 @@ function tablaMovimientos(list,acciones){
         <td class="mono">${mv.fecha}</td>
         <td>${esc(mv.desc)}</td>
         <td>${esc(mv.categoria)}</td>
-        <td>${esc(mv.ctaOrigen)}${mv.ctaDestino?' → '+esc(mv.ctaDestino):''}</td>
+        <td>${mv.tipo==='Ingreso'?'→ '+esc(mv.ctaDestino||''):(mv.ctaDestino?esc(mv.ctaOrigen)+' → '+esc(mv.ctaDestino):esc(mv.ctaOrigen||''))}${mv.recurrenteId?'<div style="font-size:10px;color:var(--muted)">↻ recurrente</div>':''}</td>
         <td style="color:var(--muted)">${esc(mv.medio||'')}</td>
         <td><span class="tag ${tagCls[mv.tipo]}">${mv.tipo}</span></td>
         <td class="num ${neg?'neg':(mv.tipo==='Ingreso'?'pos':'')}">${neg?'−':''}${fmt(base(mv))}${mv.moneda!=='PEN'?`<div style="font-size:10px;color:var(--muted)">${mv.monto} ${mv.moneda}</div>`:''}</td>
@@ -537,29 +658,255 @@ function tablaMovimientos(list,acciones){
 function delMov(id){ if(confirm('¿Eliminar este movimiento?')){ DB.movimientos=DB.movimientos.filter(x=>x.id!==id); render(); toast('Movimiento eliminado'); } }
 
 function openMov(id){
-  const mv = id?DB.movimientos.find(x=>x.id===id):{fecha:new Date().toISOString().slice(0,10),tipo:'Egreso',estado:'Ejecutado',moneda:'PEN',ctaDestino:''};
+  const mv = id?DB.movimientos.find(x=>x.id===id):{fecha:new Date().toISOString().slice(0,10),tipo:'Egreso',estado:'Ejecutado',moneda:'PEN',ctaOrigen:'',ctaDestino:''};
   const opt=(arr,sel,val)=>arr.map(x=>{const v=val?x[val]:x;return `<option ${v===sel?'selected':''}>${esc(v)}</option>`}).join('');
+  const cuentas=[...DB.carteras.map(c=>c.nombre),...DB.tarjetas.map(t=>t.nombre)];
   modal(id?'Editar movimiento':'Nuevo movimiento', `
+    <div class="field" style="margin-bottom:16px">
+      <label>Tipo de movimiento</label>
+      <select id="f_tipo" onchange="updateMovFields()">${opt(DB.tiposMov,mv.tipo)}</select>
+    </div>
     <div class="form-grid">
       <div class="field"><label>Fecha</label><input id="f_fecha" type="date" value="${mv.fecha||''}"></div>
-      <div class="field"><label>Tipo de movimiento</label><select id="f_tipo">${opt(DB.tiposMov,mv.tipo)}</select></div>
-      <div class="field full"><label>Descripción</label><input id="f_desc" value="${esc(mv.desc||'')}" placeholder="Ej. Compras del mes"></div>
-      <div class="field"><label>Categoría</label><select id="f_cat">${opt(DB.categorias,mv.categoria,'nombre')}</select></div>
-      <div class="field"><label>Medio de pago</label><select id="f_medio">${opt(DB.medios,mv.medio)}</select></div>
-      <div class="field"><label>Cuenta origen</label><select id="f_orig">${opt([...DB.carteras.map(c=>c.nombre),...DB.tarjetas.map(t=>t.nombre)],mv.ctaOrigen)}</select></div>
-      <div class="field"><label>Cuenta destino <span style="color:var(--muted);font-weight:400">(transferencias)</span></label><select id="f_dest"><option value=""></option>${opt([...DB.carteras.map(c=>c.nombre),...DB.tarjetas.map(t=>t.nombre)],mv.ctaDestino)}</select></div>
-      <div class="field"><label>Moneda</label><select id="f_mon">${opt(DB.divisas,mv.moneda,'cod')}</select></div>
       <div class="field"><label>Monto</label><input id="f_monto" type="number" step="0.01" value="${mv.monto||''}"></div>
-      <div class="field"><label>Estado</label><select id="f_est">${opt(DB.estados,mv.estado)}</select></div>
-    </div>`,
+      <div class="field full"><label>Descripción</label><input id="f_desc" value="${esc(mv.desc||'')}" placeholder="Ej. Compras del mes"></div>
+      <div class="field full"><label>Categoría</label><select id="f_cat">${opt(DB.categorias,mv.categoria,'nombre')}</select></div>
+      <div class="field full" id="wrapOrigen"><label id="labOrigen">Cuenta de origen</label><select id="f_orig"><option value=""></option>${opt(cuentas,mv.ctaOrigen)}</select></div>
+      <div class="field full" id="wrapDestino"><label id="labDestino">Cuenta de destino</label><select id="f_dest"><option value=""></option>${opt(cuentas,mv.ctaDestino)}</select></div>
+      <div class="field"><label>Medio de pago</label><select id="f_medio">${opt(DB.medios,mv.medio)}</select></div>
+      <div class="field"><label>Moneda</label><select id="f_mon">${opt(DB.divisas,mv.moneda,'cod')}</select></div>
+      <div class="field full"><label>Estado</label><select id="f_est">${opt(DB.estados,mv.estado)}</select></div>
+    </div>
+    <div id="movHint" class="sim-out ok" style="margin-top:14px;font-size:12.5px"></div>`,
     ()=>{
-      const nm={fecha:$('f_fecha').value,desc:$('f_desc').value,tipo:$('f_tipo').value,categoria:$('f_cat').value,
-        ctaOrigen:$('f_orig').value,ctaDestino:$('f_dest').value,medio:$('f_medio').value,moneda:$('f_mon').value,
+      const tipo=$('f_tipo').value;
+      const nm={fecha:$('f_fecha').value,desc:$('f_desc').value,tipo,categoria:$('f_cat').value,
+        ctaOrigen: tipo==='Ingreso' ? '' : $('f_orig').value,
+        ctaDestino: tipo==='Egreso' ? '' : $('f_dest').value,
+        medio:$('f_medio').value,moneda:$('f_mon').value,
         monto:+$('f_monto').value,estado:$('f_est').value};
       if(!nm.fecha||!nm.monto){toast('Completa fecha y monto');return false;}
-      if(id){ Object.assign(DB.movimientos.find(x=>x.id===id),nm); } else { DB.movimientos.push({id:uid(),...nm}); }
+      if(tipo==='Ingreso' && !nm.ctaDestino){toast('Elige la cuenta donde entra el dinero');return false;}
+      if(tipo!=='Ingreso' && !nm.ctaOrigen){toast('Elige la cuenta de donde sale el dinero');return false;}
+      if((tipo==='Transferencia'||tipo==='Inversión') && !nm.ctaDestino){toast('Elige la cuenta de destino');return false;}
+      if(nm.ctaOrigen && nm.ctaOrigen===nm.ctaDestino){toast('Origen y destino no pueden ser la misma cuenta');return false;}
+      if(id){ const t=DB.movimientos.find(x=>x.id===id); Object.assign(t,nm); }
+      else { DB.movimientos.push({id:uid(),...nm}); }
       render(); toast(id?'Movimiento actualizado':'Movimiento agregado'); return true;
     });
+  updateMovFields();
+}
+function updateMovFields(){
+  const tipo=$('f_tipo')?.value; if(!tipo) return;
+  const wo=$('wrapOrigen'), wd=$('wrapDestino'), hint=$('movHint');
+  const show=(el,v)=>el.style.display=v?'flex':'none';
+  if(tipo==='Ingreso'){
+    show(wo,false); show(wd,true);
+    $('labDestino').textContent='Cuenta de destino · ¿dónde entra el dinero?';
+    hint.className='sim-out ok';
+    hint.innerHTML='💰 <b>Ingreso</b> — solo necesitas la cuenta de destino. Si es tu sueldo, regístralo por el <b>neto</b> que llega a tu cuenta (usa la pestaña Nómina para calcularlo).';
+  } else if(tipo==='Egreso'){
+    show(wo,true); show(wd,false);
+    $('labOrigen').textContent='Cuenta de origen · ¿de dónde sale el dinero?';
+    hint.className='sim-out warn';
+    hint.innerHTML='💸 <b>Egreso</b> — solo necesitas la cuenta de origen. Si pagas con tarjeta de crédito, elígela para que sume a tu deuda.';
+  } else if(tipo==='Transferencia'){
+    show(wo,true); show(wd,true);
+    $('labOrigen').textContent='Cuenta de origen · sale de';
+    $('labDestino').textContent='Cuenta de destino · entra a';
+    hint.className='sim-out ok';
+    hint.innerHTML='🔄 <b>Transferencia</b> — mueve dinero entre tus cuentas. Tu patrimonio no cambia. Para pagar una tarjeta, pon la tarjeta como destino.';
+  } else {
+    show(wo,true); show(wd,true);
+    $('labOrigen').textContent='Cuenta de origen · de dónde sale';
+    $('labDestino').textContent='Instrumento de destino · a dónde se invierte';
+    hint.className='sim-out ok';
+    hint.innerHTML='📈 <b>Inversión</b> — sale de una cuenta y entra a tu instrumento. No es un gasto: sigue siendo tu dinero.';
+  }
+}
+
+/* --------- RECURRENTES --------- */
+function renderRecurrentes(){
+  const n=calcNomina();
+  const etiquetaFuente={manual:'',nomina_neto:'↔ neto de nómina',nomina_grati:'↔ gratificación',nomina_cts:'↔ CTS'};
+  const totIng=DB.recurrentes.filter(r=>r.activo&&r.tipo==='Ingreso'&&r.frecuencia==='Mensual').reduce((a,r)=>a+montoRecurrente(r),0);
+  const totEgr=DB.recurrentes.filter(r=>r.activo&&r.tipo==='Egreso'&&r.frecuencia==='Mensual').reduce((a,r)=>a+montoRecurrente(r),0);
+  content.innerHTML=`
+  <div class="grid kpis" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
+    <div class="card kpi"><div class="lab">Ingresos fijos al mes</div><div class="val pos">${fmt(totIng)}</div><div class="meta">solo los mensuales activos</div></div>
+    <div class="card kpi"><div class="lab">Egresos fijos al mes</div><div class="val neg">${fmt(totEgr)}</div><div class="meta">letras, pensiones, servicios</div></div>
+    <div class="card kpi"><div class="lab">Queda libre al mes</div><div class="val ${totIng-totEgr>=0?'pos':'neg'}">${fmt(totIng-totEgr)}</div><div class="meta">antes de gastos variables</div></div>
+  </div>
+
+  <div class="card card-pad" style="margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+    <button class="btn primary sm" onclick="openRec()">+ Nuevo recurrente</button>
+    <button class="btn gold sm" onclick="generarRecurrentes(12)">⚡ Generar próximos 12 meses</button>
+    <button class="btn ghost sm danger" onclick="borrarGenerados()">Borrar generados</button>
+    <span style="margin-left:auto;color:var(--muted);font-size:12.5px">Al generar se crean movimientos <b>Programados</b> en el historial, sin duplicar los que ya existen.</span>
+  </div>
+
+  <div class="card card-pad">
+    <table><thead><tr>
+      <th>Concepto</th><th>Tipo</th><th>Categoría</th><th>Cuenta</th><th class="num">Monto</th>
+      <th>Frecuencia</th><th class="num">Día</th><th>Desde</th><th>Estado</th><th></th></tr></thead>
+    <tbody>${DB.recurrentes.map(r=>{
+      const monto=montoRecurrente(r);
+      return `<tr style="${r.activo?'':'opacity:.45'}">
+        <td><b>${esc(r.concepto)}</b>${etiquetaFuente[r.fuente]?`<div style="font-size:10px;color:var(--blue)">${etiquetaFuente[r.fuente]}</div>`:''}</td>
+        <td><span class="tag ${r.tipo==='Ingreso'?'ing':'egr'}">${r.tipo}</span></td>
+        <td style="color:var(--muted)">${esc(r.categoria)}</td>
+        <td>${esc(r.cuenta)}</td>
+        <td class="num ${r.tipo==='Ingreso'?'pos':'neg'}">${fmt(monto)}</td>
+        <td>${r.frecuencia}</td><td class="num">${r.dia}</td><td class="mono">${r.inicio}</td>
+        <td><span class="tag ${r.activo?'ejec':'prog'}">${r.activo?'Activo':'Pausado'}</span></td>
+        <td><div class="row-actions">
+          <button class="icon-btn" onclick="toggleRec('${r.id}')" title="Activar/pausar">${r.activo?'⏸':'▶'}</button>
+          <button class="icon-btn" onclick="openRec('${r.id}')">✎</button>
+          <button class="icon-btn" onclick="delItem('recurrentes','${r.id}')">✕</button></div></td>
+      </tr>`;}).join('')||`<tr><td colspan="10" class="empty">Sin recurrentes. Agrega tu sueldo, letras o pensiones.</td></tr>`}
+    </tbody></table>
+  </div>`;
+}
+function toggleRec(id){ const r=DB.recurrentes.find(x=>x.id===id); r.activo=!r.activo; render(); toast(r.activo?'Recurrente activado':'Recurrente pausado'); }
+function openRec(id){
+  const r=id?DB.recurrentes.find(x=>x.id===id):{tipo:'Egreso',frecuencia:'Mensual',dia:1,activo:true,fuente:'manual',inicio:new Date().toISOString().slice(0,10),fin:''};
+  const opt=(arr,sel,val)=>arr.map(x=>{const v=val?x[val]:x;return `<option ${v===sel?'selected':''}>${esc(v)}</option>`}).join('');
+  const cuentas=[...DB.carteras.map(c=>c.nombre),...DB.tarjetas.map(t=>t.nombre)];
+  const fuentes=[['manual','Monto fijo que yo defino'],['nomina_neto','Neto de mi nómina (automático)'],
+                 ['nomina_grati','Gratificación + 9% (automático)'],['nomina_cts','Depósito CTS (automático)']];
+  modal(id?'Editar recurrente':'Nuevo recurrente',`
+    <div class="form-grid">
+      <div class="field full"><label>Concepto</label><input id="r_c" value="${esc(r.concepto||'')}" placeholder="Ej. Letra del auto, pensión colegio"></div>
+      <div class="field"><label>Tipo</label><select id="r_t">${opt(['Ingreso','Egreso'],r.tipo)}</select></div>
+      <div class="field"><label>Frecuencia</label><select id="r_f">${opt(Object.keys(PERIODO),r.frecuencia)}</select></div>
+      <div class="field full"><label>Categoría</label><select id="r_cat">${opt(DB.categorias,r.categoria,'nombre')}</select></div>
+      <div class="field full"><label>Cuenta</label><select id="r_cta">${opt(cuentas,r.cuenta)}</select></div>
+      <div class="field full"><label>Origen del monto</label><select id="r_src" onchange="document.getElementById('r_m').disabled=this.value!=='manual'">
+        ${fuentes.map(([v,l])=>`<option value="${v}" ${r.fuente===v?'selected':''}>${l}</option>`).join('')}</select></div>
+      <div class="field"><label>Monto</label><input id="r_m" type="number" step="0.01" value="${r.monto||0}" ${r.fuente!=='manual'?'disabled':''}></div>
+      <div class="field"><label>Día del mes</label><input id="r_d" type="number" min="1" max="31" value="${r.dia||1}"></div>
+      <div class="field"><label>Fecha de inicio</label><input id="r_i" type="date" value="${r.inicio||''}"></div>
+      <div class="field"><label>Fecha de fin <span style="color:var(--muted);font-weight:400">(opcional)</span></label><input id="r_fin" type="date" value="${r.fin||''}"></div>
+    </div>
+    <div class="sim-out ok" style="margin-top:14px;font-size:12.5px">💡 Si tu sueldo ya está registrado hasta cierto mes, empieza el recurrente el mes siguiente para no duplicarlo.</div>`,
+    ()=>{
+      const nm={concepto:$('r_c').value,tipo:$('r_t').value,categoria:$('r_cat').value,cuenta:$('r_cta').value,
+        fuente:$('r_src').value,monto:+$('r_m').value,frecuencia:$('r_f').value,dia:+$('r_d').value,
+        inicio:$('r_i').value,fin:$('r_fin').value,activo:id?r.activo:true};
+      if(!nm.concepto||!nm.inicio){toast('Falta el concepto o la fecha de inicio');return false;}
+      saveItem('recurrentes',id,nm); return true;
+    });
+}
+
+/* --------- NÓMINA --------- */
+function renderNomina(){
+  const n=calcNomina(), p=DB.params, nm=DB.nomina;
+  const fila=(l,v,cls='',ind=false,nota='')=>`<tr>
+    <td style="${ind?'padding-left:26px;':''}${cls==='b'?'font-weight:700':''}">${l}${nota?`<div style="font-size:10.5px;color:var(--muted)">${nota}</div>`:''}</td>
+    <td class="num ${cls==='neg'?'neg':cls==='pos'?'pos':''}" style="${cls==='b'?'font-weight:700':''}">${fmt(v)}</td></tr>`;
+  content.innerHTML=`
+  <div class="grid two-col" style="grid-template-columns:.85fr 1.15fr;gap:16px;margin-bottom:16px">
+    <div class="card card-pad">
+      <h3>Datos de tu sueldo</h3>
+      <div class="field" style="margin-bottom:12px"><label>Sueldo básico mensual (bruto)</label>
+        <input type="number" value="${nm.sueldoBasico}" onchange="DB.nomina.sueldoBasico=+this.value;render()"></div>
+      <div class="field" style="margin-bottom:12px"><label>Sistema de pensión</label>
+        <select onchange="DB.nomina.sistema=this.value;render()">
+          <option ${nm.sistema==='AFP'?'selected':''}>AFP</option><option ${nm.sistema==='ONP'?'selected':''}>ONP</option></select></div>
+      ${nm.sistema==='AFP'?`<div class="field" style="margin-bottom:12px"><label>Tu AFP</label>
+        <select onchange="DB.nomina.afp=this.value;render()">
+          ${Object.keys(p.afpComisiones).map(a=>`<option value="${a}" ${nm.afp===a?'selected':''}>${a} · comisión ${pct(p.afpComisiones[a])}</option>`).join('')}
+        </select></div>`:''}
+      <div class="field" style="margin-bottom:12px"><label>Asignación familiar (tienes hijos menores)</label>
+        <select onchange="DB.nomina.asignacionFamiliar=(this.value==='SI');render()">
+          <option ${nm.asignacionFamiliar?'selected':''}>SI</option><option ${!nm.asignacionFamiliar?'selected':''}>NO</option></select></div>
+      <div class="field" style="margin-bottom:12px"><label>Otros ingresos afectos (bonos, horas extras)</label>
+        <input type="number" value="${nm.otrosAfectos}" onchange="DB.nomina.otrosAfectos=+this.value;render()"></div>
+      <div class="field" style="margin-bottom:12px"><label>Otros descuentos (adelantos, préstamos)</label>
+        <input type="number" value="${nm.otrosDescuentos}" onchange="DB.nomina.otrosDescuentos=+this.value;render()"></div>
+      <div class="field"><label>Cuenta donde te abonan</label>
+        <select onchange="DB.nomina.cuentaAbono=this.value;render()">${DB.carteras.map(c=>`<option ${c.nombre===nm.cuentaAbono?'selected':''}>${esc(c.nombre)}</option>`).join('')}</select></div>
+    </div>
+
+    <div class="card card-pad">
+      <h3>Tu boleta mensual</h3>
+      <table>
+        ${fila('Sueldo básico',n.basico)}
+        ${fila('Asignación familiar',n.asig,'',true,nm.asignacionFamiliar?'10% de la RMV ('+fmt(p.rmv)+')':'no aplica')}
+        ${fila('Otros ingresos afectos',n.otrosAfectos,'',true)}
+        ${fila('TOTAL BRUTO',n.bruto,'b')}
+        ${nm.sistema==='AFP'?`
+          ${fila('Aporte obligatorio AFP',-n.aporte,'neg',true,'10% · va a tu fondo')}
+          ${fila('Comisión '+nm.afp,-n.comision,'neg',true,pct(p.afpComisiones[nm.afp])+' sobre tu bruto')}
+          ${fila('Prima de seguro',-n.prima,'neg',true,pct(p.afpPrima)+' · tope '+fmt(p.rmaTope))}`
+        :fila('Aporte ONP',-n.onp,'neg',true,'13% de tu bruto')}
+        ${fila('Renta 5ta categoría',-n.retencion,'neg',true,'retención mensual proyectada')}
+        ${n.otrosDesc?fila('Otros descuentos',-n.otrosDesc,'neg',true):''}
+        ${fila('TOTAL DESCUENTOS',-n.totalDesc,'b')}
+      </table>
+      <div class="sim-out ok" style="margin-top:14px;display:flex;justify-content:space-between;align-items:center">
+        <span>NETO EN MANO CADA MES</span>
+        <span style="font-family:'Fraunces',serif;font-size:24px">${fmt(n.neto)}</span>
+      </div>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">
+        Te descuentan <b>${pct(n.totalDesc/(n.bruto||1))}</b> del bruto. De S/ ${n.bruto.toFixed(0)} recibes S/ ${n.neto.toFixed(0)}.
+      </div>
+    </div>
+  </div>
+
+  <div class="grid two-col" style="grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+    <div class="card card-pad">
+      <h3>Cómo sale tu impuesto de 5ta</h3>
+      <table>
+        ${fila('Proyección de 12 sueldos',n.proy12)}
+        ${fila('Gratificaciones (julio + diciembre)',n.gratis,'',true)}
+        ${fila('Bonificación extraordinaria 9%',n.bonifAnual,'',true,'el 9% de EsSalud va a ti · Ley 30334')}
+        ${fila('Renta bruta anual proyectada',n.rentaBruta,'b')}
+        ${fila('Deducción de 7 UIT',-p.uit*p.deduccionUIT,'neg',true,'UIT 2026 = '+fmt(p.uit))}
+        ${fila('Renta neta imponible',n.rni,'b')}
+        ${n.detalle.map((d,i)=>d.monto>0?fila('Tramo al '+pct(d.tasa),d.imp,'',true):'').join('')}
+        ${fila('Impuesto anual',n.impAnual,'b')}
+        ${fila('Retención mensual (÷12)',n.retencion,'b')}
+      </table>
+      ${n.rni===0?`<div class="sim-out ok" style="margin-top:12px">✅ No pagas impuesto de 5ta: tu proyección anual no supera las 7 UIT (${fmt(p.uit*7)}).</div>`:''}
+    </div>
+
+    <div class="card card-pad">
+      <h3>Gratificaciones y CTS</h3>
+      <table>
+        ${fila('Gratificación (julio y diciembre)',n.grati,'',false,'inafecta a AFP/ONP · Ley 30334')}
+        ${fila('Bonificación extraordinaria 9%',n.bonifGrati,'pos',true)}
+        ${fila('Recibes por gratificación',n.netoGrati,'b')}
+        ${fila('Depósito CTS (mayo y noviembre)',n.cts,'b',false,'va a tu cuenta CTS, no es de libre disposición')}
+      </table>
+      <hr style="border:none;border-top:1px solid var(--cardline);margin:16px 0">
+      <h3>Al año</h3>
+      <table>
+        ${fila('Bruto anual (sueldos + gratis)',n.rentaBruta)}
+        ${fila('Descuentos de pensión',-n.pension*12,'neg',true)}
+        ${fila('Impuesto a la renta',-n.impAnual,'neg',true)}
+        ${fila('NETO ANUAL',n.rentaBruta-n.pension*12-n.impAnual-n.otrosDesc*12,'b')}
+      </table>
+      <button class="btn primary sm" style="margin-top:16px;width:100%" onclick="go('recurrentes')">
+        Usar este neto como ingreso recurrente →</button>
+    </div>
+  </div>
+
+  <div class="card card-pad">
+    <h3>Parámetros legales · Perú 2026</h3>
+    <div class="form-grid" style="grid-template-columns:repeat(4,1fr)">
+      <div class="field"><label>UIT</label><input type="number" value="${p.uit}" onchange="DB.params.uit=+this.value;render()"></div>
+      <div class="field"><label>RMV</label><input type="number" value="${p.rmv}" onchange="DB.params.rmv=+this.value;render()"></div>
+      <div class="field"><label>Prima AFP</label><input type="number" step="0.0001" value="${p.afpPrima}" onchange="DB.params.afpPrima=+this.value;render()"></div>
+      <div class="field"><label>Tope asegurable</label><input type="number" step="0.01" value="${p.rmaTope}" onchange="DB.params.rmaTope=+this.value;render()"></div>
+    </div>
+    <div style="font-size:11.5px;color:var(--muted);margin-top:12px;line-height:1.6">
+      UIT 2026 <b>S/ 5,500</b> (DS 301-2025-EF) · RMV <b>S/ 1,130</b> (DS 006-2024-TR) → asignación familiar <b>S/ 113</b> ·
+      ONP <b>13%</b> · AFP aporte <b>10%</b> + prima <b>1.37%</b> + comisión (Habitat 1.47%, Integra 1.55%, Prima 1.60%, Profuturo 1.69%) ·
+      Renta 5ta: deducción <b>7 UIT (S/ 38,500)</b> y tramos 8/14/17/20/30%.
+      El tope asegurable de la prima AFP lo actualiza la SBS cada trimestre — revísalo.
+    </div>
+  </div>`;
 }
 
 /* --------- PROYECCIÓN --------- */
