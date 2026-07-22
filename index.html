@@ -2,1193 +2,692 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sistema Financiero · ACIF</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mi Sistema Financiero</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --navy:#2C3E50; --slate:#34495E; --dark:#1A252F; --ink:#1B2631; --muted:#7B8794;
-  --line:#E4E8EC; --bg:#F4F6F8; --card:#FFFFFF; --cardline:#EDF0F3;
-  --green:#1E8449; --green-bg:#E8F6EF; --red:#C0392B; --red-bg:#FDECEA;
-  --amber:#B9770E; --amber-bg:#FCF3E3; --gold:#C9A227; --blue:#2471A3;
-  --shadow:0 1px 2px rgba(20,30,45,.06),0 8px 24px rgba(20,30,45,.06);
+  --ink:#16212B; --ink-soft:#243543;
+  --bg:#EDF0F3; --card:#FFFFFF; --line:#DDE3E9; --line-soft:#EDF1F4;
+  --text:#1B2733; --muted:#6B7A88;
+  --in:#0E7A5F; --in-bg:#E6F4EF;
+  --out:#B0392F; --out-bg:#FBEBE9;
+  --accent:#0E6E63;
+  --shadow:0 1px 2px rgba(20,32,43,.05), 0 6px 20px rgba(20,32,43,.07);
+  --r:14px;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%}
-body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
-.tnum{font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
-button{font-family:inherit;cursor:pointer;border:none;background:none}
-input,select{font-family:inherit;font-size:14px}
-.app{display:flex;min-height:100vh}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;padding-bottom:80px}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font-family:inherit;font-size:15px}
+.num{font-family:'Space Grotesk',sans-serif;font-variant-numeric:tabular-nums}
 
-/* SIDEBAR */
-.side{width:236px;background:var(--navy);color:#DDE4EA;display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:20}
-.brand{padding:22px 20px 18px;border-bottom:1px solid rgba(255,255,255,.08)}
-.brand h1{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:#fff;letter-spacing:.2px}
-.brand span{font-size:11px;color:#8FA0AF;letter-spacing:1.5px;text-transform:uppercase;font-weight:600}
-.nav{padding:12px 12px;flex:1;overflow-y:auto}
-.nav a{display:flex;align-items:center;gap:11px;padding:10px 13px;border-radius:9px;color:#B7C4CF;font-weight:500;font-size:13.5px;margin-bottom:2px;transition:.15s;text-decoration:none}
-.nav a .ic{width:17px;text-align:center;opacity:.85}
-.nav a:hover{background:rgba(255,255,255,.06);color:#fff}
-.nav a.active{background:var(--gold);color:var(--dark);font-weight:700}
-.nav a.active .ic{opacity:1}
-.side-foot{padding:14px 18px;font-size:11px;color:#7A8895;border-top:1px solid rgba(255,255,255,.08)}
-.side-foot b{color:#AEB9C4}
+/* ---------- HEADER ---------- */
+header{background:var(--ink);color:#fff;padding:18px 20px 0}
+.hwrap{max-width:1000px;margin:0 auto}
+.htop{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.logo{font-family:'Space Grotesk';font-size:18px;font-weight:700;letter-spacing:-.2px}
+.logo span{color:#8FA6B4;font-weight:500}
+.tabs{display:flex;gap:2px;overflow-x:auto}
+.tabs button{padding:11px 16px;font-size:14px;font-weight:600;color:#93A7B5;border-bottom:3px solid transparent;white-space:nowrap;border-radius:8px 8px 0 0}
+.tabs button:hover{color:#fff}
+.tabs button.on{color:#fff;border-color:#fff;background:rgba(255,255,255,.07)}
 
-/* MAIN */
-.main{margin-left:236px;flex:1;min-width:0}
-.topbar{background:var(--card);border-bottom:1px solid var(--line);padding:16px 30px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:10}
-.topbar h2{font-size:17px;font-weight:700;color:var(--navy)}
-.topbar .sub{font-size:12px;color:var(--muted);margin-top:1px}
-.content{padding:26px 30px 60px;max-width:1240px}
-.hidden{display:none!important}
+/* ---------- LAYOUT ---------- */
+main{max-width:1000px;margin:0 auto;padding:22px 20px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+.pad{padding:20px}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-weight:700;margin-bottom:14px}
+.row{display:flex;align-items:center;gap:12px}
+.between{display:flex;justify-content:space-between;align-items:center}
+.grid{display:grid;gap:14px}
+.mb{margin-bottom:16px}
 
-/* CARDS */
-.grid{display:grid;gap:16px}
-.card{background:var(--card);border:1px solid var(--cardline);border-radius:14px;box-shadow:var(--shadow)}
-.card-pad{padding:20px 22px}
-.card h3{font-size:12px;text-transform:uppercase;letter-spacing:.8px;color:var(--muted);font-weight:700;margin-bottom:14px}
+/* ---------- SALDO TOTAL ---------- */
+.total{background:var(--ink);color:#fff;border-radius:var(--r);padding:26px 24px;margin-bottom:16px}
+.total .lbl{font-size:13px;color:#93A7B5;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
+.total .big{font-family:'Space Grotesk';font-size:42px;font-weight:700;letter-spacing:-1.4px;margin:6px 0 14px;line-height:1}
+.total .mini{display:flex;gap:26px;flex-wrap:wrap}
+.total .mini div{font-size:13px;color:#A9BCC8}
+.total .mini b{display:block;font-family:'Space Grotesk';font-size:17px;color:#fff;font-weight:600;margin-top:2px}
 
-/* KPI */
-.kpis{grid-template-columns:repeat(4,1fr)}
-.kpi{padding:18px 20px}
-.kpi .lab{font-size:11.5px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);font-weight:700}
-.kpi .val{font-family:'Fraunces',serif;font-size:27px;font-weight:600;margin-top:7px;letter-spacing:-.3px}
-.kpi .val.big{font-size:30px}
-.kpi .meta{font-size:12px;color:var(--muted);margin-top:4px}
-.pos{color:var(--green)} .neg{color:var(--red)} .amb{color:var(--amber)}
-.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:700}
-.pill.g{background:var(--green-bg);color:var(--green)} .pill.r{background:var(--red-bg);color:var(--red)} .pill.a{background:var(--amber-bg);color:var(--amber)}
+/* ---------- BOTONES ---------- */
+.btn{padding:11px 18px;border-radius:10px;font-weight:600;font-size:14.5px;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.15s;border:1.5px solid transparent}
+.btn:active{transform:scale(.98)}
+.btn-in{background:var(--in);color:#fff;flex:1}
+.btn-in:hover{background:#0B6650}
+.btn-out{background:var(--out);color:#fff;flex:1}
+.btn-out:hover{background:#963028}
+.btn-dark{background:var(--ink);color:#fff}
+.btn-dark:hover{background:var(--ink-soft)}
+.btn-line{background:#fff;border-color:var(--line);color:var(--text)}
+.btn-line:hover{border-color:var(--ink);}
+.btn-sm{padding:7px 13px;font-size:13.5px;border-radius:9px}
+.quick{display:flex;gap:12px;margin-bottom:16px}
+.icon-btn{width:32px;height:32px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);font-size:15px}
+.icon-btn:hover{background:var(--bg);color:var(--ink)}
 
-/* TABLES */
-table{width:100%;border-collapse:collapse}
-th{font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700;text-align:left;padding:9px 12px;border-bottom:1.5px solid var(--line)}
-td{padding:10px 12px;border-bottom:1px solid var(--cardline);font-size:13px}
-tbody tr:hover{background:#FAFBFC}
-th.num,td.num{text-align:right;font-variant-numeric:tabular-nums}
-.tag{display:inline-block;padding:2px 8px;border-radius:6px;font-size:11px;font-weight:600}
-.tag.ing{background:var(--green-bg);color:var(--green)} .tag.egr{background:var(--red-bg);color:var(--red)}
-.tag.tra{background:#EAF2F8;color:var(--blue)} .tag.inv{background:#F4ECFB;color:#7D3C98}
-.tag.prog{background:#FEF5E7;color:var(--amber)} .tag.ejec{background:#EAF2EC;color:#4A6B54}
-.wallet-chip{display:inline-flex;align-items:center;gap:6px}
+/* ---------- BILLETERAS ---------- */
+.wallets{grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
+.wallet{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:17px;box-shadow:var(--shadow);transition:.15s}
+.wallet:hover{border-color:#C3CDD6}
+.wallet .top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.wallet .emoji{width:38px;height:38px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
+.wallet .nm{font-weight:600;font-size:14.5px;line-height:1.25;flex:1;min-width:0}
+.wallet .amt{font-family:'Space Grotesk';font-size:23px;font-weight:600;letter-spacing:-.5px}
+.wallet .sub{font-size:12px;color:var(--muted);margin-top:3px}
+.neg{color:var(--out)} .pos{color:var(--in)}
+.add-wallet{border:2px dashed var(--line);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-weight:600;font-size:14px;min-height:118px;transition:.15s}
+.add-wallet:hover{border-color:var(--accent);color:var(--accent);background:#fff}
 
-/* FORMS */
-.form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px 18px}
-.field{display:flex;flex-direction:column;gap:5px}
-.field.full{grid-column:1/-1}
-label{font-size:12px;font-weight:600;color:var(--slate)}
-input,select{padding:9px 11px;border:1.5px solid var(--line);border-radius:9px;background:#fff;color:var(--ink);transition:.15s}
-input:focus,select:focus{outline:none;border-color:var(--navy);box-shadow:0 0 0 3px rgba(44,62,80,.08)}
-.btn{padding:10px 18px;border-radius:9px;font-weight:700;font-size:13.5px;transition:.15s;display:inline-flex;align-items:center;gap:7px}
-.btn.primary{background:var(--navy);color:#fff}
-.btn.primary:hover{background:var(--dark)}
-.btn.ghost{background:#fff;border:1.5px solid var(--line);color:var(--slate)}
-.btn.ghost:hover{border-color:var(--navy);color:var(--navy)}
-.btn.gold{background:var(--gold);color:var(--dark)}
-.btn.sm{padding:6px 12px;font-size:12px}
-.btn.danger{color:var(--red)} .btn.danger:hover{background:var(--red-bg)}
-.row-actions{display:flex;gap:6px;justify-content:flex-end}
-.icon-btn{width:30px;height:30px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);font-size:14px}
-.icon-btn:hover{background:var(--bg);color:var(--navy)}
+/* ---------- MOVIMIENTOS ---------- */
+.mov{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid var(--line-soft)}
+.mov:last-child{border-bottom:none}
+.mov .ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
+.mov .ic.i{background:var(--in-bg);color:var(--in)}
+.mov .ic.e{background:var(--out-bg);color:var(--out)}
+.mov .info{flex:1;min-width:0}
+.mov .d{font-weight:600;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mov .m{font-size:12.5px;color:var(--muted);margin-top:1px}
+.mov .val{font-family:'Space Grotesk';font-weight:600;font-size:15.5px;white-space:nowrap}
+.mov .acts{display:flex;gap:2px;opacity:0;transition:.15s}
+.mov:hover .acts{opacity:1}
+@media(hover:none){.mov .acts{opacity:1}}
+.chip{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:600;background:var(--bg);color:var(--muted);margin-left:6px}
 
-/* SALDO BARS */
-.saldo-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--cardline)}
-.saldo-row:last-child{border:none}
-.saldo-ic{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;background:var(--bg);flex-shrink:0}
-.saldo-name{flex:1;min-width:0}
-.saldo-name .n{font-weight:600;font-size:13px}
-.saldo-name .t{font-size:11px;color:var(--muted)}
-.saldo-val{font-weight:700;font-variant-numeric:tabular-nums;font-size:14px}
+/* ---------- MES ---------- */
+.monthbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+.monthbar .mname{font-family:'Space Grotesk';font-size:19px;font-weight:600;text-transform:capitalize}
+.nav-m{width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px}
+.nav-m:hover{border-color:var(--ink)}
+.msum{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px}
+.msum div{background:#fff;padding:14px}
+.msum .l{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700}
+.msum .v{font-family:'Space Grotesk';font-size:19px;font-weight:600;margin-top:3px}
 
-/* PROGRESS */
-.prog-wrap{height:10px;background:var(--line);border-radius:20px;overflow:hidden;margin-top:8px}
-.prog-bar{height:100%;background:linear-gradient(90deg,var(--green),#27AE60);border-radius:20px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+/* ---------- TABLA RECURRENTES ---------- */
+.rec{display:flex;align-items:center;gap:13px;padding:15px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.rec:last-child{border-bottom:none}
+.rec .info{flex:1;min-width:180px}
+.rec .d{font-weight:600;font-size:14.5px}
+.rec .m{font-size:12.5px;color:var(--muted);margin-top:2px}
+.rec .gen{display:flex;align-items:center;gap:6px}
+.rec .gen input{width:52px;padding:6px 8px;border:1.5px solid var(--line);border-radius:8px;text-align:center;font-size:13.5px}
+.pausado{opacity:.5}
 
-/* SIM */
-.sim-out{margin-top:14px;padding:14px 16px;border-radius:11px;font-weight:600;font-size:13.5px;line-height:1.4}
-.sim-out.ok{background:var(--green-bg);color:var(--green)}
-.sim-out.warn{background:var(--amber-bg);color:var(--amber)}
-.sim-out.bad{background:var(--red-bg);color:var(--red)}
+/* ---------- FORMS ---------- */
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+label{font-size:13px;font-weight:600;color:var(--ink-soft)}
+input,select{padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--text);width:100%}
+input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(14,110,99,.1)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.seg{display:flex;gap:8px;margin-bottom:16px}
+.seg button{flex:1;padding:12px;border-radius:10px;font-weight:600;font-size:14.5px;border:1.5px solid var(--line);background:#fff;color:var(--muted)}
+.seg button.on-in{background:var(--in-bg);border-color:var(--in);color:var(--in)}
+.seg button.on-out{background:var(--out-bg);border-color:var(--out);color:var(--out)}
 
-/* PROJECTION */
-.proj-scroll{overflow-x:auto}
-.proj table{min-width:900px}
-.proj td.cat{font-weight:500;white-space:nowrap}
-.proj tr.head td{background:#F0F2F5;font-weight:700;color:var(--navy)}
-.proj tr.tot td{background:var(--slate);color:#fff;font-weight:700}
-.proj tr.acc td{background:var(--dark);color:#fff;font-weight:700}
-.proj td.num{font-variant-numeric:tabular-nums}
-.proj td.zero{color:transparent}
+/* ---------- MODAL ---------- */
+.overlay{position:fixed;inset:0;background:rgba(22,33,43,.55);display:flex;align-items:flex-end;justify-content:center;z-index:100;padding:0}
+.modal{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;animation:up .22s ease}
+@keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:translateY(0);opacity:1}}
+.mhead{padding:20px 22px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;border-radius:18px 18px 0 0}
+.mhead h3{font-family:'Space Grotesk';font-size:17px;font-weight:600}
+.mbody{padding:20px 22px}
+.mfoot{padding:14px 22px 22px;display:flex;gap:10px}
+.mfoot .btn{flex:1}
+@media(min-width:640px){
+  .overlay{align-items:center;padding:20px}
+  .modal{border-radius:18px}
+  .mhead{border-radius:18px 18px 0 0}
+}
 
-/* TABS in config */
-.subtabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:20px;border-bottom:1px solid var(--line)}
-.subtabs button{padding:9px 15px;font-size:13px;font-weight:600;color:var(--muted);border-bottom:2.5px solid transparent;margin-bottom:-1px}
-.subtabs button.active{color:var(--navy);border-color:var(--gold)}
-.section-title{font-size:15px;font-weight:700;color:var(--navy);margin:0 0 4px}
-.section-sub{font-size:12.5px;color:var(--muted);margin-bottom:16px}
-
-/* MODAL */
-.modal-bg{position:fixed;inset:0;background:rgba(26,37,47,.5);display:flex;align-items:center;justify-content:center;z-index:50;padding:20px}
-.modal{background:#fff;border-radius:16px;width:100%;max-width:480px;box-shadow:0 20px 60px rgba(0,0,0,.3);max-height:90vh;overflow-y:auto}
-.modal-head{padding:20px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
-.modal-head h3{font-size:16px;font-weight:700;color:var(--navy);text-transform:none;letter-spacing:0;margin:0}
-.modal-body{padding:22px 24px}
-.modal-foot{padding:16px 24px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;gap:10px}
-.empty{text-align:center;padding:40px 20px;color:var(--muted)}
-.empty .big{font-size:34px;margin-bottom:10px;opacity:.5}
-.mono{font-variant-numeric:tabular-nums}
-.toast{position:fixed;bottom:26px;right:26px;background:var(--dark);color:#fff;padding:13px 20px;border-radius:11px;font-weight:600;font-size:13.5px;box-shadow:0 10px 30px rgba(0,0,0,.25);z-index:60;transform:translateY(80px);opacity:0;transition:.35s}
-.toast.show{transform:translateY(0);opacity:1}
-
-.menu-toggle{display:none}
-@media(max-width:900px){
-  .side{transform:translateX(-100%);transition:.3s;width:250px}
-  .side.open{transform:translateX(0)}
-  .main{margin-left:0}
-  .menu-toggle{display:inline-flex}
-  .kpis{grid-template-columns:repeat(2,1fr)}
-  .form-grid{grid-template-columns:1fr}
-  .content{padding:18px 16px 60px}
-  .topbar{padding:14px 16px}
-  .two-col{grid-template-columns:1fr!important}
+.empty{text-align:center;padding:38px 20px;color:var(--muted)}
+.empty .e{font-size:32px;opacity:.35;margin-bottom:10px}
+.empty p{font-size:14px;margin-bottom:14px}
+.hint{background:#F7F9FA;border-left:3px solid var(--accent);padding:11px 14px;border-radius:0 8px 8px 0;font-size:13px;color:var(--muted);margin-top:14px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,90px);background:var(--ink);color:#fff;padding:13px 22px;border-radius:12px;font-weight:600;font-size:14px;z-index:200;transition:.3s;box-shadow:0 8px 26px rgba(0,0,0,.25)}
+.toast.show{transform:translate(-50%,0)}
+@media(max-width:520px){
+  .total .big{font-size:35px}
+  .msum{grid-template-columns:1fr;}
+  main{padding:16px}
 }
 </style>
 </head>
 <body>
-<div class="app">
-  <!-- SIDEBAR -->
-  <aside class="side" id="side">
-    <div class="brand">
-      <span>Finanzas Personales</span>
-      <h1>ACIF Cashflow</h1>
+
+<header>
+  <div class="hwrap">
+    <div class="htop">
+      <div class="logo">Mi Dinero <span>· control simple</span></div>
+      <button class="icon-btn" style="color:#93A7B5" onclick="menuDatos()" title="Datos">⋯</button>
     </div>
-    <nav class="nav" id="nav">
-      <a data-view="dashboard" class="active"><span class="ic">◈</span> Dashboard</a>
-      <a data-view="movimientos"><span class="ic">↹</span> Movimientos</a>
-      <a data-view="recurrentes"><span class="ic">↻</span> Recurrentes</a>
-      <a data-view="nomina"><span class="ic">🧾</span> Nómina</a>
-      <a data-view="proyeccion"><span class="ic">↗</span> Proyección 12M</a>
-      <a data-view="deudas"><span class="ic">▤</span> Deudas y Tarjetas</a>
-      <a data-view="inversiones"><span class="ic">◆</span> Inversiones</a>
-      <a data-view="config"><span class="ic">⚙</span> Configuración</a>
+    <nav class="tabs" id="tabs">
+      <button data-v="inicio" class="on">Inicio</button>
+      <button data-v="historial">Historial</button>
+      <button data-v="recurrentes">Recurrentes</button>
+      <button data-v="billeteras">Billeteras</button>
     </nav>
-    <div class="side-foot">
-      Presupuesto Base Cero<br>Flujo de caja proyectado · <b>12M</b>
-    </div>
-  </aside>
+  </div>
+</header>
 
-  <!-- MAIN -->
-  <main class="main">
-    <div class="topbar">
-      <div style="display:flex;align-items:center;gap:14px">
-        <button class="icon-btn menu-toggle" onclick="document.getElementById('side').classList.toggle('open')" style="font-size:20px">☰</button>
-        <div>
-          <h2 id="viewTitle">Dashboard financiero</h2>
-          <div class="sub" id="viewSub">Patrimonio, liquidez e indicadores clave</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px">
-        <button class="btn ghost sm" onclick="exportCSV()">⬇ CSV</button>
-        <button class="btn primary sm" onclick="openMov()">+ Movimiento</button>
-      </div>
-    </div>
-    <div class="content" id="content"></div>
-  </main>
-</div>
-
-<div id="modalRoot"></div>
+<main id="app"></main>
+<div id="modal"></div>
 <div class="toast" id="toast"></div>
 
 <script>
-/* ============================ ESTADO / DATOS ============================ */
-const LS_KEY = 'acif_finanzas_v2';
-const fmt = (n,dec=2)=> (n<0?'-':'')+'S/ '+Math.abs(+n||0).toLocaleString('es-PE',{minimumFractionDigits:dec,maximumFractionDigits:dec});
-const pct = n => ((+n||0)*100).toFixed(1)+'%';
-const uid = ()=> Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-const mesKey = f => (f||'').slice(0,7);
-const nombreMes = ym => { const [y,m]=ym.split('-'); return ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'][+m-1]+' '+y.slice(2); };
+/* ═══════════════ DATOS ═══════════════ */
+const KEY='mi_dinero_v1';
+let memoria=null;
 
-const DEFAULTS = {
-  carteras:[
-    {id:uid(),nombre:'Efectivo',tipo:'Efectivo',moneda:'PEN',saldoInicial:850,icon:'💵'},
-    {id:uid(),nombre:'Yape',tipo:'Billetera Digital',moneda:'PEN',saldoInicial:1240,icon:'📱'},
-    {id:uid(),nombre:'Plin',tipo:'Billetera Digital',moneda:'PEN',saldoInicial:430,icon:'📲'},
-    {id:uid(),nombre:'BCP Ahorros',tipo:'Cuenta Ahorro',moneda:'PEN',saldoInicial:8600,icon:'🏦'},
-    {id:uid(),nombre:'Interbank Sueldo',tipo:'Cuenta Sueldo',moneda:'PEN',saldoInicial:3200,icon:'🏛️'},
-    {id:uid(),nombre:'Fondo Emergencia',tipo:'Cuenta Ahorro',moneda:'PEN',saldoInicial:6000,icon:'🛟'},
-    {id:uid(),nombre:'Inversión Fondo Mutuo',tipo:'Inversión',moneda:'PEN',saldoInicial:5000,icon:'📈'},
-  ],
-  categorias:[
-    {id:uid(),nombre:'Sueldo',grupo:'Ingreso',clase:'Activo'},
-    {id:uid(),nombre:'Bono / Comisión',grupo:'Ingreso',clase:'Activo'},
-    {id:uid(),nombre:'Ingreso Freelance',grupo:'Ingreso',clase:'Activo'},
-    {id:uid(),nombre:'Rendimiento Inversión',grupo:'Ingreso',clase:'Activo'},
-    {id:uid(),nombre:'Vivienda / Alquiler',grupo:'Egreso',clase:'Necesidad'},
-    {id:uid(),nombre:'Alimentación',grupo:'Egreso',clase:'Necesidad'},
-    {id:uid(),nombre:'Servicios (luz, agua, internet)',grupo:'Egreso',clase:'Necesidad'},
-    {id:uid(),nombre:'Transporte',grupo:'Egreso',clase:'Necesidad'},
-    {id:uid(),nombre:'Salud',grupo:'Egreso',clase:'Necesidad'},
-    {id:uid(),nombre:'Educación',grupo:'Egreso',clase:'Necesidad'},
-    {id:uid(),nombre:'Pago Tarjeta / Deuda',grupo:'Egreso',clase:'Pasivo'},
-    {id:uid(),nombre:'Restaurantes / Delivery',grupo:'Egreso',clase:'Deseo'},
-    {id:uid(),nombre:'Compras / Ropa',grupo:'Egreso',clase:'Deseo'},
-    {id:uid(),nombre:'Suscripciones',grupo:'Egreso',clase:'Deseo'},
-    {id:uid(),nombre:'Viajes',grupo:'Egreso',clase:'Deseo'},
-    {id:uid(),nombre:'Ocio / Entretenimiento',grupo:'Egreso',clase:'Deseo'},
-    {id:uid(),nombre:'Provisión Anual',grupo:'Egreso',clase:'Necesidad'},
-    {id:uid(),nombre:'Aporte Inversión',grupo:'Inversión',clase:'Activo'},
-    {id:uid(),nombre:'Transferencia interna',grupo:'Transferencia',clase:'—'},
-    {id:uid(),nombre:'Otros Egresos',grupo:'Egreso',clase:'Deseo'},
-  ],
-  tiposMov:['Ingreso','Egreso','Transferencia','Inversión'],
-  tiposGasto:['Costo Fijo / Necesidad','Costo Variable / Deseo','Deuda / Pasivo','Ahorro / Inversión'],
-  medios:['Efectivo','Yape','Plin','Tarjeta Débito','Tarjeta Crédito','Transferencia','Débito automático'],
-  estados:['Ejecutado','Programado'],
-  divisas:[
-    {id:uid(),cod:'PEN',nombre:'Sol Peruano',tc:1},
-    {id:uid(),cod:'USD',nombre:'Dólar EEUU',tc:3.75},
-    {id:uid(),cod:'EUR',nombre:'Euro',tc:4.05},
-    {id:uid(),cod:'CLP',nombre:'Peso Chileno',tc:0.0040},
-  ],
-  tarjetas:[
-    {id:uid(),nombre:'Tarjeta BCP Visa',banco:'BCP',linea:6000,cierre:25,pago:15,tasa:0.65,moneda:'PEN'},
-    {id:uid(),nombre:'Tarjeta Interbank MC',banco:'Interbank',linea:4500,cierre:5,pago:20,tasa:0.72,moneda:'PEN'},
-  ],
-  prestamos:[
-    {id:uid(),nombre:'Crédito Vehicular',entidad:'BBVA',monto:28000,tasa:0.145,cuotas:36,inicio:'2025-09-01'},
-    {id:uid(),nombre:'Préstamo Personal',entidad:'Interbank',monto:9000,tasa:0.28,cuotas:18,inicio:'2026-01-15'},
-  ],
-  inversiones:[
-    {id:uid(),nombre:'Fondo Mutuo BCP',invertido:5000,valorActual:5420,rendimiento:180},
-    {id:uid(),nombre:'Depósito a Plazo IBK',invertido:8000,valorActual:8360,rendimiento:0},
-    {id:uid(),nombre:'Acciones BVL',invertido:3000,valorActual:2740,rendimiento:60},
-  ],
-  provisiones:[
-    {id:uid(),concepto:'Seguro Vehicular',anual:1400,meses:8},
-    {id:uid(),concepto:'Impuesto Predial',anual:600,meses:5},
-    {id:uid(),concepto:'Matrícula anual',anual:2400,meses:4},
+const store={
+  get(){ try{ return localStorage.getItem(KEY); }catch(e){ return memoria; } },
+  set(v){ try{ localStorage.setItem(KEY,v); }catch(e){ memoria=v; } }
+};
+
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const hoy=()=>new Date().toISOString().slice(0,10);
+
+const INICIAL={
+  billeteras:[
+    {id:'w1',nombre:'Efectivo',icono:'💵',saldoInicial:300},
+    {id:'w2',nombre:'Yape',icono:'📱',saldoInicial:450},
+    {id:'w3',nombre:'Plin',icono:'💬',saldoInicial:120},
+    {id:'w4',nombre:'Cuenta de ahorros',icono:'🏦',saldoInicial:2500},
   ],
   movimientos:[
-    m('2026-01-02','Sueldo enero','Ingreso','Sueldo','','Interbank Sueldo','Transferencia','PEN',3604.70,'Ejecutado'),
-    m('2026-01-03','Alquiler depto','Egreso','Vivienda / Alquiler','Interbank Sueldo','','Transferencia','PEN',1300,'Ejecutado'),
-    m('2026-01-05','Compras supermercado','Egreso','Alimentación','Yape','','Yape','PEN',520,'Ejecutado'),
-    m('2026-01-07','Combustible','Egreso','Transporte','Tarjeta BCP Visa','','Tarjeta Crédito','PEN',180,'Ejecutado'),
-    m('2026-01-10','Internet + cable','Egreso','Servicios (luz, agua, internet)','BCP Ahorros','','Débito automático','PEN',149,'Ejecutado'),
-    m('2026-01-12','Cena restaurante','Egreso','Restaurantes / Delivery','Tarjeta BCP Visa','','Tarjeta Crédito','PEN',145,'Ejecutado'),
-    m('2026-01-15','Aporte fondo mutuo','Inversión','Aporte Inversión','BCP Ahorros','Inversión Fondo Mutuo','Transferencia','PEN',600,'Ejecutado'),
-    m('2026-01-18','Freelance diseño','Ingreso','Ingreso Freelance','','Yape','Yape','PEN',850,'Ejecutado'),
-    m('2026-01-20','Suscripción software','Egreso','Suscripciones','Tarjeta Interbank MC','','Tarjeta Crédito','USD',29,'Ejecutado'),
-    m('2026-01-25','Pago tarjeta BCP','Transferencia','Pago Tarjeta / Deuda','BCP Ahorros','Tarjeta BCP Visa','Transferencia','PEN',470,'Ejecutado'),
-    m('2026-02-02','Sueldo febrero','Ingreso','Sueldo','','Interbank Sueldo','Transferencia','PEN',3604.70,'Ejecutado'),
-    m('2026-02-03','Alquiler depto','Egreso','Vivienda / Alquiler','Interbank Sueldo','','Transferencia','PEN',1300,'Ejecutado'),
-    m('2026-02-06','Compras mes','Egreso','Alimentación','Yape','','Yape','PEN',610,'Ejecutado'),
-    m('2026-02-14','Regalo','Egreso','Compras / Ropa','Tarjeta BCP Visa','','Tarjeta Crédito','PEN',220,'Ejecutado'),
-    m('2026-03-10','Matrícula curso','Egreso','Educación','BCP Ahorros','','Transferencia','PEN',480,'Programado'),
-    m('2026-04-15','Viaje feriado','Egreso','Viajes','Fondo Emergencia','','Transferencia','PEN',1200,'Programado'),
+    {id:uid(),fecha:hoy(),tipo:'Ingreso',monto:2800,descripcion:'Sueldo',categoria:'Sueldo',billeteraId:'w4'},
+    {id:uid(),fecha:hoy(),tipo:'Egreso',monto:65,descripcion:'Almuerzo',categoria:'Comida',billeteraId:'w2'},
+    {id:uid(),fecha:hoy(),tipo:'Egreso',monto:120,descripcion:'Recibo de luz',categoria:'Servicios',billeteraId:'w4'},
   ],
   recurrentes:[
-    {id:uid(),concepto:'Sueldo neto (nómina)',tipo:'Ingreso',categoria:'Sueldo',cuenta:'Interbank Sueldo',fuente:'nomina_neto',monto:0,frecuencia:'Mensual',dia:30,inicio:'2026-03-01',fin:'',activo:true},
-    {id:uid(),concepto:'Alquiler departamento',tipo:'Egreso',categoria:'Vivienda / Alquiler',cuenta:'Interbank Sueldo',fuente:'manual',monto:1300,frecuencia:'Mensual',dia:3,inicio:'2026-03-01',fin:'',activo:true},
-    {id:uid(),concepto:'Letra crédito vehicular',tipo:'Egreso',categoria:'Pago Tarjeta / Deuda',cuenta:'BCP Ahorros',fuente:'manual',monto:963.79,frecuencia:'Mensual',dia:10,inicio:'2026-03-01',fin:'',activo:true},
-    {id:uid(),concepto:'Pensión de enseñanza',tipo:'Egreso',categoria:'Educación',cuenta:'BCP Ahorros',fuente:'manual',monto:450,frecuencia:'Mensual',dia:5,inicio:'2026-03-01',fin:'',activo:true},
-    {id:uid(),concepto:'Internet + cable',tipo:'Egreso',categoria:'Servicios (luz, agua, internet)',cuenta:'BCP Ahorros',fuente:'manual',monto:149,frecuencia:'Mensual',dia:10,inicio:'2026-03-01',fin:'',activo:true},
-    {id:uid(),concepto:'Suscripción software',tipo:'Egreso',categoria:'Suscripciones',cuenta:'Tarjeta Interbank MC',fuente:'manual',monto:108.75,frecuencia:'Mensual',dia:20,inicio:'2026-03-01',fin:'',activo:true},
-    {id:uid(),concepto:'Seguro vehicular',tipo:'Egreso',categoria:'Provisión Anual',cuenta:'BCP Ahorros',fuente:'manual',monto:1400,frecuencia:'Anual',dia:20,inicio:'2026-06-01',fin:'',activo:true},
-    {id:uid(),concepto:'Gratificación + bonif. 9%',tipo:'Ingreso',categoria:'Bono / Comisión',cuenta:'Interbank Sueldo',fuente:'nomina_grati',monto:0,frecuencia:'Semestral',dia:15,inicio:'2026-07-01',fin:'',activo:true},
-    {id:uid(),concepto:'Depósito CTS',tipo:'Ingreso',categoria:'Otros Egresos',cuenta:'Fondo Emergencia',fuente:'nomina_cts',monto:0,frecuencia:'Semestral',dia:15,inicio:'2026-05-01',fin:'',activo:true},
+    {id:uid(),concepto:'Sueldo',tipo:'Ingreso',monto:2800,categoria:'Sueldo',billeteraId:'w4',frecuencia:'Mensual',proxima:sumarDias(hoy(),30),activo:true},
+    {id:uid(),concepto:'Alquiler',tipo:'Egreso',monto:800,categoria:'Vivienda',billeteraId:'w4',frecuencia:'Mensual',proxima:sumarDias(hoy(),12),activo:true},
+    {id:uid(),concepto:'Internet',tipo:'Egreso',monto:99,categoria:'Servicios',billeteraId:'w4',frecuencia:'Mensual',proxima:sumarDias(hoy(),6),activo:true},
   ],
-  nomina:{
-    sueldoBasico:4200, asignacionFamiliar:true, sistema:'AFP', afp:'Integra',
-    otrosAfectos:0, otrosDescuentos:0, cuentaAbono:'Interbank Sueldo', diaPago:30,
-  },
-  params:{
-    uit:5500, rmv:1130, tasaONP:0.13, afpAporte:0.10, afpPrima:0.0137, rmaTope:12598.91,
-    afpComisiones:{Habitat:0.0147, Integra:0.0155, Prima:0.0160, Profuturo:0.0169},
-    tramos:[[5,0.08],[20,0.14],[35,0.17],[45,0.20],[Infinity,0.30]],
-    deduccionUIT:7,
-  },
-  fondoMesesMeta:6,
-  projStart:'2026-01',
 };
-function m(fecha,desc,tipo,cat,orig,dest,medio,mon,monto,est){
-  return {id:uid(),fecha,desc,tipo,categoria:cat,ctaOrigen:orig,ctaDestino:dest,medio,moneda:mon,monto,estado:est};
-}
+
+function sumarDias(f,n){ const d=new Date(f+'T12:00:00'); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
 
 let DB;
-function load(){
-  try{ const raw=localStorage.getItem(LS_KEY); DB = raw?JSON.parse(raw):structuredClone(DEFAULTS); }
-  catch(e){ DB=structuredClone(DEFAULTS); }
+function cargar(){
+  const raw=store.get();
+  try{ DB = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(INICIAL)); }
+  catch(e){ DB = JSON.parse(JSON.stringify(INICIAL)); }
+  DB.billeteras ||= []; DB.movimientos ||= []; DB.recurrentes ||= [];
 }
-function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(DB)); }catch(e){} }
-function resetDB(){ if(confirm('¿Restaurar los datos de ejemplo? Se perderán tus cambios.')){ DB=structuredClone(DEFAULTS); save(); render(); toast('Datos restaurados'); } }
+function guardar(){ store.set(JSON.stringify(DB)); }
 
-/* ============================ CÁLCULOS ============================ */
-const tc = cod => { const d=DB.divisas.find(x=>x.cod===cod); return d?d.tc:1; };
-const base = mv => (+mv.monto||0)*tc(mv.moneda);
-const ejec = mv => mv.estado==='Ejecutado';
+/* ═══════════════ CÁLCULOS ═══════════════ */
+const S=n=>'S/ '+(+n||0).toLocaleString('es-PE',{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mesDe=f=>(f||'').slice(0,7);
+const MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const nombreMes=ym=>{const[a,m]=ym.split('-');return MESES[+m-1]+' '+a;};
+const fechaCorta=f=>{const[a,m,d]=f.split('-');return `${d} ${MESES[+m-1].slice(0,3)}`;};
 
-function saldoCartera(nombre, soloEjecutado=true){
-  const c=DB.carteras.find(x=>x.nombre===nombre); if(!c) return 0;
-  let s=+c.saldoInicial||0;
-  for(const mv of DB.movimientos){
-    if(soloEjecutado && !ejec(mv)) continue;
-    // Ingreso: entra en la cuenta DESTINO. Egreso: sale de la cuenta ORIGEN.
-    if(mv.tipo==='Ingreso' && mv.ctaDestino===nombre) s+=base(mv);
-    if(mv.tipo==='Egreso' && mv.ctaOrigen===nombre) s-=base(mv);
-    if(mv.tipo==='Transferencia'||mv.tipo==='Inversión'){
-      if(mv.ctaOrigen===nombre) s-=base(mv);
-      if(mv.ctaDestino===nombre) s+=base(mv);
-    }
-  }
-  return s;
+const billetera=id=>DB.billeteras.find(b=>b.id===id);
+function saldo(id){
+  const b=billetera(id); if(!b) return 0;
+  return DB.movimientos.reduce((t,m)=>{
+    if(m.billeteraId!==id) return t;
+    return t + (m.tipo==='Ingreso' ? +m.monto : -m.monto);
+  }, +b.saldoInicial||0);
 }
+const saldoTotal=()=>DB.billeteras.reduce((t,b)=>t+saldo(b.id),0);
+function totalesMes(ym){
+  let ing=0,egr=0;
+  for(const m of DB.movimientos){
+    if(mesDe(m.fecha)!==ym) continue;
+    if(m.tipo==='Ingreso') ing+=+m.monto; else egr+=+m.monto;
+  }
+  return {ing,egr,neto:ing-egr};
+}
+const mesActual=()=>hoy().slice(0,7);
 
-/* ---- NÓMINA: sueldo bruto → neto en mano (régimen privado, Perú) ---- */
-function calcNomina(){
-  const p=DB.params, n=DB.nomina;
-  const basico=+n.sueldoBasico||0;
-  const asig = n.asignacionFamiliar ? p.rmv*0.10 : 0;
-  const otrosAfectos=+n.otrosAfectos||0;
-  const bruto=basico+asig+otrosAfectos;
-  let aporte=0,comision=0,prima=0,onp=0;
-  if(n.sistema==='ONP'){ onp=bruto*p.tasaONP; }
-  else {
-    aporte=bruto*p.afpAporte;
-    comision=bruto*(p.afpComisiones[n.afp]||0);
-    prima=Math.min(bruto,p.rmaTope)*p.afpPrima;   // prima con tope asegurable
-  }
-  const pension=aporte+comision+prima+onp;
-  // Renta de 5ta: proyección anual = 12 sueldos + 2 gratificaciones + bonif. 9%
-  const remComp=basico+asig;
-  const proy12=(remComp+otrosAfectos)*12;
-  const gratis=remComp*2;
-  const bonifAnual=gratis*0.09;
-  const rentaBruta=proy12+gratis+bonifAnual;
-  const rni=Math.max(0,rentaBruta-p.uit*p.deduccionUIT);
-  let prev=0, impAnual=0; const detalle=[];
-  for(const [hastaUIT,tasa] of p.tramos){
-    const techo = hastaUIT===Infinity ? Infinity : hastaUIT*p.uit;
-    const piso  = prev*p.uit;
-    const monto = Math.max(0, Math.min(rni,techo)-piso);
-    detalle.push({tasa,monto,imp:monto*tasa});
-    impAnual+=monto*tasa;
-    prev = hastaUIT===Infinity ? prev : hastaUIT;
-  }
-  const retencion=impAnual/12;
-  const otrosDesc=+n.otrosDescuentos||0;
-  const totalDesc=pension+retencion+otrosDesc;
-  const neto=bruto-totalDesc;
-  // Gratificación (inafecta a AFP/ONP) + bonificación extraordinaria 9%
-  const grati=remComp, bonifGrati=grati*0.09, netoGrati=grati+bonifGrati;
-  const cts=(remComp+grati/6)/2;   // depósito semestral
-  return {basico,asig,otrosAfectos,bruto,aporte,comision,prima,onp,pension,remComp,
-          proy12,gratis,bonifAnual,rentaBruta,rni,detalle,impAnual,retencion,
-          otrosDesc,totalDesc,neto,grati,bonifGrati,netoGrati,cts};
+/* ═══════════════ RECURRENTES ═══════════════ */
+const PASOS={Semanal:{d:7},Quincenal:{d:15},Mensual:{m:1},Bimestral:{m:2},Trimestral:{m:3},Semestral:{m:6},Anual:{m:12}};
+function siguienteFecha(f,frec){
+  const p=PASOS[frec]||PASOS.Mensual;
+  const d=new Date(f+'T12:00:00');
+  if(p.d) d.setDate(d.getDate()+p.d);
+  else { const dia=d.getDate(); d.setDate(1); d.setMonth(d.getMonth()+p.m);
+         d.setDate(Math.min(dia,new Date(d.getFullYear(),d.getMonth()+1,0).getDate())); }
+  return d.toISOString().slice(0,10);
 }
-
-/* ---- RECURRENTES ---- */
-const PERIODO={Mensual:1,Quincenal:1,Bimestral:2,Trimestral:3,Semestral:6,Anual:12};
-function montoRecurrente(r){
-  const n=calcNomina();
-  if(r.fuente==='nomina_neto')  return n.neto;
-  if(r.fuente==='nomina_grati') return n.netoGrati;
-  if(r.fuente==='nomina_cts')   return n.cts;
-  return +r.monto||0;
+function crearDesde(r,fecha){
+  DB.movimientos.push({id:uid(),fecha,tipo:r.tipo,monto:+r.monto,descripcion:r.concepto,
+    categoria:r.categoria,billeteraId:r.billeteraId,recurrenteId:r.id});
 }
-function ocurrencias(r, mesesAdelante=12){
-  if(!r.activo||!r.inicio) return [];
-  const per=PERIODO[r.frecuencia]||1;
-  const ini=new Date(r.inicio+'T00:00:00');
-  const fin=r.fin?new Date(r.fin+'T00:00:00'):null;
-  const limite=new Date(); limite.setMonth(limite.getMonth()+mesesAdelante);
-  const out=[];
-  for(let k=0;k<120;k++){
-    if(k%per!==0) continue;
-    const d=new Date(ini.getFullYear(), ini.getMonth()+k, 1);
-    if(d>limite) break;
-    if(fin && d>fin) break;
-    const ultimoDia=new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
-    const dia=Math.min(+r.dia||1, ultimoDia);
-    out.push(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(dia).padStart(2,'0')}`);
-  }
-  return out;
-}
-function generarRecurrentes(meses=12){
-  let creados=0;
-  const existentes=new Set(DB.movimientos.filter(x=>x.recurrenteId).map(x=>x.recurrenteId+':'+mesKey(x.fecha)));
+/* Automático: crea todo lo que ya venció hasta hoy */
+function generarVencidos(){
+  let n=0; const limite=hoy();
   for(const r of DB.recurrentes){
-    const monto=montoRecurrente(r);
-    if(!monto) continue;
-    for(const fecha of ocurrencias(r,meses)){
-      const clave=r.id+':'+mesKey(fecha);
-      if(existentes.has(clave)) continue;
-      existentes.add(clave);
-      DB.movimientos.push({
-        id:uid(), recurrenteId:r.id, fecha, desc:r.concepto, tipo:r.tipo, categoria:r.categoria,
-        ctaOrigen: r.tipo==='Ingreso'?'':r.cuenta,
-        ctaDestino: r.tipo==='Ingreso'?r.cuenta:'',
-        medio:'Transferencia', moneda:'PEN', monto, estado:'Programado'
-      });
-      creados++;
+    if(!r.activo||!r.proxima) continue;
+    let guard=0;
+    while(r.proxima<=limite && guard++<200){
+      crearDesde(r,r.proxima);
+      r.proxima=siguienteFecha(r.proxima,r.frecuencia);
+      n++;
     }
   }
-  render();
-  toast(creados?`${creados} movimientos generados`:'Todo estaba al día, nada que generar');
+  if(n) guardar();
+  return n;
 }
-function borrarGenerados(){
-  if(!confirm('¿Eliminar todos los movimientos generados desde recurrentes? Los registrados a mano se mantienen.')) return;
-  const antes=DB.movimientos.length;
-  DB.movimientos=DB.movimientos.filter(x=>!x.recurrenteId);
-  render(); toast(`${antes-DB.movimientos.length} movimientos eliminados`);
-}
-const totalLiquido = ()=> DB.carteras.reduce((a,c)=>a+saldoCartera(c.nombre),0);
-
-function consumoTarjeta(nombre){
-  let s=0;
-  for(const mv of DB.movimientos){ if(!ejec(mv)) continue;
-    if(mv.ctaOrigen===nombre && mv.tipo==='Egreso') s+=base(mv);
-    if(mv.ctaDestino===nombre && mv.tipo==='Transferencia') s-=base(mv);
+/* A pedido: adelanta N generaciones futuras */
+function generarVeces(id,veces){
+  const r=DB.recurrentes.find(x=>x.id===id);
+  veces=Math.max(1,Math.min(60,+veces||1));
+  for(let i=0;i<veces;i++){
+    crearDesde(r,r.proxima);
+    r.proxima=siguienteFecha(r.proxima,r.frecuencia);
   }
-  return s;
-}
-const deudaTarjetas = ()=> DB.tarjetas.reduce((a,t)=>a+Math.max(0,consumoTarjeta(t.nombre)),0);
-
-function saldoPrestamo(p){
-  const i=(+p.tasa)/12, n=+p.cuotas;
-  const cuota = i>0 ? p.monto*i/(1-Math.pow(1+i,-n)) : p.monto/n;
-  const meses = mesesTranscurridos(p.inicio);
-  const rest = Math.max(0, n-Math.min(n,meses));
-  const saldo = i>0 ? cuota*(1-Math.pow(1+i,-rest))/i : cuota*rest;
-  return {cuota,pagadas:Math.min(n,meses),rest,saldo};
-}
-function mesesTranscurridos(fecha){
-  if(!fecha) return 0;
-  const d=new Date(fecha), now=new Date();
-  return Math.max(0,(now.getFullYear()-d.getFullYear())*12+(now.getMonth()-d.getMonth()));
-}
-const saldoPrestamos = ()=> DB.prestamos.reduce((a,p)=>a+saldoPrestamo(p).saldo,0);
-
-function sumaMov(tipo, estado){
-  return DB.movimientos.filter(x=>x.tipo===tipo && (!estado||x.estado===estado)).reduce((a,x)=>a+base(x),0);
-}
-function kpis(){
-  const ing=sumaMov('Ingreso','Ejecutado'), egr=sumaMov('Egreso','Ejecutado');
-  const dt=deudaTarjetas(), sp=saldoPrestamos(), liq=totalLiquido();
-  const invVal=DB.inversiones.reduce((a,x)=>a+(+x.valorActual||0),0);
-  return {
-    ing,egr, tasaAhorro: ing?(ing-egr)/ing:0,
-    deudaTarjetas:dt, saldoPrestamos:sp, liquido:liq,
-    patrimonio: liq-dt-sp,
-    ratio: (liq+invVal)?(dt+sp)/(liq+invVal):0,
-  };
-}
-function egresoMensualProm(){
-  const meses=new Set(DB.movimientos.filter(x=>x.tipo==='Egreso'&&ejec(x)).map(x=>mesKey(x.fecha)));
-  const egr=sumaMov('Egreso','Ejecutado');
-  return meses.size?egr/meses.size:0;
+  pintar(); aviso(`${veces} ${veces===1?'movimiento generado':'movimientos generados'} de ${r.concepto}`);
 }
 
-/* ============================ RENDER ============================ */
-const $ = id => document.getElementById(id);
-const content = $('content');
-let currentView='dashboard';
-let configTab='carteras';
+/* ═══════════════ VISTAS ═══════════════ */
+let vista='inicio';
+let mesVisto=mesActual();
+const app=()=>document.getElementById('app');
 
-function render(){
-  save();
-  const v=currentView;
-  const titles={dashboard:['Dashboard financiero','Patrimonio, liquidez e indicadores clave'],
-    movimientos:['Movimientos','Historial y registro de transacciones'],
-    recurrentes:['Ingresos y egresos recurrentes','Nómina, letras, pensiones y suscripciones'],
-    nomina:['Nómina','De sueldo bruto a neto en mano'],
-    proyeccion:['Proyección a 12 meses','Flujo de caja proyectado mes a mes'],
-    deudas:['Deudas y tarjetas','Consumo, fechas de pago y amortización'],
-    inversiones:['Inversiones y provisiones','ROI y aprovisionamiento de gastos anuales'],
-    config:['Configuración','Carteras, categorías, tarjetas, préstamos y divisas']};
-  $('viewTitle').textContent=titles[v][0]; $('viewSub').textContent=titles[v][1];
-  document.querySelectorAll('#nav a').forEach(a=>a.classList.toggle('active',a.dataset.view===v));
-  ({dashboard:renderDashboard,movimientos:renderMovimientos,recurrentes:renderRecurrentes,
-    nomina:renderNomina,proyeccion:renderProyeccion,
-    deudas:renderDeudas,inversiones:renderInversiones,config:renderConfig}[v])();
+function pintar(){
+  guardar();
+  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===vista));
+  ({inicio:vInicio,historial:vHistorial,recurrentes:vRecurrentes,billeteras:vBilleteras})[vista]();
 }
+document.getElementById('tabs').onclick=e=>{
+  const b=e.target.closest('button'); if(!b) return;
+  vista=b.dataset.v; window.scrollTo(0,0); pintar();
+};
 
-/* --------- DASHBOARD --------- */
-function renderDashboard(){
-  const k=kpis();
-  const meta=egresoMensualProm()*DB.fondoMesesMeta;
-  const fondoAct=saldoCartera('Fondo Emergencia');
-  const prog=meta?Math.min(fondoAct/meta,1):0;
-  const ratioPill = k.ratio>0.5?'r':k.ratio>0.35?'a':'g';
-  const ahorroPill = k.tasaAhorro>=0.2?'g':k.tasaAhorro>=0.1?'a':'r';
-
-  content.innerHTML=`
-  <div class="grid kpis" style="margin-bottom:16px">
-    <div class="card kpi">
-      <div class="lab">Patrimonio Neto Líquido</div>
-      <div class="val big ${k.patrimonio>=0?'':'neg'}">${fmt(k.patrimonio)}</div>
-      <div class="meta">Líquido ${fmt(k.liquido)} − deuda ${fmt(k.deudaTarjetas+k.saldoPrestamos)}</div>
+/* ---------- INICIO ---------- */
+function vInicio(){
+  const t=totalesMes(mesActual());
+  const ultimos=DB.movimientos.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha)||b.id.localeCompare(a.id)).slice(0,6);
+  app().innerHTML=`
+    <div class="total">
+      <div class="lbl">Tienes en total</div>
+      <div class="big num">${S(saldoTotal())}</div>
+      <div class="mini">
+        <div>Este mes entró<b class="num">${S(t.ing)}</b></div>
+        <div>Este mes salió<b class="num">${S(t.egr)}</b></div>
+        <div>Diferencia<b class="num">${t.neto>=0?'+':''}${S(t.neto)}</b></div>
+      </div>
     </div>
-    <div class="card kpi">
-      <div class="lab">Tasa de Ahorro</div>
-      <div class="val">${pct(k.tasaAhorro)} <span class="pill ${ahorroPill}" style="font-size:11px;vertical-align:middle">${k.tasaAhorro>=0.2?'Saludable':k.tasaAhorro>=0.1?'Ajustada':'Baja'}</span></div>
-      <div class="meta">Ingresos ${fmt(k.ing)} · Egresos ${fmt(k.egr)}</div>
-    </div>
-    <div class="card kpi">
-      <div class="lab">Ratio de Endeudamiento</div>
-      <div class="val">${pct(k.ratio)} <span class="pill ${ratioPill}" style="font-size:11px;vertical-align:middle">${k.ratio>0.5?'Alto':k.ratio>0.35?'Medio':'Sano'}</span></div>
-      <div class="meta">Deuda ${fmt(k.deudaTarjetas+k.saldoPrestamos)} / activos</div>
-    </div>
-    <div class="card kpi">
-      <div class="lab">Deuda Total</div>
-      <div class="val neg">${fmt(k.deudaTarjetas+k.saldoPrestamos)}</div>
-      <div class="meta">Tarjetas ${fmt(k.deudaTarjetas)} · Préstamos ${fmt(k.saldoPrestamos)}</div>
-    </div>
-  </div>
 
-  <div class="grid two-col" style="grid-template-columns:1.15fr .85fr;margin-bottom:16px">
-    <div class="card card-pad">
-      <h3>Saldos por cartera</h3>
-      <div>${DB.carteras.map(c=>{const s=saldoCartera(c.nombre);return `
-        <div class="saldo-row">
-          <div class="saldo-ic">${c.icon||'💼'}</div>
-          <div class="saldo-name"><div class="n">${esc(c.nombre)}</div><div class="t">${esc(c.tipo)} · ${c.moneda}</div></div>
-          <div class="saldo-val ${s<0?'neg':''}">${fmt(s)}</div>
-        </div>`;}).join('')}
-        <div class="saldo-row" style="border-top:2px solid var(--line);margin-top:4px">
-          <div class="saldo-ic" style="background:var(--navy);color:#fff">Σ</div>
-          <div class="saldo-name"><div class="n">Total líquido</div></div>
-          <div class="saldo-val">${fmt(k.liquido)}</div>
+    <div class="quick">
+      <button class="btn btn-in" onclick="formMov(null,'Ingreso')">＋ Ingreso</button>
+      <button class="btn btn-out" onclick="formMov(null,'Egreso')">－ Egreso</button>
+    </div>
+
+    <h2>Mis billeteras</h2>
+    <div class="grid wallets mb">
+      ${DB.billeteras.map(b=>tarjetaBilletera(b)).join('')}
+      <button class="add-wallet" onclick="formBilletera()"><span style="font-size:20px">＋</span>Agregar billetera</button>
+    </div>
+
+    <div class="card pad">
+      <div class="between" style="margin-bottom:10px">
+        <h2 style="margin:0">Últimos movimientos</h2>
+        ${DB.movimientos.length?`<button class="btn btn-line btn-sm" onclick="irA('historial')">Ver todo</button>`:''}
+      </div>
+      ${ultimos.length ? ultimos.map(m=>filaMov(m)).join('')
+        : `<div class="empty"><div class="e">📋</div><p>Aún no registras nada.<br>Usa los botones de arriba.</p></div>`}
+    </div>`;
+}
+function tarjetaBilletera(b){
+  const s=saldo(b.id);
+  return `<div class="wallet">
+    <div class="top">
+      <div class="emoji">${b.icono||'💼'}</div>
+      <div class="nm">${esc(b.nombre)}</div>
+      <button class="icon-btn" onclick="formBilletera('${b.id}')">✎</button>
+    </div>
+    <div class="amt num ${s<0?'neg':''}">${S(s)}</div>
+    <div class="sub">${DB.movimientos.filter(m=>m.billeteraId===b.id).length} movimientos</div>
+  </div>`;
+}
+function filaMov(m){
+  const b=billetera(m.billeteraId);
+  const ing=m.tipo==='Ingreso';
+  return `<div class="mov">
+    <div class="ic ${ing?'i':'e'}">${ing?'↓':'↑'}</div>
+    <div class="info">
+      <div class="d">${esc(m.descripcion||m.categoria||'Sin descripción')}${m.recurrenteId?'<span class="chip">↻ auto</span>':''}</div>
+      <div class="m">${fechaCorta(m.fecha)} · ${b?esc(b.icono+' '+b.nombre):'—'}${m.categoria?' · '+esc(m.categoria):''}</div>
+    </div>
+    <div class="val ${ing?'pos':'neg'}">${ing?'+':'−'}${S(m.monto)}</div>
+    <div class="acts">
+      <button class="icon-btn" onclick="formMov('${m.id}')">✎</button>
+      <button class="icon-btn" onclick="borrarMov('${m.id}')">✕</button>
+    </div>
+  </div>`;
+}
+
+/* ---------- HISTORIAL ---------- */
+function vHistorial(){
+  const t=totalesMes(mesVisto);
+  const lista=DB.movimientos.filter(m=>mesDe(m.fecha)===mesVisto)
+    .sort((a,b)=>b.fecha.localeCompare(a.fecha)||b.id.localeCompare(a.id));
+  app().innerHTML=`
+    <div class="monthbar">
+      <button class="nav-m" onclick="moverMes(-1)">‹</button>
+      <div class="mname">${nombreMes(mesVisto)}</div>
+      <button class="nav-m" onclick="moverMes(1)">›</button>
+    </div>
+    <div class="msum">
+      <div><div class="l">Entró</div><div class="v pos num">${S(t.ing)}</div></div>
+      <div><div class="l">Salió</div><div class="v neg num">${S(t.egr)}</div></div>
+      <div><div class="l">Diferencia</div><div class="v num" style="color:${t.neto>=0?'var(--in)':'var(--out)'}">${t.neto>=0?'+':''}${S(t.neto)}</div></div>
+    </div>
+    <div class="card pad">
+      <div class="between" style="margin-bottom:10px">
+        <h2 style="margin:0">${lista.length} movimiento${lista.length===1?'':'s'}</h2>
+        <button class="btn btn-line btn-sm" onclick="formMov()">＋ Agregar</button>
+      </div>
+      ${lista.length ? lista.map(m=>filaMov(m)).join('')
+        : `<div class="empty"><div class="e">📅</div><p>No hay movimientos en ${nombreMes(mesVisto)}.</p>
+           <button class="btn btn-dark btn-sm" onclick="formMov()">Registrar uno</button></div>`}
+    </div>`;
+}
+function moverMes(n){
+  let [a,m]=mesVisto.split('-').map(Number);
+  m+=n; if(m<1){m=12;a--;} if(m>12){m=1;a++;}
+  mesVisto=`${a}-${String(m).padStart(2,'0')}`; pintar();
+}
+
+/* ---------- RECURRENTES ---------- */
+function vRecurrentes(){
+  app().innerHTML=`
+    <div class="card pad mb">
+      <div class="between" style="margin-bottom:4px">
+        <h2 style="margin:0">Ingresos y egresos que se repiten</h2>
+        <button class="btn btn-dark btn-sm" onclick="formRecurrente()">＋ Nuevo</button>
+      </div>
+      <div class="hint">Cada uno se registra solo cuando llega su fecha. Si quieres adelantarte, escribe cuántas veces y pulsa <b>Generar</b>.</div>
+    </div>
+    <div class="card pad">
+      ${DB.recurrentes.length ? DB.recurrentes.map(r=>filaRec(r)).join('')
+        : `<div class="empty"><div class="e">🔁</div><p>Sin recurrentes.<br>Agrega tu sueldo, alquiler o recibos.</p>
+           <button class="btn btn-dark btn-sm" onclick="formRecurrente()">Crear el primero</button></div>`}
+    </div>`;
+}
+function filaRec(r){
+  const b=billetera(r.billeteraId);
+  const ing=r.tipo==='Ingreso';
+  const dias=Math.ceil((new Date(r.proxima+'T12:00:00')-new Date(hoy()+'T12:00:00'))/86400000);
+  const cuando = !r.activo ? 'Pausado' : dias<=0?'Se registra hoy' : dias===1?'Mañana' : `En ${dias} días`;
+  return `<div class="rec ${r.activo?'':'pausado'}">
+    <div class="ic mov-ic" style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;background:${ing?'var(--in-bg)':'var(--out-bg)'};color:${ing?'var(--in)':'var(--out)'}">${ing?'↓':'↑'}</div>
+    <div class="info">
+      <div class="d">${esc(r.concepto)}</div>
+      <div class="m">${r.frecuencia} · ${b?esc(b.nombre):'—'} · ${cuando} (${fechaCorta(r.proxima)})</div>
+    </div>
+    <div class="val num ${ing?'pos':'neg'}" style="font-family:'Space Grotesk';font-weight:600">${ing?'+':'−'}${S(r.monto)}</div>
+    <div class="gen">
+      <input type="number" min="1" max="60" value="1" id="g_${r.id}">
+      <button class="btn btn-line btn-sm" onclick="generarVeces('${r.id}',document.getElementById('g_${r.id}').value)">Generar</button>
+      <button class="icon-btn" onclick="pausarRec('${r.id}')" title="${r.activo?'Pausar':'Activar'}">${r.activo?'⏸':'▶'}</button>
+      <button class="icon-btn" onclick="formRecurrente('${r.id}')">✎</button>
+      <button class="icon-btn" onclick="borrarRec('${r.id}')">✕</button>
+    </div>
+  </div>`;
+}
+function pausarRec(id){const r=DB.recurrentes.find(x=>x.id===id);r.activo=!r.activo;pintar();aviso(r.activo?'Activado':'Pausado');}
+function borrarRec(id){
+  if(!confirm('¿Eliminar este recurrente? Los movimientos ya registrados se mantienen.')) return;
+  DB.recurrentes=DB.recurrentes.filter(x=>x.id!==id); pintar(); aviso('Recurrente eliminado');
+}
+
+/* ---------- BILLETERAS ---------- */
+function vBilleteras(){
+  app().innerHTML=`
+    <div class="card pad mb">
+      <div class="between">
+        <h2 style="margin:0">Mis billeteras</h2>
+        <button class="btn btn-dark btn-sm" onclick="formBilletera()">＋ Nueva</button>
+      </div>
+      <div class="hint">El <b>saldo inicial</b> es el dinero que ya tenías cuando empezaste a usar esto. De ahí en adelante suma y resta según tus movimientos.</div>
+    </div>
+    <div class="grid wallets">
+      ${DB.billeteras.map(b=>{
+        const s=saldo(b.id);
+        return `<div class="wallet">
+          <div class="top">
+            <div class="emoji">${b.icono||'💼'}</div>
+            <div class="nm">${esc(b.nombre)}</div>
+          </div>
+          <div class="amt num ${s<0?'neg':''}">${S(s)}</div>
+          <div class="sub">Inicial ${S(b.saldoInicial)}</div>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn btn-line btn-sm" style="flex:1" onclick="formBilletera('${b.id}')">Editar</button>
+            <button class="btn btn-line btn-sm" onclick="borrarBilletera('${b.id}')">✕</button>
+          </div>
+        </div>`}).join('')}
+      <button class="add-wallet" onclick="formBilletera()"><span style="font-size:20px">＋</span>Agregar billetera</button>
+    </div>`;
+}
+function borrarBilletera(id){
+  const n=DB.movimientos.filter(m=>m.billeteraId===id).length;
+  if(n && !confirm(`Esta billetera tiene ${n} movimientos. Si la eliminas, también se eliminan. ¿Continuar?`)) return;
+  if(!n && !confirm('¿Eliminar esta billetera?')) return;
+  DB.movimientos=DB.movimientos.filter(m=>m.billeteraId!==id);
+  DB.recurrentes=DB.recurrentes.filter(r=>r.billeteraId!==id);
+  DB.billeteras=DB.billeteras.filter(b=>b.id!==id);
+  pintar(); aviso('Billetera eliminada');
+}
+
+/* ═══════════════ FORMULARIOS ═══════════════ */
+let tipoSel='Egreso';
+const CATEGORIAS=['Sueldo','Negocio','Venta','Comida','Transporte','Servicios','Vivienda','Salud','Educación','Compras','Ocio','Otros'];
+
+function formMov(id,tipo){
+  const m = id ? DB.movimientos.find(x=>x.id===id) : null;
+  tipoSel = m ? m.tipo : (tipo||'Egreso');
+  if(!DB.billeteras.length){ aviso('Primero crea una billetera'); return formBilletera(); }
+  abrir(id?'Editar movimiento':'Nuevo movimiento',`
+    <div class="seg">
+      <button id="sIng" onclick="setTipo('Ingreso')">↓ Ingreso</button>
+      <button id="sEgr" onclick="setTipo('Egreso')">↑ Egreso</button>
+    </div>
+    <div class="field">
+      <label>¿Cuánto?</label>
+      <input id="f_monto" type="number" step="0.01" inputmode="decimal" value="${m?m.monto:''}" placeholder="0.00" autofocus>
+    </div>
+    <div class="field">
+      <label>¿En qué billetera?</label>
+      <select id="f_bill">${DB.billeteras.map(b=>`<option value="${b.id}" ${m&&m.billeteraId===b.id?'selected':''}>${b.icono} ${esc(b.nombre)}</option>`).join('')}</select>
+    </div>
+    <div class="field">
+      <label>¿Qué fue?</label>
+      <input id="f_desc" value="${m?esc(m.descripcion):''}" placeholder="Ej. Almuerzo, recibo de luz">
+    </div>
+    <div class="two">
+      <div class="field">
+        <label>Categoría</label>
+        <input id="f_cat" list="cats" value="${m?esc(m.categoria):''}" placeholder="Comida">
+        <datalist id="cats">${CATEGORIAS.map(c=>`<option value="${c}">`).join('')}</datalist>
+      </div>
+      <div class="field">
+        <label>Fecha</label>
+        <input id="f_fecha" type="date" value="${m?m.fecha:hoy()}">
+      </div>
+    </div>`,
+    ()=>{
+      const monto=+val('f_monto');
+      if(!monto||monto<=0){ aviso('Escribe un monto'); return false; }
+      const d={fecha:val('f_fecha')||hoy(),tipo:tipoSel,monto,descripcion:val('f_desc'),
+               categoria:val('f_cat'),billeteraId:val('f_bill')};
+      if(id) Object.assign(DB.movimientos.find(x=>x.id===id),d);
+      else DB.movimientos.push({id:uid(),...d});
+      pintar(); aviso(id?'Movimiento actualizado':(tipoSel==='Ingreso'?'Ingreso registrado':'Egreso registrado'));
+      return true;
+    });
+  setTipo(tipoSel);
+}
+function setTipo(t){
+  tipoSel=t;
+  const i=document.getElementById('sIng'), e=document.getElementById('sEgr');
+  if(!i) return;
+  i.className = t==='Ingreso'?'on-in':''; e.className = t==='Egreso'?'on-out':'';
+}
+function borrarMov(id){
+  if(!confirm('¿Eliminar este movimiento?')) return;
+  DB.movimientos=DB.movimientos.filter(x=>x.id!==id); pintar(); aviso('Movimiento eliminado');
+}
+
+function formBilletera(id){
+  const b = id ? DB.billeteras.find(x=>x.id===id) : null;
+  const iconos=['💵','📱','💬','🏦','💳','🐷','👛','💰','🏧','📦'];
+  abrir(id?'Editar billetera':'Nueva billetera',`
+    <div class="field">
+      <label>Nombre</label>
+      <input id="b_nom" value="${b?esc(b.nombre):''}" placeholder="Ej. Yape, Efectivo, BCP" autofocus>
+    </div>
+    <div class="field">
+      <label>Ícono</label>
+      <div style="display:flex;gap:7px;flex-wrap:wrap" id="iconos">
+        ${iconos.map(i=>`<button type="button" onclick="pickIcono('${i}')" data-i="${i}"
+          style="width:42px;height:42px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:19px">${i}</button>`).join('')}
+      </div>
+      <input type="hidden" id="b_ico" value="${b?b.icono:'💼'}">
+    </div>
+    <div class="field">
+      <label>Saldo inicial <span style="color:var(--muted);font-weight:400">— lo que ya tienes ahí</span></label>
+      <input id="b_saldo" type="number" step="0.01" inputmode="decimal" value="${b?b.saldoInicial:0}">
+    </div>`,
+    ()=>{
+      const nom=val('b_nom').trim();
+      if(!nom){ aviso('Ponle un nombre'); return false; }
+      const d={nombre:nom,icono:val('b_ico')||'💼',saldoInicial:+val('b_saldo')||0};
+      if(id) Object.assign(DB.billeteras.find(x=>x.id===id),d);
+      else DB.billeteras.push({id:uid(),...d});
+      pintar(); aviso(id?'Billetera actualizada':'Billetera creada');
+      return true;
+    });
+  pickIcono(b?b.icono:'💼');
+}
+function pickIcono(i){
+  const h=document.getElementById('b_ico'); if(!h) return;
+  h.value=i;
+  document.querySelectorAll('#iconos button').forEach(btn=>{
+    const on=btn.dataset.i===i;
+    btn.style.borderColor = on?'var(--accent)':'var(--line)';
+    btn.style.background  = on?'#E9F2F1':'#fff';
+  });
+}
+
+function formRecurrente(id){
+  const r = id ? DB.recurrentes.find(x=>x.id===id) : null;
+  if(!DB.billeteras.length){ aviso('Primero crea una billetera'); return formBilletera(); }
+  abrir(id?'Editar recurrente':'Nuevo recurrente',`
+    <div class="field">
+      <label>¿Qué es?</label>
+      <input id="r_con" value="${r?esc(r.concepto):''}" placeholder="Ej. Sueldo, alquiler, Netflix" autofocus>
+    </div>
+    <div class="two">
+      <div class="field">
+        <label>Tipo</label>
+        <select id="r_tipo"><option ${r&&r.tipo==='Ingreso'?'selected':''}>Ingreso</option><option ${!r||r.tipo==='Egreso'?'selected':''}>Egreso</option></select>
+      </div>
+      <div class="field">
+        <label>Monto</label>
+        <input id="r_monto" type="number" step="0.01" inputmode="decimal" value="${r?r.monto:''}" placeholder="0.00">
+      </div>
+    </div>
+    <div class="field">
+      <label>Billetera</label>
+      <select id="r_bill">${DB.billeteras.map(b=>`<option value="${b.id}" ${r&&r.billeteraId===b.id?'selected':''}>${b.icono} ${esc(b.nombre)}</option>`).join('')}</select>
+    </div>
+    <div class="two">
+      <div class="field">
+        <label>¿Cada cuánto?</label>
+        <select id="r_frec">${Object.keys(PASOS).map(f=>`<option ${r&&r.frecuencia===f?'selected':(!r&&f==='Mensual'?'selected':'')}>${f}</option>`).join('')}</select>
+      </div>
+      <div class="field">
+        <label>Próxima fecha</label>
+        <input id="r_prox" type="date" value="${r?r.proxima:hoy()}">
+      </div>
+    </div>
+    <div class="field">
+      <label>Categoría</label>
+      <input id="r_cat" list="cats2" value="${r?esc(r.categoria):''}" placeholder="Servicios">
+      <datalist id="cats2">${CATEGORIAS.map(c=>`<option value="${c}">`).join('')}</datalist>
+    </div>
+    <div class="hint">Llegada esa fecha se registra solo. Después salta a la siguiente según la frecuencia.</div>`,
+    ()=>{
+      const con=val('r_con').trim(), monto=+val('r_monto');
+      if(!con){ aviso('Ponle un nombre'); return false; }
+      if(!monto||monto<=0){ aviso('Escribe un monto'); return false; }
+      const d={concepto:con,tipo:val('r_tipo'),monto,categoria:val('r_cat'),billeteraId:val('r_bill'),
+               frecuencia:val('r_frec'),proxima:val('r_prox')||hoy(),activo:r?r.activo:true};
+      if(id) Object.assign(DB.recurrentes.find(x=>x.id===id),d);
+      else DB.recurrentes.push({id:uid(),...d});
+      pintar(); aviso(id?'Recurrente actualizado':'Recurrente creado');
+      return true;
+    });
+}
+
+/* ═══════════════ UI ═══════════════ */
+const val=id=>document.getElementById(id)?.value ?? '';
+let alGuardar=null;
+function abrir(titulo,cuerpo,onSave){
+  alGuardar=onSave;
+  document.getElementById('modal').innerHTML=`
+    <div class="overlay" onclick="if(event.target===this)cerrar()">
+      <div class="modal">
+        <div class="mhead"><h3>${titulo}</h3><button class="icon-btn" onclick="cerrar()">✕</button></div>
+        <div class="mbody">${cuerpo}</div>
+        <div class="mfoot">
+          <button class="btn btn-line" onclick="cerrar()">Cancelar</button>
+          <button class="btn btn-dark" onclick="confirmar()">Guardar</button>
         </div>
       </div>
-    </div>
+    </div>`;
+  setTimeout(()=>document.querySelector('.mbody input')?.focus(),80);
+}
+function cerrar(){ document.getElementById('modal').innerHTML=''; alGuardar=null; }
+function confirmar(){ if(!alGuardar) return cerrar(); if(alGuardar()!==false) cerrar(); }
+function irA(v){ vista=v; window.scrollTo(0,0); pintar(); }
 
-    <div class="card card-pad">
-      <h3>Fondo de Emergencia</h3>
-      <div style="display:flex;justify-content:space-between;align-items:baseline">
-        <span style="font-family:'Fraunces',serif;font-size:26px;font-weight:600">${fmt(fondoAct)}</span>
-        <span class="meta" style="color:var(--muted);font-size:12px">meta ${fmt(meta)}</span>
-      </div>
-      <div class="prog-wrap"><div class="prog-bar" style="width:${(prog*100).toFixed(1)}%"></div></div>
-      <div style="display:flex;justify-content:space-between;margin-top:7px;font-size:12px;color:var(--muted)">
-        <span>${pct(prog)} cubierto</span><span>${DB.fondoMesesMeta} meses de egresos</span>
-      </div>
-      <hr style="border:none;border-top:1px solid var(--cardline);margin:18px 0">
-      <h3>Asesor de simulación de compra</h3>
-      <div class="field" style="margin-bottom:10px">
-        <label>Monto de la compra</label>
-        <input id="simMonto" type="number" value="1500" oninput="runSim()">
-      </div>
-      <div class="field" style="margin-bottom:10px">
-        <label>Cuenta de origen</label>
-        <select id="simCta" onchange="runSim()">${DB.carteras.map(c=>`<option ${c.nombre==='BCP Ahorros'?'selected':''}>${esc(c.nombre)}</option>`).join('')}</select>
-      </div>
-      <div id="simOut"></div>
-    </div>
-  </div>
-
-  <div class="card card-pad">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <h3 style="margin:0">Últimos movimientos</h3>
-      <button class="btn ghost sm" onclick="go('movimientos')">Ver todos →</button>
-    </div>
-    ${tablaMovimientos(DB.movimientos.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha)).slice(0,7),false)}
-  </div>`;
-  runSim();
+let tT;
+function aviso(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('show'),2400);
+}
+function menuDatos(){
+  abrir('Mis datos',`
+    <p style="font-size:14px;color:var(--muted);margin-bottom:16px">
+      Todo se guarda en este navegador, en tu equipo. Nadie más lo ve.</p>
+    <button class="btn btn-line" style="width:100%;margin-bottom:10px" onclick="exportar()">⬇ Descargar copia (CSV)</button>
+    <button class="btn btn-line" style="width:100%;color:var(--out)" onclick="reiniciar()">↺ Borrar todo y empezar de cero</button>`,
+    ()=>true);
+}
+function exportar(){
+  const filas=[['Fecha','Tipo','Descripcion','Categoria','Billetera','Monto']];
+  DB.movimientos.slice().sort((a,b)=>a.fecha.localeCompare(b.fecha)).forEach(m=>{
+    const b=billetera(m.billeteraId);
+    filas.push([m.fecha,m.tipo,m.descripcion||'',m.categoria||'',b?b.nombre:'',(+m.monto).toFixed(2)]);
+  });
+  const csv=filas.map(f=>f.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'}));
+  a.download='mis-movimientos.csv'; a.click();
+  cerrar(); aviso('Copia descargada');
+}
+function reiniciar(){
+  if(!confirm('Se borrarán todas tus billeteras y movimientos. ¿Seguro?')) return;
+  DB=JSON.parse(JSON.stringify(INICIAL)); cerrar(); pintar(); aviso('Todo reiniciado');
 }
 
-function runSim(){
-  const monto=+($('simMonto')?.value||0);
-  const cta=$('simCta')?.value;
-  if(!cta) return;
-  const saldo=saldoCartera(cta);
-  const result=saldo-monto;
-  const meta=egresoMensualProm()*DB.fondoMesesMeta;
-  const critico=meta*0.5;
-  // compromisos programados que salen de esta cuenta
-  const prog=DB.movimientos.filter(x=>x.ctaOrigen===cta&&x.tipo==='Egreso'&&x.estado==='Programado').reduce((a,x)=>a+base(x),0);
-  let cls,msg;
-  if(result<0){cls='bad';msg=`⛔ RECHAZADO · La compra deja <b>${esc(cta)}</b> en saldo negativo (${fmt(result)}).`;}
-  else if(result<critico){cls='warn';msg=`⚠ PRECAUCIÓN · Quedarías con ${fmt(result)}, por debajo de tu fondo crítico (${fmt(critico)}).`;}
-  else if((result-prog)<critico){cls='warn';msg=`⚠ REVISAR · Con tus egresos programados (${fmt(prog)}) quedarías bajo el fondo crítico.`;}
-  else{cls='ok';msg=`✅ APROBADO · Saldo tras la compra: ${fmt(result)}. Tu liquidez y fondo quedan protegidos.`;}
-  $('simOut').innerHTML=`<div class="sim-out ${cls}">${msg}</div>`;
-}
-
-/* --------- MOVIMIENTOS --------- */
-let filtroTipo='', filtroEstado='';
-function renderMovimientos(){
-  let list=DB.movimientos.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha));
-  if(filtroTipo) list=list.filter(x=>x.tipo===filtroTipo);
-  if(filtroEstado) list=list.filter(x=>x.estado===filtroEstado);
-  content.innerHTML=`
-  <div class="card card-pad" style="margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-    <button class="btn primary sm" onclick="openMov()">+ Nuevo movimiento</button>
-    <select onchange="filtroTipo=this.value;render()" style="max-width:170px">
-      <option value="">Todos los tipos</option>${DB.tiposMov.map(t=>`<option ${filtroTipo===t?'selected':''}>${t}</option>`).join('')}
-    </select>
-    <select onchange="filtroEstado=this.value;render()" style="max-width:170px">
-      <option value="">Todos los estados</option>${DB.estados.map(t=>`<option ${filtroEstado===t?'selected':''}>${t}</option>`).join('')}
-    </select>
-    <span style="margin-left:auto;color:var(--muted);font-size:12.5px">${list.length} registros</span>
-  </div>
-  <div class="card card-pad">${tablaMovimientos(list,true)}</div>`;
-}
-function tablaMovimientos(list,acciones){
-  if(!list.length) return `<div class="empty"><div class="big">◎</div>Sin movimientos todavía. Agrega el primero con “+ Movimiento”.</div>`;
-  const tagCls={Ingreso:'ing',Egreso:'egr',Transferencia:'tra','Inversión':'inv'};
-  return `<table><thead><tr>
-    <th>Fecha</th><th>Descripción</th><th>Categoría</th><th>Cuenta</th><th>Medio</th><th>Tipo</th><th class="num">Monto</th><th>Estado</th>${acciones?'<th></th>':''}
-    </tr></thead><tbody>${list.map(mv=>{
-      const neg=mv.tipo==='Egreso'||mv.tipo==='Inversión';
-      return `<tr>
-        <td class="mono">${mv.fecha}</td>
-        <td>${esc(mv.desc)}</td>
-        <td>${esc(mv.categoria)}</td>
-        <td>${mv.tipo==='Ingreso'?'→ '+esc(mv.ctaDestino||''):(mv.ctaDestino?esc(mv.ctaOrigen)+' → '+esc(mv.ctaDestino):esc(mv.ctaOrigen||''))}${mv.recurrenteId?'<div style="font-size:10px;color:var(--muted)">↻ recurrente</div>':''}</td>
-        <td style="color:var(--muted)">${esc(mv.medio||'')}</td>
-        <td><span class="tag ${tagCls[mv.tipo]}">${mv.tipo}</span></td>
-        <td class="num ${neg?'neg':(mv.tipo==='Ingreso'?'pos':'')}">${neg?'−':''}${fmt(base(mv))}${mv.moneda!=='PEN'?`<div style="font-size:10px;color:var(--muted)">${mv.monto} ${mv.moneda}</div>`:''}</td>
-        <td><span class="tag ${mv.estado==='Ejecutado'?'ejec':'prog'}">${mv.estado}</span></td>
-        ${acciones?`<td><div class="row-actions">
-          <button class="icon-btn" onclick="openMov('${mv.id}')">✎</button>
-          <button class="icon-btn" onclick="delMov('${mv.id}')">✕</button></div></td>`:''}
-      </tr>`;}).join('')}</tbody></table>`;
-}
-function delMov(id){ if(confirm('¿Eliminar este movimiento?')){ DB.movimientos=DB.movimientos.filter(x=>x.id!==id); render(); toast('Movimiento eliminado'); } }
-
-function openMov(id){
-  const mv = id?DB.movimientos.find(x=>x.id===id):{fecha:new Date().toISOString().slice(0,10),tipo:'Egreso',estado:'Ejecutado',moneda:'PEN',ctaOrigen:'',ctaDestino:''};
-  const opt=(arr,sel,val)=>arr.map(x=>{const v=val?x[val]:x;return `<option ${v===sel?'selected':''}>${esc(v)}</option>`}).join('');
-  const cuentas=[...DB.carteras.map(c=>c.nombre),...DB.tarjetas.map(t=>t.nombre)];
-  modal(id?'Editar movimiento':'Nuevo movimiento', `
-    <div class="field" style="margin-bottom:16px">
-      <label>Tipo de movimiento</label>
-      <select id="f_tipo" onchange="updateMovFields()">${opt(DB.tiposMov,mv.tipo)}</select>
-    </div>
-    <div class="form-grid">
-      <div class="field"><label>Fecha</label><input id="f_fecha" type="date" value="${mv.fecha||''}"></div>
-      <div class="field"><label>Monto</label><input id="f_monto" type="number" step="0.01" value="${mv.monto||''}"></div>
-      <div class="field full"><label>Descripción</label><input id="f_desc" value="${esc(mv.desc||'')}" placeholder="Ej. Compras del mes"></div>
-      <div class="field full"><label>Categoría</label><select id="f_cat">${opt(DB.categorias,mv.categoria,'nombre')}</select></div>
-      <div class="field full" id="wrapOrigen"><label id="labOrigen">Cuenta de origen</label><select id="f_orig"><option value=""></option>${opt(cuentas,mv.ctaOrigen)}</select></div>
-      <div class="field full" id="wrapDestino"><label id="labDestino">Cuenta de destino</label><select id="f_dest"><option value=""></option>${opt(cuentas,mv.ctaDestino)}</select></div>
-      <div class="field"><label>Medio de pago</label><select id="f_medio">${opt(DB.medios,mv.medio)}</select></div>
-      <div class="field"><label>Moneda</label><select id="f_mon">${opt(DB.divisas,mv.moneda,'cod')}</select></div>
-      <div class="field full"><label>Estado</label><select id="f_est">${opt(DB.estados,mv.estado)}</select></div>
-    </div>
-    <div id="movHint" class="sim-out ok" style="margin-top:14px;font-size:12.5px"></div>`,
-    ()=>{
-      const tipo=$('f_tipo').value;
-      const nm={fecha:$('f_fecha').value,desc:$('f_desc').value,tipo,categoria:$('f_cat').value,
-        ctaOrigen: tipo==='Ingreso' ? '' : $('f_orig').value,
-        ctaDestino: tipo==='Egreso' ? '' : $('f_dest').value,
-        medio:$('f_medio').value,moneda:$('f_mon').value,
-        monto:+$('f_monto').value,estado:$('f_est').value};
-      if(!nm.fecha||!nm.monto){toast('Completa fecha y monto');return false;}
-      if(tipo==='Ingreso' && !nm.ctaDestino){toast('Elige la cuenta donde entra el dinero');return false;}
-      if(tipo!=='Ingreso' && !nm.ctaOrigen){toast('Elige la cuenta de donde sale el dinero');return false;}
-      if((tipo==='Transferencia'||tipo==='Inversión') && !nm.ctaDestino){toast('Elige la cuenta de destino');return false;}
-      if(nm.ctaOrigen && nm.ctaOrigen===nm.ctaDestino){toast('Origen y destino no pueden ser la misma cuenta');return false;}
-      if(id){ const t=DB.movimientos.find(x=>x.id===id); Object.assign(t,nm); }
-      else { DB.movimientos.push({id:uid(),...nm}); }
-      render(); toast(id?'Movimiento actualizado':'Movimiento agregado'); return true;
-    });
-  updateMovFields();
-}
-function updateMovFields(){
-  const tipo=$('f_tipo')?.value; if(!tipo) return;
-  const wo=$('wrapOrigen'), wd=$('wrapDestino'), hint=$('movHint');
-  const show=(el,v)=>el.style.display=v?'flex':'none';
-  if(tipo==='Ingreso'){
-    show(wo,false); show(wd,true);
-    $('labDestino').textContent='Cuenta de destino · ¿dónde entra el dinero?';
-    hint.className='sim-out ok';
-    hint.innerHTML='💰 <b>Ingreso</b> — solo necesitas la cuenta de destino. Si es tu sueldo, regístralo por el <b>neto</b> que llega a tu cuenta (usa la pestaña Nómina para calcularlo).';
-  } else if(tipo==='Egreso'){
-    show(wo,true); show(wd,false);
-    $('labOrigen').textContent='Cuenta de origen · ¿de dónde sale el dinero?';
-    hint.className='sim-out warn';
-    hint.innerHTML='💸 <b>Egreso</b> — solo necesitas la cuenta de origen. Si pagas con tarjeta de crédito, elígela para que sume a tu deuda.';
-  } else if(tipo==='Transferencia'){
-    show(wo,true); show(wd,true);
-    $('labOrigen').textContent='Cuenta de origen · sale de';
-    $('labDestino').textContent='Cuenta de destino · entra a';
-    hint.className='sim-out ok';
-    hint.innerHTML='🔄 <b>Transferencia</b> — mueve dinero entre tus cuentas. Tu patrimonio no cambia. Para pagar una tarjeta, pon la tarjeta como destino.';
-  } else {
-    show(wo,true); show(wd,true);
-    $('labOrigen').textContent='Cuenta de origen · de dónde sale';
-    $('labDestino').textContent='Instrumento de destino · a dónde se invierte';
-    hint.className='sim-out ok';
-    hint.innerHTML='📈 <b>Inversión</b> — sale de una cuenta y entra a tu instrumento. No es un gasto: sigue siendo tu dinero.';
-  }
-}
-
-/* --------- RECURRENTES --------- */
-function renderRecurrentes(){
-  const n=calcNomina();
-  const etiquetaFuente={manual:'',nomina_neto:'↔ neto de nómina',nomina_grati:'↔ gratificación',nomina_cts:'↔ CTS'};
-  const totIng=DB.recurrentes.filter(r=>r.activo&&r.tipo==='Ingreso'&&r.frecuencia==='Mensual').reduce((a,r)=>a+montoRecurrente(r),0);
-  const totEgr=DB.recurrentes.filter(r=>r.activo&&r.tipo==='Egreso'&&r.frecuencia==='Mensual').reduce((a,r)=>a+montoRecurrente(r),0);
-  content.innerHTML=`
-  <div class="grid kpis" style="grid-template-columns:repeat(3,1fr);margin-bottom:16px">
-    <div class="card kpi"><div class="lab">Ingresos fijos al mes</div><div class="val pos">${fmt(totIng)}</div><div class="meta">solo los mensuales activos</div></div>
-    <div class="card kpi"><div class="lab">Egresos fijos al mes</div><div class="val neg">${fmt(totEgr)}</div><div class="meta">letras, pensiones, servicios</div></div>
-    <div class="card kpi"><div class="lab">Queda libre al mes</div><div class="val ${totIng-totEgr>=0?'pos':'neg'}">${fmt(totIng-totEgr)}</div><div class="meta">antes de gastos variables</div></div>
-  </div>
-
-  <div class="card card-pad" style="margin-bottom:16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap">
-    <button class="btn primary sm" onclick="openRec()">+ Nuevo recurrente</button>
-    <button class="btn gold sm" onclick="generarRecurrentes(12)">⚡ Generar próximos 12 meses</button>
-    <button class="btn ghost sm danger" onclick="borrarGenerados()">Borrar generados</button>
-    <span style="margin-left:auto;color:var(--muted);font-size:12.5px">Al generar se crean movimientos <b>Programados</b> en el historial, sin duplicar los que ya existen.</span>
-  </div>
-
-  <div class="card card-pad">
-    <table><thead><tr>
-      <th>Concepto</th><th>Tipo</th><th>Categoría</th><th>Cuenta</th><th class="num">Monto</th>
-      <th>Frecuencia</th><th class="num">Día</th><th>Desde</th><th>Estado</th><th></th></tr></thead>
-    <tbody>${DB.recurrentes.map(r=>{
-      const monto=montoRecurrente(r);
-      return `<tr style="${r.activo?'':'opacity:.45'}">
-        <td><b>${esc(r.concepto)}</b>${etiquetaFuente[r.fuente]?`<div style="font-size:10px;color:var(--blue)">${etiquetaFuente[r.fuente]}</div>`:''}</td>
-        <td><span class="tag ${r.tipo==='Ingreso'?'ing':'egr'}">${r.tipo}</span></td>
-        <td style="color:var(--muted)">${esc(r.categoria)}</td>
-        <td>${esc(r.cuenta)}</td>
-        <td class="num ${r.tipo==='Ingreso'?'pos':'neg'}">${fmt(monto)}</td>
-        <td>${r.frecuencia}</td><td class="num">${r.dia}</td><td class="mono">${r.inicio}</td>
-        <td><span class="tag ${r.activo?'ejec':'prog'}">${r.activo?'Activo':'Pausado'}</span></td>
-        <td><div class="row-actions">
-          <button class="icon-btn" onclick="toggleRec('${r.id}')" title="Activar/pausar">${r.activo?'⏸':'▶'}</button>
-          <button class="icon-btn" onclick="openRec('${r.id}')">✎</button>
-          <button class="icon-btn" onclick="delItem('recurrentes','${r.id}')">✕</button></div></td>
-      </tr>`;}).join('')||`<tr><td colspan="10" class="empty">Sin recurrentes. Agrega tu sueldo, letras o pensiones.</td></tr>`}
-    </tbody></table>
-  </div>`;
-}
-function toggleRec(id){ const r=DB.recurrentes.find(x=>x.id===id); r.activo=!r.activo; render(); toast(r.activo?'Recurrente activado':'Recurrente pausado'); }
-function openRec(id){
-  const r=id?DB.recurrentes.find(x=>x.id===id):{tipo:'Egreso',frecuencia:'Mensual',dia:1,activo:true,fuente:'manual',inicio:new Date().toISOString().slice(0,10),fin:''};
-  const opt=(arr,sel,val)=>arr.map(x=>{const v=val?x[val]:x;return `<option ${v===sel?'selected':''}>${esc(v)}</option>`}).join('');
-  const cuentas=[...DB.carteras.map(c=>c.nombre),...DB.tarjetas.map(t=>t.nombre)];
-  const fuentes=[['manual','Monto fijo que yo defino'],['nomina_neto','Neto de mi nómina (automático)'],
-                 ['nomina_grati','Gratificación + 9% (automático)'],['nomina_cts','Depósito CTS (automático)']];
-  modal(id?'Editar recurrente':'Nuevo recurrente',`
-    <div class="form-grid">
-      <div class="field full"><label>Concepto</label><input id="r_c" value="${esc(r.concepto||'')}" placeholder="Ej. Letra del auto, pensión colegio"></div>
-      <div class="field"><label>Tipo</label><select id="r_t">${opt(['Ingreso','Egreso'],r.tipo)}</select></div>
-      <div class="field"><label>Frecuencia</label><select id="r_f">${opt(Object.keys(PERIODO),r.frecuencia)}</select></div>
-      <div class="field full"><label>Categoría</label><select id="r_cat">${opt(DB.categorias,r.categoria,'nombre')}</select></div>
-      <div class="field full"><label>Cuenta</label><select id="r_cta">${opt(cuentas,r.cuenta)}</select></div>
-      <div class="field full"><label>Origen del monto</label><select id="r_src" onchange="document.getElementById('r_m').disabled=this.value!=='manual'">
-        ${fuentes.map(([v,l])=>`<option value="${v}" ${r.fuente===v?'selected':''}>${l}</option>`).join('')}</select></div>
-      <div class="field"><label>Monto</label><input id="r_m" type="number" step="0.01" value="${r.monto||0}" ${r.fuente!=='manual'?'disabled':''}></div>
-      <div class="field"><label>Día del mes</label><input id="r_d" type="number" min="1" max="31" value="${r.dia||1}"></div>
-      <div class="field"><label>Fecha de inicio</label><input id="r_i" type="date" value="${r.inicio||''}"></div>
-      <div class="field"><label>Fecha de fin <span style="color:var(--muted);font-weight:400">(opcional)</span></label><input id="r_fin" type="date" value="${r.fin||''}"></div>
-    </div>
-    <div class="sim-out ok" style="margin-top:14px;font-size:12.5px">💡 Si tu sueldo ya está registrado hasta cierto mes, empieza el recurrente el mes siguiente para no duplicarlo.</div>`,
-    ()=>{
-      const nm={concepto:$('r_c').value,tipo:$('r_t').value,categoria:$('r_cat').value,cuenta:$('r_cta').value,
-        fuente:$('r_src').value,monto:+$('r_m').value,frecuencia:$('r_f').value,dia:+$('r_d').value,
-        inicio:$('r_i').value,fin:$('r_fin').value,activo:id?r.activo:true};
-      if(!nm.concepto||!nm.inicio){toast('Falta el concepto o la fecha de inicio');return false;}
-      saveItem('recurrentes',id,nm); return true;
-    });
-}
-
-/* --------- NÓMINA --------- */
-function renderNomina(){
-  const n=calcNomina(), p=DB.params, nm=DB.nomina;
-  const fila=(l,v,cls='',ind=false,nota='')=>`<tr>
-    <td style="${ind?'padding-left:26px;':''}${cls==='b'?'font-weight:700':''}">${l}${nota?`<div style="font-size:10.5px;color:var(--muted)">${nota}</div>`:''}</td>
-    <td class="num ${cls==='neg'?'neg':cls==='pos'?'pos':''}" style="${cls==='b'?'font-weight:700':''}">${fmt(v)}</td></tr>`;
-  content.innerHTML=`
-  <div class="grid two-col" style="grid-template-columns:.85fr 1.15fr;gap:16px;margin-bottom:16px">
-    <div class="card card-pad">
-      <h3>Datos de tu sueldo</h3>
-      <div class="field" style="margin-bottom:12px"><label>Sueldo básico mensual (bruto)</label>
-        <input type="number" value="${nm.sueldoBasico}" onchange="DB.nomina.sueldoBasico=+this.value;render()"></div>
-      <div class="field" style="margin-bottom:12px"><label>Sistema de pensión</label>
-        <select onchange="DB.nomina.sistema=this.value;render()">
-          <option ${nm.sistema==='AFP'?'selected':''}>AFP</option><option ${nm.sistema==='ONP'?'selected':''}>ONP</option></select></div>
-      ${nm.sistema==='AFP'?`<div class="field" style="margin-bottom:12px"><label>Tu AFP</label>
-        <select onchange="DB.nomina.afp=this.value;render()">
-          ${Object.keys(p.afpComisiones).map(a=>`<option value="${a}" ${nm.afp===a?'selected':''}>${a} · comisión ${pct(p.afpComisiones[a])}</option>`).join('')}
-        </select></div>`:''}
-      <div class="field" style="margin-bottom:12px"><label>Asignación familiar (tienes hijos menores)</label>
-        <select onchange="DB.nomina.asignacionFamiliar=(this.value==='SI');render()">
-          <option ${nm.asignacionFamiliar?'selected':''}>SI</option><option ${!nm.asignacionFamiliar?'selected':''}>NO</option></select></div>
-      <div class="field" style="margin-bottom:12px"><label>Otros ingresos afectos (bonos, horas extras)</label>
-        <input type="number" value="${nm.otrosAfectos}" onchange="DB.nomina.otrosAfectos=+this.value;render()"></div>
-      <div class="field" style="margin-bottom:12px"><label>Otros descuentos (adelantos, préstamos)</label>
-        <input type="number" value="${nm.otrosDescuentos}" onchange="DB.nomina.otrosDescuentos=+this.value;render()"></div>
-      <div class="field"><label>Cuenta donde te abonan</label>
-        <select onchange="DB.nomina.cuentaAbono=this.value;render()">${DB.carteras.map(c=>`<option ${c.nombre===nm.cuentaAbono?'selected':''}>${esc(c.nombre)}</option>`).join('')}</select></div>
-    </div>
-
-    <div class="card card-pad">
-      <h3>Tu boleta mensual</h3>
-      <table>
-        ${fila('Sueldo básico',n.basico)}
-        ${fila('Asignación familiar',n.asig,'',true,nm.asignacionFamiliar?'10% de la RMV ('+fmt(p.rmv)+')':'no aplica')}
-        ${fila('Otros ingresos afectos',n.otrosAfectos,'',true)}
-        ${fila('TOTAL BRUTO',n.bruto,'b')}
-        ${nm.sistema==='AFP'?`
-          ${fila('Aporte obligatorio AFP',-n.aporte,'neg',true,'10% · va a tu fondo')}
-          ${fila('Comisión '+nm.afp,-n.comision,'neg',true,pct(p.afpComisiones[nm.afp])+' sobre tu bruto')}
-          ${fila('Prima de seguro',-n.prima,'neg',true,pct(p.afpPrima)+' · tope '+fmt(p.rmaTope))}`
-        :fila('Aporte ONP',-n.onp,'neg',true,'13% de tu bruto')}
-        ${fila('Renta 5ta categoría',-n.retencion,'neg',true,'retención mensual proyectada')}
-        ${n.otrosDesc?fila('Otros descuentos',-n.otrosDesc,'neg',true):''}
-        ${fila('TOTAL DESCUENTOS',-n.totalDesc,'b')}
-      </table>
-      <div class="sim-out ok" style="margin-top:14px;display:flex;justify-content:space-between;align-items:center">
-        <span>NETO EN MANO CADA MES</span>
-        <span style="font-family:'Fraunces',serif;font-size:24px">${fmt(n.neto)}</span>
-      </div>
-      <div style="font-size:12px;color:var(--muted);margin-top:8px">
-        Te descuentan <b>${pct(n.totalDesc/(n.bruto||1))}</b> del bruto. De S/ ${n.bruto.toFixed(0)} recibes S/ ${n.neto.toFixed(0)}.
-      </div>
-    </div>
-  </div>
-
-  <div class="grid two-col" style="grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-    <div class="card card-pad">
-      <h3>Cómo sale tu impuesto de 5ta</h3>
-      <table>
-        ${fila('Proyección de 12 sueldos',n.proy12)}
-        ${fila('Gratificaciones (julio + diciembre)',n.gratis,'',true)}
-        ${fila('Bonificación extraordinaria 9%',n.bonifAnual,'',true,'el 9% de EsSalud va a ti · Ley 30334')}
-        ${fila('Renta bruta anual proyectada',n.rentaBruta,'b')}
-        ${fila('Deducción de 7 UIT',-p.uit*p.deduccionUIT,'neg',true,'UIT 2026 = '+fmt(p.uit))}
-        ${fila('Renta neta imponible',n.rni,'b')}
-        ${n.detalle.map((d,i)=>d.monto>0?fila('Tramo al '+pct(d.tasa),d.imp,'',true):'').join('')}
-        ${fila('Impuesto anual',n.impAnual,'b')}
-        ${fila('Retención mensual (÷12)',n.retencion,'b')}
-      </table>
-      ${n.rni===0?`<div class="sim-out ok" style="margin-top:12px">✅ No pagas impuesto de 5ta: tu proyección anual no supera las 7 UIT (${fmt(p.uit*7)}).</div>`:''}
-    </div>
-
-    <div class="card card-pad">
-      <h3>Gratificaciones y CTS</h3>
-      <table>
-        ${fila('Gratificación (julio y diciembre)',n.grati,'',false,'inafecta a AFP/ONP · Ley 30334')}
-        ${fila('Bonificación extraordinaria 9%',n.bonifGrati,'pos',true)}
-        ${fila('Recibes por gratificación',n.netoGrati,'b')}
-        ${fila('Depósito CTS (mayo y noviembre)',n.cts,'b',false,'va a tu cuenta CTS, no es de libre disposición')}
-      </table>
-      <hr style="border:none;border-top:1px solid var(--cardline);margin:16px 0">
-      <h3>Al año</h3>
-      <table>
-        ${fila('Bruto anual (sueldos + gratis)',n.rentaBruta)}
-        ${fila('Descuentos de pensión',-n.pension*12,'neg',true)}
-        ${fila('Impuesto a la renta',-n.impAnual,'neg',true)}
-        ${fila('NETO ANUAL',n.rentaBruta-n.pension*12-n.impAnual-n.otrosDesc*12,'b')}
-      </table>
-      <button class="btn primary sm" style="margin-top:16px;width:100%" onclick="go('recurrentes')">
-        Usar este neto como ingreso recurrente →</button>
-    </div>
-  </div>
-
-  <div class="card card-pad">
-    <h3>Parámetros legales · Perú 2026</h3>
-    <div class="form-grid" style="grid-template-columns:repeat(4,1fr)">
-      <div class="field"><label>UIT</label><input type="number" value="${p.uit}" onchange="DB.params.uit=+this.value;render()"></div>
-      <div class="field"><label>RMV</label><input type="number" value="${p.rmv}" onchange="DB.params.rmv=+this.value;render()"></div>
-      <div class="field"><label>Prima AFP</label><input type="number" step="0.0001" value="${p.afpPrima}" onchange="DB.params.afpPrima=+this.value;render()"></div>
-      <div class="field"><label>Tope asegurable</label><input type="number" step="0.01" value="${p.rmaTope}" onchange="DB.params.rmaTope=+this.value;render()"></div>
-    </div>
-    <div style="font-size:11.5px;color:var(--muted);margin-top:12px;line-height:1.6">
-      UIT 2026 <b>S/ 5,500</b> (DS 301-2025-EF) · RMV <b>S/ 1,130</b> (DS 006-2024-TR) → asignación familiar <b>S/ 113</b> ·
-      ONP <b>13%</b> · AFP aporte <b>10%</b> + prima <b>1.37%</b> + comisión (Habitat 1.47%, Integra 1.55%, Prima 1.60%, Profuturo 1.69%) ·
-      Renta 5ta: deducción <b>7 UIT (S/ 38,500)</b> y tramos 8/14/17/20/30%.
-      El tope asegurable de la prima AFP lo actualiza la SBS cada trimestre — revísalo.
-    </div>
-  </div>`;
-}
-
-/* --------- PROYECCIÓN --------- */
-function renderProyeccion(){
-  const start=DB.projStart;
-  const meses=[]; let [y,mo]=start.split('-').map(Number);
-  for(let i=0;i<12;i++){ meses.push(`${y}-${String(mo).padStart(2,'0')}`); mo++; if(mo>12){mo=1;y++;} }
-  const egCats=DB.categorias.filter(c=>c.grupo==='Egreso').map(c=>c.nombre);
-  const sum=(pred)=>meses.map(mk=>DB.movimientos.filter(x=>mesKey(x.fecha)===mk&&pred(x)).reduce((a,x)=>a+base(x),0));
-  const ingresos=sum(x=>x.tipo==='Ingreso');
-  const egrRows=egCats.map(cat=>({cat,vals:sum(x=>x.tipo==='Egreso'&&x.categoria===cat)}));
-  const totEgr=meses.map((_,i)=>egrRows.reduce((a,r)=>a+r.vals[i],0));
-  const inv=sum(x=>x.tipo==='Inversión');
-  const flujo=meses.map((_,i)=>ingresos[i]-totEgr[i]-inv[i]);
-  const inicial=DB.carteras.reduce((a,c)=>a+(+c.saldoInicial||0),0);
-  const acum=[]; flujo.reduce((p,f,i)=>acum[i]=p+f, inicial);
-  const cell=(v)=> v===0?`<td class="num zero">·</td>`:`<td class="num ${v<0?'neg':''}">${fmt(v,0)}</td>`;
-
-  content.innerHTML=`
-  <div class="card card-pad" style="margin-bottom:16px;display:flex;gap:14px;align-items:center;flex-wrap:wrap">
-    <label style="font-weight:600">Mes de inicio</label>
-    <input type="month" value="${start}" onchange="DB.projStart=this.value;render()" style="max-width:180px">
-    <span style="color:var(--muted);font-size:12.5px;margin-left:auto">Incluye ejecutados y programados · meses sin datos quedan vacíos</span>
-  </div>
-  <div class="card card-pad proj">
-    <div class="proj-scroll"><table>
-      <thead><tr><th>Concepto / Categoría</th>${meses.map(mk=>`<th class="num">${nombreMes(mk)}</th>`).join('')}</tr></thead>
-      <tbody>
-        <tr class="head"><td class="cat">INGRESOS TOTALES</td>${ingresos.map(v=>v===0?`<td class="num zero">·</td>`:`<td class="num pos">${fmt(v,0)}</td>`).join('')}</tr>
-        <tr class="head"><td class="cat">EGRESOS</td>${meses.map(()=>'<td></td>').join('')}</tr>
-        ${egrRows.map(r=>`<tr><td class="cat" style="padding-left:24px;font-weight:400">${esc(r.cat)}</td>${r.vals.map(cell).join('')}</tr>`).join('')}
-        <tr class="head"><td class="cat">TOTAL EGRESOS</td>${totEgr.map(v=>v===0?`<td class="num zero">·</td>`:`<td class="num neg">${fmt(v,0)}</td>`).join('')}</tr>
-        <tr><td class="cat" style="padding-left:24px;font-weight:400">Aportes a inversión</td>${inv.map(cell).join('')}</tr>
-        <tr class="tot"><td class="cat">FLUJO NETO DEL MES</td>${flujo.map(v=>`<td class="num">${v===0?'·':fmt(v,0)}</td>`).join('')}</tr>
-        <tr class="acc"><td class="cat">SALDO ACUMULADO</td>${acum.map(v=>`<td class="num">${fmt(v,0)}</td>`).join('')}</tr>
-      </tbody>
-    </table></div>
-  </div>`;
-}
-
-/* --------- DEUDAS --------- */
-function renderDeudas(){
-  content.innerHTML=`
-  <div class="card card-pad" style="margin-bottom:16px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <h3 style="margin:0">Tarjetas de crédito</h3>
-      <button class="btn ghost sm" onclick="openTarjeta()">+ Tarjeta</button>
-    </div>
-    <table><thead><tr><th>Tarjeta</th><th class="num">Línea</th><th class="num">Consumo</th><th class="num">Disponible</th><th class="num">Uso</th><th class="num">Cierre</th><th class="num">Días</th><th></th></tr></thead>
-    <tbody>${DB.tarjetas.map(t=>{
-      const cons=Math.max(0,consumoTarjeta(t.nombre)), disp=t.linea-cons, uso=t.linea?cons/t.linea:0;
-      const dias=diasParaCierre(t.cierre);
-      const upill=uso>0.7?'r':uso>0.4?'a':'g';
-      return `<tr>
-        <td><b>${esc(t.nombre)}</b><div style="font-size:11px;color:var(--muted)">${esc(t.banco)}</div></td>
-        <td class="num">${fmt(t.linea,0)}</td><td class="num neg">${fmt(cons)}</td>
-        <td class="num pos">${fmt(disp)}</td>
-        <td class="num"><span class="pill ${upill}">${pct(uso)}</span></td>
-        <td class="num">día ${t.cierre}</td><td class="num">${dias} d</td>
-        <td><div class="row-actions"><button class="icon-btn" onclick="openTarjeta('${t.id}')">✎</button><button class="icon-btn" onclick="delItem('tarjetas','${t.id}')">✕</button></div></td>
-      </tr>`;}).join('')||`<tr><td colspan="8" class="empty">Sin tarjetas</td></tr>`}</tbody></table>
-  </div>
-
-  <div class="card card-pad">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <h3 style="margin:0">Amortización de préstamos (método francés)</h3>
-      <button class="btn ghost sm" onclick="openPrestamo()">+ Préstamo</button>
-    </div>
-    <table><thead><tr><th>Préstamo</th><th class="num">Cuota</th><th class="num">Pagadas</th><th class="num">Restantes</th><th class="num">Saldo pendiente</th><th></th></tr></thead>
-    <tbody>${DB.prestamos.map(p=>{const s=saldoPrestamo(p);return `<tr>
-      <td><b>${esc(p.nombre)}</b><div style="font-size:11px;color:var(--muted)">${esc(p.entidad)} · ${pct(p.tasa)} anual</div></td>
-      <td class="num">${fmt(s.cuota)}</td><td class="num">${s.pagadas} / ${p.cuotas}</td>
-      <td class="num">${s.rest}</td><td class="num neg">${fmt(s.saldo)}</td>
-      <td><div class="row-actions"><button class="icon-btn" onclick="openPrestamo('${p.id}')">✎</button><button class="icon-btn" onclick="delItem('prestamos','${p.id}')">✕</button></div></td>
-    </tr>`;}).join('')||`<tr><td colspan="6" class="empty">Sin préstamos</td></tr>`}
-    <tr class="tot" style="background:var(--slate)"><td colspan="4" style="color:#fff;font-weight:700">SALDO TOTAL PRÉSTAMOS</td><td class="num" style="color:#fff;font-weight:700">${fmt(saldoPrestamos())}</td><td></td></tr>
-    </tbody></table>
-  </div>`;
-}
-function diasParaCierre(cierre){
-  const hoy=new Date().getDate(); const finMes=new Date(new Date().getFullYear(),new Date().getMonth()+1,0).getDate();
-  return hoy<=cierre?cierre-hoy:cierre+finMes-hoy;
-}
-
-/* --------- INVERSIONES --------- */
-function renderInversiones(){
-  const totInv=DB.inversiones.reduce((a,x)=>a+(+x.invertido||0),0);
-  const totVal=DB.inversiones.reduce((a,x)=>a+(+x.valorActual||0),0);
-  const totGan=DB.inversiones.reduce((a,x)=>a+((+x.valorActual||0)+(+x.rendimiento||0)-(+x.invertido||0)),0);
-  const roiTot=totInv?totGan/totInv:0;
-  const totProvM=DB.provisiones.reduce((a,p)=>a+(+p.anual||0)/12,0);
-  content.innerHTML=`
-  <div class="card card-pad" style="margin-bottom:16px">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <h3 style="margin:0">Registro de activos · ROI</h3>
-      <button class="btn ghost sm" onclick="openInv()">+ Activo</button>
-    </div>
-    <table><thead><tr><th>Activo</th><th class="num">Invertido</th><th class="num">Valor actual</th><th class="num">Rendim.</th><th class="num">Ganancia</th><th class="num">ROI</th><th></th></tr></thead>
-    <tbody>${DB.inversiones.map(x=>{const gan=(+x.valorActual||0)+(+x.rendimiento||0)-(+x.invertido||0);const roi=x.invertido?gan/x.invertido:0;return `<tr>
-      <td><b>${esc(x.nombre)}</b></td><td class="num">${fmt(x.invertido)}</td><td class="num">${fmt(x.valorActual)}</td>
-      <td class="num">${fmt(x.rendimiento)}</td><td class="num ${gan<0?'neg':'pos'}">${fmt(gan)}</td>
-      <td class="num"><span class="pill ${roi<0?'r':'g'}">${pct(roi)}</span></td>
-      <td><div class="row-actions"><button class="icon-btn" onclick="openInv('${x.id}')">✎</button><button class="icon-btn" onclick="delItem('inversiones','${x.id}')">✕</button></div></td>
-    </tr>`;}).join('')}
-    <tr class="tot" style="background:var(--slate)"><td style="color:#fff;font-weight:700">TOTALES</td><td class="num" style="color:#fff;font-weight:700">${fmt(totInv)}</td><td class="num" style="color:#fff;font-weight:700">${fmt(totVal)}</td><td></td><td class="num" style="color:#fff;font-weight:700">${fmt(totGan)}</td><td class="num" style="color:#fff;font-weight:700">${pct(roiTot)}</td><td></td></tr>
-    </tbody></table>
-  </div>
-  <div class="card card-pad">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-      <h3 style="margin:0">Provisiones · fracciona gastos anuales</h3>
-      <button class="btn ghost sm" onclick="openProv()">+ Provisión</button>
-    </div>
-    <table><thead><tr><th>Concepto</th><th class="num">Monto anual</th><th class="num">Provisión mensual</th><th class="num">Meses</th><th class="num">Acumulado</th><th></th></tr></thead>
-    <tbody>${DB.provisiones.map(p=>{const men=(+p.anual||0)/12;return `<tr>
-      <td><b>${esc(p.concepto)}</b></td><td class="num">${fmt(p.anual)}</td><td class="num">${fmt(men)}</td>
-      <td class="num">${p.meses}</td><td class="num pos">${fmt(men*p.meses)}</td>
-      <td><div class="row-actions"><button class="icon-btn" onclick="openProv('${p.id}')">✎</button><button class="icon-btn" onclick="delItem('provisiones','${p.id}')">✕</button></div></td>
-    </tr>`;}).join('')}
-    <tr class="tot" style="background:var(--slate)"><td colspan="2" style="color:#fff;font-weight:700">TOTAL PROVISIÓN MENSUAL</td><td class="num" style="color:#fff;font-weight:700">${fmt(totProvM)}</td><td colspan="3"></td></tr>
-    </tbody></table>
-  </div>`;
-}
-
-/* --------- CONFIG --------- */
-function renderConfig(){
-  const tabs=[['carteras','Carteras'],['categorias','Categorías'],['tarjetas','Tarjetas'],['prestamos','Préstamos'],['divisas','Divisas'],['listas','Listas & Fondo']];
-  content.innerHTML=`
-  <div class="subtabs">${tabs.map(([k,l])=>`<button class="${configTab===k?'active':''}" onclick="configTab='${k}';render()">${l}</button>`).join('')}</div>
-  <div id="cfgBody"></div>`;
-  const b=$('cfgBody');
-  if(configTab==='carteras') b.innerHTML=cfgCarteras();
-  else if(configTab==='categorias') b.innerHTML=cfgCategorias();
-  else if(configTab==='tarjetas') b.innerHTML=cfgTarjetas();
-  else if(configTab==='prestamos') b.innerHTML=cfgPrestamos();
-  else if(configTab==='divisas') b.innerHTML=cfgDivisas();
-  else b.innerHTML=cfgListas();
-}
-function cfgCarteras(){return `<div class="card card-pad">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><div class="section-title">Carteras y cuentas</div><div class="section-sub">Define tus billeteras y su saldo inicial (punto de partida del sistema).</div></div><button class="btn primary sm" onclick="openCartera()">+ Cartera</button></div>
-  <table><thead><tr><th>Cuenta</th><th>Tipo</th><th>Moneda</th><th class="num">Saldo inicial</th><th class="num">Saldo actual</th><th></th></tr></thead>
-  <tbody>${DB.carteras.map(c=>`<tr>
-    <td>${c.icon||'💼'} <b>${esc(c.nombre)}</b></td><td style="color:var(--muted)">${esc(c.tipo)}</td><td>${c.moneda}</td>
-    <td class="num">${fmt(c.saldoInicial)}</td><td class="num"><b>${fmt(saldoCartera(c.nombre))}</b></td>
-    <td><div class="row-actions"><button class="icon-btn" onclick="openCartera('${c.id}')">✎</button><button class="icon-btn" onclick="delItem('carteras','${c.id}')">✕</button></div></td>
-  </tr>`).join('')}</tbody></table></div>`;}
-function cfgCategorias(){return `<div class="card card-pad">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><div class="section-title">Categorías</div><div class="section-sub">Ingresos (Activos/Pasivos) y egresos (Necesidades/Deseos) que alimentan el formulario.</div></div><button class="btn primary sm" onclick="openCat()">+ Categoría</button></div>
-  <table><thead><tr><th>Categoría</th><th>Grupo</th><th>Clasificación</th><th></th></tr></thead>
-  <tbody>${DB.categorias.map(c=>`<tr><td><b>${esc(c.nombre)}</b></td>
-    <td><span class="tag ${({Ingreso:'ing',Egreso:'egr',Transferencia:'tra','Inversión':'inv'})[c.grupo]||''}">${c.grupo}</span></td>
-    <td style="color:var(--muted)">${esc(c.clase)}</td>
-    <td><div class="row-actions"><button class="icon-btn" onclick="openCat('${c.id}')">✎</button><button class="icon-btn" onclick="delItem('categorias','${c.id}')">✕</button></div></td>
-  </tr>`).join('')}</tbody></table></div>`;}
-function cfgTarjetas(){return `<div class="card card-pad">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><div class="section-title">Tarjetas de crédito</div><div class="section-sub">Línea, días de cierre y pago, y tasa anual de cada tarjeta.</div></div><button class="btn primary sm" onclick="openTarjeta()">+ Tarjeta</button></div>
-  <table><thead><tr><th>Tarjeta</th><th>Banco</th><th class="num">Línea</th><th class="num">Cierre</th><th class="num">Pago</th><th class="num">Tasa anual</th><th></th></tr></thead>
-  <tbody>${DB.tarjetas.map(t=>`<tr><td><b>${esc(t.nombre)}</b></td><td>${esc(t.banco)}</td><td class="num">${fmt(t.linea,0)}</td>
-    <td class="num">día ${t.cierre}</td><td class="num">día ${t.pago}</td><td class="num">${pct(t.tasa)}</td>
-    <td><div class="row-actions"><button class="icon-btn" onclick="openTarjeta('${t.id}')">✎</button><button class="icon-btn" onclick="delItem('tarjetas','${t.id}')">✕</button></div></td>
-  </tr>`).join('')}</tbody></table></div>`;}
-function cfgPrestamos(){return `<div class="card card-pad">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><div class="section-title">Préstamos activos</div><div class="section-sub">La cuota mensual se calcula sola con el método francés.</div></div><button class="btn primary sm" onclick="openPrestamo()">+ Préstamo</button></div>
-  <table><thead><tr><th>Préstamo</th><th>Entidad</th><th class="num">Monto</th><th class="num">Tasa anual</th><th class="num">Cuotas</th><th>Inicio</th><th class="num">Cuota mensual</th><th></th></tr></thead>
-  <tbody>${DB.prestamos.map(p=>`<tr><td><b>${esc(p.nombre)}</b></td><td>${esc(p.entidad)}</td><td class="num">${fmt(p.monto,0)}</td>
-    <td class="num">${pct(p.tasa)}</td><td class="num">${p.cuotas}</td><td class="mono">${p.inicio}</td><td class="num"><b>${fmt(saldoPrestamo(p).cuota)}</b></td>
-    <td><div class="row-actions"><button class="icon-btn" onclick="openPrestamo('${p.id}')">✎</button><button class="icon-btn" onclick="delItem('prestamos','${p.id}')">✕</button></div></td>
-  </tr>`).join('')}</tbody></table></div>`;}
-function cfgDivisas(){return `<div class="card card-pad">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px"><div><div class="section-title">Divisas</div><div class="section-sub">Tipo de cambio a Soles. Todos los montos se convierten a S/ automáticamente.</div></div><button class="btn primary sm" onclick="openDivisa()">+ Divisa</button></div>
-  <table><thead><tr><th>Código</th><th>Moneda</th><th class="num">Tipo de cambio (a S/)</th><th></th></tr></thead>
-  <tbody>${DB.divisas.map(d=>`<tr><td><b>${d.cod}</b></td><td>${esc(d.nombre)}</td><td class="num mono">${(+d.tc).toFixed(4)}</td>
-    <td><div class="row-actions"><button class="icon-btn" onclick="openDivisa('${d.id}')">✎</button>${d.cod!=='PEN'?`<button class="icon-btn" onclick="delItem('divisas','${d.id}')">✕</button>`:''}</div></td>
-  </tr>`).join('')}</tbody></table></div>`;}
-function cfgListas(){return `<div class="grid two-col" style="grid-template-columns:1fr 1fr;gap:16px">
-  <div class="card card-pad"><div class="section-title">Tipos de movimiento</div><div class="section-sub">Motor de la lógica de saldos.</div>
-    ${DB.tiposMov.map(t=>`<div class="saldo-row"><div class="saldo-name"><div class="n">${t}</div></div></div>`).join('')}</div>
-  <div class="card card-pad"><div class="section-title">Tipos de gasto</div><div class="section-sub">Clasificación base cero.</div>
-    ${DB.tiposGasto.map(t=>`<div class="saldo-row"><div class="saldo-name"><div class="n">${t}</div></div></div>`).join('')}</div>
-  <div class="card card-pad"><div class="section-title">Medios de pago</div>
-    ${DB.medios.map(t=>`<div class="saldo-row"><div class="saldo-name"><div class="n">${t}</div></div></div>`).join('')}</div>
-  <div class="card card-pad"><div class="section-title">Fondo de emergencia</div><div class="section-sub">Meta en meses de egresos.</div>
-    <div class="field"><label>Meses de cobertura objetivo</label><input type="number" value="${DB.fondoMesesMeta}" onchange="DB.fondoMesesMeta=+this.value;save();toast('Guardado')"></div>
-    <hr style="border:none;border-top:1px solid var(--cardline);margin:18px 0">
-    <button class="btn ghost sm danger" onclick="resetDB()">↺ Restaurar datos de ejemplo</button>
-  </div>
-</div>`;}
-
-/* ---- CRUD editores config ---- */
-function openCartera(id){const c=id?DB.carteras.find(x=>x.id===id):{tipo:'Cuenta Ahorro',moneda:'PEN',icon:'💼'};
-  modal(id?'Editar cartera':'Nueva cartera',`<div class="form-grid">
-    <div class="field full"><label>Nombre</label><input id="c_n" value="${esc(c.nombre||'')}"></div>
-    <div class="field"><label>Tipo</label><input id="c_t" value="${esc(c.tipo||'')}" placeholder="Efectivo / Ahorro..."></div>
-    <div class="field"><label>Moneda</label><select id="c_m">${DB.divisas.map(d=>`<option ${d.cod===c.moneda?'selected':''}>${d.cod}</option>`).join('')}</select></div>
-    <div class="field"><label>Ícono (emoji)</label><input id="c_i" value="${c.icon||'💼'}" maxlength="2"></div>
-    <div class="field"><label>Saldo inicial</label><input id="c_s" type="number" step="0.01" value="${c.saldoInicial||0}"></div>
-  </div>`,()=>{const nm={nombre:$('c_n').value,tipo:$('c_t').value,moneda:$('c_m').value,icon:$('c_i').value,saldoInicial:+$('c_s').value};
-    if(!nm.nombre){toast('Falta el nombre');return false;} saveItem('carteras',id,nm);return true;});}
-function openCat(id){const c=id?DB.categorias.find(x=>x.id===id):{grupo:'Egreso',clase:'Necesidad'};
-  modal(id?'Editar categoría':'Nueva categoría',`<div class="form-grid">
-    <div class="field full"><label>Nombre</label><input id="k_n" value="${esc(c.nombre||'')}"></div>
-    <div class="field"><label>Grupo</label><select id="k_g">${DB.tiposMov.map(t=>`<option ${t===c.grupo?'selected':''}>${t}</option>`).join('')}</select></div>
-    <div class="field"><label>Clasificación</label><input id="k_c" value="${esc(c.clase||'')}" placeholder="Necesidad / Deseo / Activo / Pasivo"></div>
-  </div>`,()=>{const nm={nombre:$('k_n').value,grupo:$('k_g').value,clase:$('k_c').value};
-    if(!nm.nombre){toast('Falta el nombre');return false;} saveItem('categorias',id,nm);return true;});}
-function openTarjeta(id){const t=id?DB.tarjetas.find(x=>x.id===id):{moneda:'PEN',cierre:25,pago:15,tasa:0.65};
-  modal(id?'Editar tarjeta':'Nueva tarjeta',`<div class="form-grid">
-    <div class="field full"><label>Nombre</label><input id="t_n" value="${esc(t.nombre||'')}"></div>
-    <div class="field"><label>Banco</label><input id="t_b" value="${esc(t.banco||'')}"></div>
-    <div class="field"><label>Línea de crédito</label><input id="t_l" type="number" value="${t.linea||0}"></div>
-    <div class="field"><label>Día de cierre</label><input id="t_c" type="number" min="1" max="31" value="${t.cierre}"></div>
-    <div class="field"><label>Día de pago</label><input id="t_p" type="number" min="1" max="31" value="${t.pago}"></div>
-    <div class="field"><label>Tasa anual (%)</label><input id="t_ta" type="number" step="0.01" value="${(t.tasa*100).toFixed(0)}"></div>
-  </div>`,()=>{const nm={nombre:$('t_n').value,banco:$('t_b').value,linea:+$('t_l').value,cierre:+$('t_c').value,pago:+$('t_p').value,tasa:(+$('t_ta').value)/100,moneda:t.moneda||'PEN'};
-    if(!nm.nombre){toast('Falta el nombre');return false;} saveItem('tarjetas',id,nm);return true;});}
-function openPrestamo(id){const p=id?DB.prestamos.find(x=>x.id===id):{tasa:0.15,cuotas:12,inicio:new Date().toISOString().slice(0,10)};
-  modal(id?'Editar préstamo':'Nuevo préstamo',`<div class="form-grid">
-    <div class="field full"><label>Nombre</label><input id="p_n" value="${esc(p.nombre||'')}"></div>
-    <div class="field"><label>Entidad</label><input id="p_e" value="${esc(p.entidad||'')}"></div>
-    <div class="field"><label>Monto original</label><input id="p_m" type="number" value="${p.monto||0}"></div>
-    <div class="field"><label>Tasa anual (%)</label><input id="p_t" type="number" step="0.01" value="${(p.tasa*100).toFixed(1)}"></div>
-    <div class="field"><label>N° de cuotas</label><input id="p_c" type="number" value="${p.cuotas}"></div>
-    <div class="field"><label>Fecha de inicio</label><input id="p_f" type="date" value="${p.inicio}"></div>
-  </div>`,()=>{const nm={nombre:$('p_n').value,entidad:$('p_e').value,monto:+$('p_m').value,tasa:(+$('p_t').value)/100,cuotas:+$('p_c').value,inicio:$('p_f').value};
-    if(!nm.nombre){toast('Falta el nombre');return false;} saveItem('prestamos',id,nm);return true;});}
-function openDivisa(id){const d=id?DB.divisas.find(x=>x.id===id):{tc:1};
-  modal(id?'Editar divisa':'Nueva divisa',`<div class="form-grid">
-    <div class="field"><label>Código</label><input id="d_c" value="${d.cod||''}" maxlength="4" ${d.cod==='PEN'?'readonly':''}></div>
-    <div class="field"><label>Moneda</label><input id="d_n" value="${esc(d.nombre||'')}"></div>
-    <div class="field full"><label>Tipo de cambio a Soles</label><input id="d_t" type="number" step="0.0001" value="${d.tc}" ${d.cod==='PEN'?'readonly':''}></div>
-  </div>`,()=>{const nm={cod:$('d_c').value.toUpperCase(),nombre:$('d_n').value,tc:+$('d_t').value};
-    if(!nm.cod){toast('Falta el código');return false;} saveItem('divisas',id,nm);return true;});}
-function openInv(id){const x=id?DB.inversiones.find(a=>a.id===id):{};
-  modal(id?'Editar activo':'Nuevo activo',`<div class="form-grid">
-    <div class="field full"><label>Activo / instrumento</label><input id="i_n" value="${esc(x.nombre||'')}"></div>
-    <div class="field"><label>Monto invertido</label><input id="i_i" type="number" value="${x.invertido||0}"></div>
-    <div class="field"><label>Valor actual</label><input id="i_v" type="number" value="${x.valorActual||0}"></div>
-    <div class="field full"><label>Rendimiento inyectado al flujo</label><input id="i_r" type="number" value="${x.rendimiento||0}"></div>
-  </div>`,()=>{const nm={nombre:$('i_n').value,invertido:+$('i_i').value,valorActual:+$('i_v').value,rendimiento:+$('i_r').value};
-    if(!nm.nombre){toast('Falta el nombre');return false;} saveItem('inversiones',id,nm);return true;});}
-function openProv(id){const p=id?DB.provisiones.find(a=>a.id===id):{meses:0};
-  modal(id?'Editar provisión':'Nueva provisión',`<div class="form-grid">
-    <div class="field full"><label>Concepto</label><input id="v_c" value="${esc(p.concepto||'')}"></div>
-    <div class="field"><label>Monto anual</label><input id="v_a" type="number" value="${p.anual||0}"></div>
-    <div class="field"><label>Meses provisionados</label><input id="v_m" type="number" value="${p.meses||0}"></div>
-  </div>`,()=>{const nm={concepto:$('v_c').value,anual:+$('v_a').value,meses:+$('v_m').value};
-    if(!nm.concepto){toast('Falta el concepto');return false;} saveItem('provisiones',id,nm);return true;});}
-
-function saveItem(coll,id,data){ if(id){Object.assign(DB[coll].find(x=>x.id===id),data);}else{DB[coll].push({id:uid(),...data});} render(); toast('Guardado'); }
-function delItem(coll,id){ if(confirm('¿Eliminar este registro?')){ DB[coll]=DB[coll].filter(x=>x.id!==id); render(); toast('Eliminado'); } }
-
-/* ============================ UI HELPERS ============================ */
-function esc(s){return String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));}
-function go(v){currentView=v;window.scrollTo(0,0);render();document.getElementById('side').classList.remove('open');}
-document.getElementById('nav').addEventListener('click',e=>{const a=e.target.closest('a');if(a){go(a.dataset.view);}});
-
-let modalOnSave=null;
-function modal(title,body,onSave){
-  modalOnSave=onSave;
-  $('modalRoot').innerHTML=`<div class="modal-bg" onclick="if(event.target===this)closeModal()">
-    <div class="modal"><div class="modal-head"><h3>${title}</h3><button class="icon-btn" onclick="closeModal()">✕</button></div>
-    <div class="modal-body">${body}</div>
-    <div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancelar</button><button class="btn primary" onclick="confirmModal()">Guardar</button></div></div></div>`;
-}
-function closeModal(){ $('modalRoot').innerHTML=''; modalOnSave=null; }
-function confirmModal(){ if(modalOnSave){ const ok=modalOnSave(); if(ok!==false) closeModal(); } else closeModal(); }
-
-let toastT;
-function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2200); }
-
-function exportCSV(){
-  const head=['Fecha','Mes','Descripcion','Tipo','Categoria','CuentaOrigen','CuentaDestino','Medio','Moneda','Monto','MontoBaseSoles','Estado'];
-  const rows=DB.movimientos.slice().sort((a,b)=>a.fecha.localeCompare(b.fecha)).map(m=>[
-    m.fecha,mesKey(m.fecha),m.desc,m.tipo,m.categoria,m.ctaOrigen,m.ctaDestino,m.medio,m.moneda,m.monto,base(m).toFixed(2),m.estado
-  ].map(v=>`"${String(v??'').replace(/"/g,'""')}"`).join(','));
-  const csv=[head.join(','),...rows].join('\n');
-  const blob=new Blob(['\ufeff'+csv],{type:'text/csv;charset=utf-8'});
-  const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='movimientos_acif.csv'; a.click();
-  toast('CSV exportado');
-}
-
-/* ============================ INIT ============================ */
-load(); render();
+/* ═══════════════ INICIO ═══════════════ */
+cargar();
+const generados=generarVencidos();
+pintar();
+if(generados) setTimeout(()=>aviso(`${generados} movimiento${generados===1?'':'s'} recurrente${generados===1?'':'s'} registrado${generados===1?'':'s'}`),600);
 </script>
 </body>
 </html>
