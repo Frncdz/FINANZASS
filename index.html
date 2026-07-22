@@ -502,18 +502,25 @@ const medioIcono=id=>{const b=billetera(id);if(b)return b.icono||'wallet';return
 const catObj=n=>DB.categorias.find(c=>c.nombre===n);
 const catColor=n=>{const c=catObj(n);return c?c.color:'#9B9C93';};
 
+const esFuturo=f=>f>hoy();
+/* Saldo REAL de hoy: solo cuenta lo que ya ocurrió */
 function saldo(id){
   const b=billetera(id); if(!b) return 0;
   return DB.movimientos.reduce((t,m)=>{
-    if(m.medioId!==id) return t;
+    if(m.medioId!==id||esFuturo(m.fecha)) return t;
     return m.tipo==='Ingreso' ? t + +m.monto : t - +m.monto;
   }, +b.saldoInicial||0);
 }
 const dineroPropio=()=>DB.billeteras.reduce((t,b)=>t+saldo(b.id),0);
+/* Movimientos con fecha futura: aún no afectan tu saldo */
+const programados=()=>DB.movimientos.filter(m=>esFuturo(m.fecha));
+function netoProgramado(){
+  return programados().reduce((t,m)=> m.tipo==='Ingreso'? t + +m.monto : t - +m.monto, 0);
+}
 
 function estadoTarjeta(t){
-  const consumos=DB.movimientos.filter(m=>m.tipo==='Egreso'&&m.medioId===t.id);
-  const pagos=DB.movimientos.filter(m=>m.tipo==='Pago'&&m.tarjetaId===t.id);
+  const consumos=DB.movimientos.filter(m=>m.tipo==='Egreso'&&m.medioId===t.id&&!esFuturo(m.fecha));
+  const pagos=DB.movimientos.filter(m=>m.tipo==='Pago'&&m.tarjetaId===t.id&&!esFuturo(m.fecha));
   const deuda=Math.max(0,consumos.reduce((a,m)=>a+ +m.monto,0)-pagos.reduce((a,m)=>a+ +m.monto,0));
   const cierreUlt=ultimoDia(t.diaCierre);
   const cierreProx=proximoDia(t.diaCierre,sumarDias(hoy(),1));
@@ -532,6 +539,78 @@ function estadoPrestamo(p){
 }
 const deudaPrestamos=()=>DB.prestamos.reduce((a,p)=>a+estadoPrestamo(p).pendiente,0);
 const deudaTotal=()=>deudaTarjetas()+deudaPrestamos();
+
+/* ════════ OBLIGACIONES CON FECHA ════════
+   Una deuda no es un monto suelto: vence un día concreto.
+   Aquí se arma el calendario real de lo que hay que pagar y cuándo. */
+function cuotasProgramadas(){
+  const out=[];
+  DB.prestamos.forEach(p=>{
+    if(!p.activo) return;
+    const e=estadoPrestamo(p);
+    let f=p.proxima;
+    for(let i=0;i<e.restantes;i++){
+      out.push({fecha:f,monto:+p.cuota,nombre:p.nombre,clase:'prestamo',id:p.id,
+                detalle:`Cuota ${(+p.pagadas||0)+i+1} de ${p.cuotas}`});
+      f=conDia(D(f).getFullYear(),D(f).getMonth()+1,p.diaPago);
+    }
+  });
+  return out;
+}
+function pagosTarjetaProgramados(){
+  const out=[];
+  DB.tarjetas.forEach(t=>{
+    const e=estadoTarjeta(t);
+    if(e.porPagar>0.01)
+      out.push({fecha:e.vence,monto:e.porPagar,nombre:t.nombre,clase:'tarjeta',id:t.id,detalle:'Facturado'});
+    if(e.sinFacturar>0.01){
+      const fp=proximoDia(t.diaPago,sumarDias(e.cierreProx,1));
+      out.push({fecha:fp,monto:e.sinFacturar,nombre:t.nombre,clase:'tarjeta',id:t.id,
+                detalle:`Cierra el ${fechaCorta(e.cierreProx)}`});
+    }
+  });
+  return out;
+}
+const obligaciones=()=>[...cuotasProgramadas(),...pagosTarjetaProgramados()].sort((a,b)=>a.fecha.localeCompare(b.fecha));
+const obligacionesMes=ym=>obligaciones().filter(o=>mesDe(o.fecha)===ym);
+const totalObligacionesMes=ym=>obligacionesMes(ym).reduce((a,o)=>a+o.monto,0);
+
+/* Recurrentes proyectados hacia adelante, sin crear movimientos */
+function recurrentesProyectados(hastaYM){
+  const out=[];
+  DB.recurrentes.forEach(r=>{
+    if(!r.activo||!r.proxima) return;
+    let f=r.proxima,g=0;
+    while(mesDe(f)<=hastaYM&&g++<400){
+      out.push({fecha:f,tipo:r.tipo,monto:+r.monto,concepto:r.concepto,categoria:r.categoria});
+      f=siguienteFecha(f,r.frecuencia);
+    }
+  });
+  return out;
+}
+
+/* Proyección de los 12 meses del año */
+function proyeccionAnual(anio){
+  const hastaYM=`${anio}-12`;
+  const rec=recurrentesProyectados(hastaYM);
+  const obl=obligaciones();
+  const act=mesActual();
+  let acum=dineroPropio();
+  const filas=[];
+  for(let m=1;m<=12;m++){
+    const ym=`${anio}-${String(m).padStart(2,'0')}`;
+    const t=totalesMes(ym);
+    const rI=rec.filter(r=>mesDe(r.fecha)===ym&&r.tipo==='Ingreso').reduce((a,r)=>a+r.monto,0);
+    const rE=rec.filter(r=>mesDe(r.fecha)===ym&&r.tipo==='Egreso').reduce((a,r)=>a+r.monto,0);
+    const o=obl.filter(x=>mesDe(x.fecha)===ym).reduce((a,x)=>a+x.monto,0);
+    const ing=t.ing+rI, egr=t.egr+rE, flujo=ing-egr-o;
+    const futuro = ym>act, esActual = ym===act;
+    if(ym>=act) acum+=flujo;
+    filas.push({ym,mes:m,ing,egr,obl:o,flujo,acum:(ym>=act?acum:null),futuro,esActual,
+                pasado:ym<act, vacio:!ing&&!egr&&!o});
+  }
+  return filas;
+}
 
 function totalesMes(ym){
   let ing=0,egr=0,pag=0;
@@ -613,14 +692,15 @@ function toggleTema(){
 const VISTAS=[
   {v:'inicio',t:'Resumen',i:'home',s:'Tu situación de un vistazo'},
   {v:'historial',t:'Movimientos',i:'list',s:'Todo lo que entra y sale, mes por mes'},
+  {v:'proyeccion',t:'Proyección',i:'trend',s:'Cómo se ve tu año mes por mes'},
   {v:'tarjetas',t:'Tarjetas',i:'card',s:'Deuda, disponible y fechas de pago'},
   {v:'prestamos',t:'Préstamos',i:'bank',s:'Cuotas y avance de tus créditos'},
   {v:'recurrentes',t:'Recurrentes',i:'repeat',s:'Lo que se repite sin que lo registres'},
   {v:'billeteras',t:'Billeteras',i:'wallet',s:'Dónde guardas tu dinero'},
   {v:'config',t:'Configuración',i:'cog',s:'Ajusta el sistema a tu manera'},
 ];
-const BNAV=['inicio','historial','tarjetas','config'];
-let vista='inicio', mesVisto=mesActual(), setTab='general';
+const BNAV=['inicio','historial','proyeccion','config'];
+let vista='inicio', mesVisto=mesActual(), setTab='general', anioVisto=+hoy().slice(0,4);
 const app=()=>document.getElementById('app');
 const $=id=>document.getElementById(id);
 
@@ -629,11 +709,11 @@ function pintarNav(){
   $('logoMk').innerHTML=ic('chart',16);
   $('nav').innerHTML =
     `<div class="sec">Principal</div>`+
-    VISTAS.slice(0,2).map(x=>navItem(x,pend)).join('')+
+    VISTAS.slice(0,3).map(x=>navItem(x,pend)).join('')+
     `<div class="sec">Deudas</div>`+
-    VISTAS.slice(2,4).map(x=>navItem(x,pend)).join('')+
+    VISTAS.slice(3,5).map(x=>navItem(x,pend)).join('')+
     `<div class="sec">Gestión</div>`+
-    VISTAS.slice(4).map(x=>navItem(x,pend)).join('');
+    VISTAS.slice(5).map(x=>navItem(x,pend)).join('');
   $('btnTema').innerHTML = ic(DB.perfil.tema==='oscuro'?'sun':'moon',15)+
     `<span>${DB.perfil.tema==='oscuro'?'Modo claro':'Modo oscuro'}</span>`;
   $('bnav').innerHTML =
@@ -660,7 +740,7 @@ function pintar(){
     ? `<button class="btn b-o b-s" onclick="formMov(null,'Ingreso')">${ic('down',15)}<span>Ingreso</span></button>
        <button class="btn b-p b-s" onclick="formMov(null,'Egreso')">${ic('plus',15)}<span>Registrar gasto</span></button>`
     : '';
-  ({inicio:vInicio,historial:vHistorial,tarjetas:vTarjetas,prestamos:vPrestamos,
+  ({inicio:vInicio,historial:vHistorial,proyeccion:vProyeccion,tarjetas:vTarjetas,prestamos:vPrestamos,
     recurrentes:vRecurrentes,billeteras:vBilleteras,config:vConfig}[vista])();
 }
 
@@ -676,11 +756,11 @@ function tablaMovs(lista,acc){
       <th class="r" style="width:112px">Importe</th>
       ${acc?'<th style="width:64px"></th>':''}
     </tr></thead><tbody>${lista.map(m=>{
-      const ing=m.tipo==='Ingreso', pg=m.tipo==='Pago';
+      const ing=m.tipo==='Ingreso', pg=m.tipo==='Pago', fut=esFuturo(m.fecha);
       const dst=pg?' → '+((tarjeta(m.tarjetaId)||{}).nombre||'tarjeta'):'';
-      return `<tr>
+      return `<tr style="${fut?'opacity:.62':''}">
         <td class="mono">${fechaCorta(m.fecha)}</td>
-        <td><span class="dsc">${esc(m.descripcion||m.categoria||'Sin descripción')}${m.recurrenteId?'<span class="tag">auto</span>':''}${pg?'<span class="tag inf">pago</span>':''}</span>
+        <td><span class="dsc">${esc(m.descripcion||m.categoria||'Sin descripción')}${m.recurrenteId?'<span class="tag">auto</span>':''}${pg?'<span class="tag inf">pago</span>':''}${fut?'<span class="tag inf">programado</span>':''}</span>
           <span class="sub2">${esc(m.categoria||'')} · ${esc(medioNombre(m.medioId))}</span></td>
         <td class="sm hide-s"><span class="cdot" style="background:${catColor(m.categoria)}"></span>${esc(m.categoria||'—')}</td>
         <td class="sm hide-s">${esc(medioNombre(m.medioId))}${dst}</td>
@@ -706,13 +786,16 @@ function vInicio(){
   const cI=pctCambio(t.ing,ant.ing), cE=pctCambio(t.egr,ant.egr);
   const cats=porCategoria(mesActual()).slice(0,5);
   const maxC=Math.max(1,...cats.map(c=>c.total));
+  const obls=obligacionesMes(mesActual()).filter(o=>o.fecha>=hoy());
+  const oblMes=obls.reduce((a,o)=>a+o.monto,0);
+  const prog=programados(), nProg=netoProgramado();
 
   app().innerHTML=`
     <div class="g g-stat mb">
       <div class="stat dark">
         <div class="top"><span class="k">Tu dinero</span><span class="ico">${ic('wallet',15)}</span></div>
         <div class="v">${S(propio)}</div>
-        <div class="f">En ${DB.billeteras.length} billeteras</div>
+        <div class="f">${prog.length?`${nProg>=0?'+':'−'}${S0(Math.abs(nProg))} programado a futuro`:`En ${DB.billeteras.length} billeteras`}</div>
       </div>
       <div class="stat">
         <div class="top"><span class="k">Entró este mes</span><span class="ico">${ic('down',15)}</span></div>
@@ -725,9 +808,9 @@ function vInicio(){
         <div class="f"><span class="chip ${cE<=0?'c-up':'c-dn'}">${cE>=0?'+':'−'}${Math.abs(cE*100).toFixed(0)}%</span> vs mes anterior</div>
       </div>
       <div class="stat">
-        <div class="top"><span class="k">Deuda total</span><span class="ico">${ic('card',15)}</span></div>
-        <div class="v">${S0(deuda)}</div>
-        <div class="f">${S0(credito)} de crédito por usar</div>
+        <div class="top"><span class="k">A pagar este mes</span><span class="ico">${ic('calendar',15)}</span></div>
+        <div class="v ${oblMes>0?'neg':''}">${S0(oblMes)}</div>
+        <div class="f">${oblMes>0?`${obls.length} vencimiento${obls.length===1?'':'s'} en ${MESES[+mesActual().slice(5)-1]}`:'Nada vence este mes'}</div>
       </div>
     </div>
 
@@ -835,9 +918,134 @@ function moverMes(n){
   mesVisto=`${a}-${String(m).padStart(2,'0')}`; pintar();
 }
 
+/* ════════ PROYECCIÓN ANUAL ════════ */
+function vProyeccion(){
+  const f=proyeccionAnual(anioVisto);
+  const act=mesActual();
+  const tI=f.reduce((a,x)=>a+x.ing,0), tE=f.reduce((a,x)=>a+x.egr,0), tO=f.reduce((a,x)=>a+x.obl,0);
+  const bal=tI-tE-tO;
+  const conDatos=f.filter(x=>!x.vacio);
+  const prom=conDatos.length?bal/conDatos.length:0;
+  const max=Math.max(1,...f.map(x=>Math.max(x.ing,x.egr+x.obl)));
+  const mejor=conDatos.slice().sort((a,b)=>b.flujo-a.flujo)[0];
+  const peor=conDatos.slice().sort((a,b)=>a.flujo-b.flujo)[0];
+  const negativos=f.filter(x=>x.acum!==null&&x.acum<0);
+
+  app().innerHTML=`
+    <div class="mbar">
+      <div class="mnav">
+        <button class="nv" onclick="anioVisto--;pintar()">${ic('chevL',15)}</button>
+        <button class="nv" onclick="anioVisto++;pintar()">${ic('chevR',15)}</button>
+      </div>
+      <span class="mname">${anioVisto}</span>
+      <div class="msum">
+        <div><div class="k">Entra</div><div class="v pos">${S0(tI)}</div></div>
+        <div><div class="k">Sale</div><div class="v neg">${S0(tE+tO)}</div></div>
+        <div><div class="k">Balance</div><div class="v" style="color:${bal>=0?'var(--pos)':'var(--neg)'}">${bal>=0?'+':'−'}${S0(Math.abs(bal))}</div></div>
+      </div>
+    </div>
+
+    <div class="hint mb">Los meses <b>pasados</b> son datos reales. Los <b>futuros</b> se estiman con tus recurrentes activos, las cuotas de préstamos y los pagos de tarjeta ya comprometidos. Los meses sin nada quedan vacíos.</div>
+
+    ${negativos.length?`<div class="card cb mb" style="border-color:var(--neg)">
+      <div style="display:flex;gap:11px;align-items:flex-start;color:var(--neg)">
+        ${ic('alert',18)}
+        <div><b style="font-size:13.5px">Te quedarías sin fondos en ${nombreMes(negativos[0].ym)}</b>
+        <div style="font-size:12.5px" class="mut">El saldo proyectado llega a ${S(negativos[0].acum)}. Conviene mover un gasto o reforzar ingresos antes de esa fecha.</div></div>
+      </div></div>`:''}
+
+    <div class="g g-73 mb">
+      <div class="card">
+        <div class="ch"><div><h3>Flujo del año</h3><p>Entradas contra salidas y obligaciones</p></div>
+          <div class="leg"><span><i style="background:var(--ink)"></i>Entra</span>
+            <span><i style="background:var(--neg);opacity:.75"></i>Sale</span></div></div>
+        <div class="cb cb-t"><div class="chart">
+          ${f.map(x=>`<div class="cg">
+            <div class="cbars">
+              <i class="a" style="height:${(x.ing/max*100).toFixed(1)}%;${x.futuro?'opacity:.45':''}"></i>
+              <i style="height:${((x.egr+x.obl)/max*100).toFixed(1)}%;background:var(--neg);opacity:${x.futuro?.4:.75};width:10px;border-radius:3px;display:block;min-height:2px"></i>
+            </div>
+            <span style="${x.esActual?'color:var(--text);font-weight:700':''}">${MESES[x.mes-1].slice(0,3)}</span>
+          </div>`).join('')}
+        </div></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><div><h3>Resumen del año</h3><p>${anioVisto}</p></div></div>
+        <div class="cb cb-t">
+          <div class="kv"><span class="k">Ingresos</span><span class="v pos">${S(tI)}</span></div>
+          <div class="kv"><span class="k">Gastos</span><span class="v neg">${S(tE)}</span></div>
+          <div class="kv"><span class="k">Cuotas y tarjetas</span><span class="v neg">${S(tO)}</span></div>
+          <div style="border-top:1px solid var(--hair);margin:9px 0"></div>
+          <div class="kv"><span class="k"><b>Balance del año</b></span>
+            <span class="v" style="color:${bal>=0?'var(--pos)':'var(--neg)'};font-size:15px">${bal>=0?'+':'−'}${S(Math.abs(bal))}</span></div>
+          <div class="kv"><span class="k">Promedio mensual</span>
+            <span class="v" style="color:${prom>=0?'var(--pos)':'var(--neg)'}">${prom>=0?'+':'−'}${S0(Math.abs(prom))}</span></div>
+          ${mejor?`<div class="ft">Mejor mes: <b>${MESES[mejor.mes-1]}</b> (${mejor.flujo>=0?'+':'−'}${S0(Math.abs(mejor.flujo))})<br>
+            Más ajustado: <b>${MESES[peor.mes-1]}</b> (${peor.flujo>=0?'+':'−'}${S0(Math.abs(peor.flujo))})</div>`:''}
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="ch"><div><h3>Mes por mes</h3><p>Saldo proyectado a partir de ${MESES[+act.slice(5)-1]}</p></div></div>
+      <div class="cb cb-t" style="padding-left:0;padding-right:0;padding-bottom:4px">
+        <div class="tw"><table class="tbl">
+          <thead><tr>
+            <th style="width:96px">Mes</th>
+            <th class="r">Entra</th>
+            <th class="r hide-s">Gastos</th>
+            <th class="r hide-s">Cuotas</th>
+            <th class="r">Flujo</th>
+            <th class="r">Saldo proyectado</th>
+          </tr></thead>
+          <tbody>${f.map(x=>`<tr style="${x.esActual?'background:var(--sunk)':''}${x.vacio?';opacity:.45':''}">
+            <td><span class="dsc" style="font-weight:${x.esActual?'700':'550'}">${MESES[x.mes-1]}
+              ${x.esActual?'<span class="tag">hoy</span>':x.futuro?'':''}</span>
+              <span class="sub2">${x.pasado?'real':x.esActual?'en curso':'proyectado'}</span></td>
+            <td class="r amt ${x.ing?'pos':'mut'}">${x.ing?S0(x.ing):'—'}</td>
+            <td class="r amt hide-s ${x.egr?'neg':'mut'}">${x.egr?S0(x.egr):'—'}</td>
+            <td class="r amt hide-s ${x.obl?'neg':'mut'}">${x.obl?S0(x.obl):'—'}</td>
+            <td class="r amt" style="color:${x.vacio?'var(--faint)':x.flujo>=0?'var(--pos)':'var(--neg)'}">
+              ${x.vacio?'—':(x.flujo>=0?'+':'−')+S0(Math.abs(x.flujo))}</td>
+            <td class="r amt" style="color:${x.acum===null?'var(--faint)':x.acum<0?'var(--neg)':'var(--text)'}">
+              ${x.acum===null?'—':S0(x.acum)}</td>
+          </tr>`).join('')}</tbody>
+        </table></div>
+      </div>
+    </div>
+
+    ${obligaciones().length?`<div class="card" style="margin-top:14px">
+      <div class="ch"><div><h3>Calendario de pagos</h3><p>Cuándo vence cada cuota y cada tarjeta</p></div></div>
+      <div class="cb cb-t" style="padding-left:0;padding-right:0;padding-bottom:4px">
+        <div class="tw"><table class="tbl">
+          <thead><tr><th style="width:80px">Vence</th><th>Concepto</th>
+            <th class="hide-s">Detalle</th><th class="r" style="width:112px">Importe</th></tr></thead>
+          <tbody>${obligaciones().filter(o=>o.fecha.slice(0,4)==String(anioVisto)).slice(0,24).map(o=>{
+            const d=diasHasta(o.fecha), u=urgencia(d);
+            return `<tr><td class="mono">${fechaCorta(o.fecha)}</td>
+              <td><span class="dsc">${ic(o.clase==='tarjeta'?'card':'bank',13)&&''}${esc(o.nombre)}</span>
+                <span class="sub2">${esc(o.detalle)}</span></td>
+              <td class="sm hide-s">${esc(o.detalle)} · <span style="color:${d<=7?colU[u]:'var(--muted)'}">${textoDias(d)}</span></td>
+              <td class="r amt neg">${S(o.monto)}</td></tr>`;}).join('')}</tbody>
+        </table></div>
+      </div>
+    </div>`:''}`;
+}
+
 /* ════════ TARJETAS ════════ */
 function vTarjetas(){
+  const dT=deudaTarjetas(), oblT=obligacionesMes(mesActual()).filter(o=>o.clase==='tarjeta'&&o.fecha>=hoy())
+    .reduce((a,o)=>a+o.monto,0);
   app().innerHTML=`
+    <div class="g g-2 mb" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
+      <div class="stat"><div class="top"><span class="k">A pagar este mes</span><span class="ico">${ic('calendar',15)}</span></div>
+        <div class="v ${oblT>0?'neg':''}">${S0(oblT)}</div><div class="f">Vence en ${MESES[+mesActual().slice(5)-1]}</div></div>
+      <div class="stat"><div class="top"><span class="k">Deuda acumulada</span><span class="ico">${ic('card',15)}</span></div>
+        <div class="v">${S0(dT)}</div><div class="f">Todo lo consumido sin pagar</div></div>
+      <div class="stat"><div class="top"><span class="k">Crédito por usar</span><span class="ico">${ic('wallet',15)}</span></div>
+        <div class="v">${S0(creditoDisponible())}</div><div class="f">No es tuyo: es deuda futura</div></div>
+    </div>
     <div class="card cb mb" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
       <div class="hint" style="flex:1;min-width:220px"><b>Cierre:</b> el banco corta la cuenta del mes; lo que compres después entra al siguiente. <b>Pago:</b> fecha límite de lo ya facturado.</div>
       <button class="btn b-p b-s" onclick="formTarjeta()">${ic('plus',14)}<span>Nueva tarjeta</span></button>
