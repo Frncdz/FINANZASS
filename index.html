@@ -15,6 +15,8 @@
   --in:#0E7A5F; --in-bg:#E6F4EF;
   --out:#B0392F; --out-bg:#FBEBE9;
   --accent:#0E6E63;
+  --card-c:#6B4BA8; --card-bg:#F1ECFA;
+  --warn:#B57614; --warn-bg:#FDF3E2;
   --shadow:0 1px 2px rgba(20,32,43,.05), 0 6px 20px rgba(20,32,43,.07);
   --r:14px;
 }
@@ -24,70 +26,93 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 input,select{font-family:inherit;font-size:15px}
 .num{font-family:'Space Grotesk',sans-serif;font-variant-numeric:tabular-nums}
 
-/* ---------- HEADER ---------- */
 header{background:var(--ink);color:#fff;padding:18px 20px 0}
 .hwrap{max-width:1000px;margin:0 auto}
 .htop{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
 .logo{font-family:'Space Grotesk';font-size:18px;font-weight:700;letter-spacing:-.2px}
 .logo span{color:#8FA6B4;font-weight:500}
-.tabs{display:flex;gap:2px;overflow-x:auto}
-.tabs button{padding:11px 16px;font-size:14px;font-weight:600;color:#93A7B5;border-bottom:3px solid transparent;white-space:nowrap;border-radius:8px 8px 0 0}
+.tabs{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{padding:11px 15px;font-size:14px;font-weight:600;color:#93A7B5;border-bottom:3px solid transparent;white-space:nowrap;border-radius:8px 8px 0 0}
 .tabs button:hover{color:#fff}
 .tabs button.on{color:#fff;border-color:#fff;background:rgba(255,255,255,.07)}
 
-/* ---------- LAYOUT ---------- */
 main{max-width:1000px;margin:0 auto;padding:22px 20px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
 .pad{padding:20px}
 h2{font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted);font-weight:700;margin-bottom:14px}
-.row{display:flex;align-items:center;gap:12px}
 .between{display:flex;justify-content:space-between;align-items:center}
 .grid{display:grid;gap:14px}
 .mb{margin-bottom:16px}
 
-/* ---------- SALDO TOTAL ---------- */
-.total{background:var(--ink);color:#fff;border-radius:var(--r);padding:26px 24px;margin-bottom:16px}
+.total{background:var(--ink);color:#fff;border-radius:var(--r);padding:24px;margin-bottom:16px}
 .total .lbl{font-size:13px;color:#93A7B5;font-weight:600;letter-spacing:.4px;text-transform:uppercase}
-.total .big{font-family:'Space Grotesk';font-size:42px;font-weight:700;letter-spacing:-1.4px;margin:6px 0 14px;line-height:1}
-.total .mini{display:flex;gap:26px;flex-wrap:wrap}
-.total .mini div{font-size:13px;color:#A9BCC8}
-.total .mini b{display:block;font-family:'Space Grotesk';font-size:17px;color:#fff;font-weight:600;margin-top:2px}
+.total .big{font-family:'Space Grotesk';font-size:42px;font-weight:700;letter-spacing:-1.4px;margin:6px 0 4px;line-height:1}
+.total .note{font-size:12.5px;color:#8FA6B4;margin-bottom:18px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1px;background:rgba(255,255,255,.13);border-radius:12px;overflow:hidden}
+.tile{background:#1D2B37;padding:13px 14px}
+.tile .l{font-size:11.5px;color:#93A7B5;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.tile .v{font-family:'Space Grotesk';font-size:19px;font-weight:600;margin-top:3px}
+.tile .s{font-size:11px;color:#7E93A2;margin-top:1px}
 
-/* ---------- BOTONES ---------- */
 .btn{padding:11px 18px;border-radius:10px;font-weight:600;font-size:14.5px;display:inline-flex;align-items:center;justify-content:center;gap:7px;transition:.15s;border:1.5px solid transparent}
 .btn:active{transform:scale(.98)}
 .btn-in{background:var(--in);color:#fff;flex:1}
-.btn-in:hover{background:#0B6650}
 .btn-out{background:var(--out);color:#fff;flex:1}
-.btn-out:hover{background:#963028}
 .btn-dark{background:var(--ink);color:#fff}
-.btn-dark:hover{background:var(--ink-soft)}
 .btn-line{background:#fff;border-color:var(--line);color:var(--text)}
-.btn-line:hover{border-color:var(--ink);}
+.btn-line:hover{border-color:var(--ink)}
 .btn-sm{padding:7px 13px;font-size:13.5px;border-radius:9px}
 .quick{display:flex;gap:12px;margin-bottom:16px}
 .icon-btn{width:32px;height:32px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:var(--muted);font-size:15px}
 .icon-btn:hover{background:var(--bg);color:var(--ink)}
 
-/* ---------- BILLETERAS ---------- */
+.rem{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
+.rem:last-child{border-bottom:none}
+.rem .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.rem .info{flex:1;min-width:150px}
+.rem .d{font-weight:600;font-size:14.5px}
+.rem .m{font-size:12.5px;color:var(--muted);margin-top:1px}
+.rem .v{font-family:'Space Grotesk';font-weight:600;font-size:15px;white-space:nowrap}
+.badge{display:inline-block;padding:2px 9px;border-radius:20px;font-size:11.5px;font-weight:700;margin-left:6px}
+.b-red{background:var(--out-bg);color:var(--out)}
+.b-amb{background:var(--warn-bg);color:var(--warn)}
+.b-ok{background:var(--in-bg);color:var(--in)}
+
 .wallets{grid-template-columns:repeat(auto-fill,minmax(215px,1fr))}
-.wallet{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:17px;box-shadow:var(--shadow);transition:.15s}
-.wallet:hover{border-color:#C3CDD6}
+.wallet{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:17px;box-shadow:var(--shadow)}
 .wallet .top{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .wallet .emoji{width:38px;height:38px;border-radius:10px;background:var(--bg);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0}
 .wallet .nm{font-weight:600;font-size:14.5px;line-height:1.25;flex:1;min-width:0}
 .wallet .amt{font-family:'Space Grotesk';font-size:23px;font-weight:600;letter-spacing:-.5px}
 .wallet .sub{font-size:12px;color:var(--muted);margin-top:3px}
 .neg{color:var(--out)} .pos{color:var(--in)}
-.add-wallet{border:2px dashed var(--line);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-weight:600;font-size:14px;min-height:118px;transition:.15s}
+.add-wallet{border:2px dashed var(--line);border-radius:var(--r);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);font-weight:600;font-size:14px;min-height:118px}
 .add-wallet:hover{border-color:var(--accent);color:var(--accent);background:#fff}
 
-/* ---------- MOVIMIENTOS ---------- */
+.tc{background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+.tc .head{padding:16px 18px;background:linear-gradient(135deg,#2E2350,#4A3A7A);color:#fff}
+.tc .head .n{font-weight:700;font-size:15.5px}
+.tc .head .b{font-size:12px;color:#C4B8E0;margin-top:1px}
+.tc .body{padding:16px 18px}
+.line-row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:4px}
+.line-row .k{font-size:12.5px;color:var(--muted)}
+.line-row .v{font-family:'Space Grotesk';font-weight:600;font-size:15px}
+.bar{height:8px;background:var(--line);border-radius:20px;overflow:hidden;margin:10px 0 14px}
+.bar i{display:block;height:100%;border-radius:20px;transition:width .5s}
+.box{background:#F7F9FA;border-radius:10px;padding:12px 14px;margin-bottom:10px}
+.box.due{background:var(--out-bg)}
+.box.soon{background:var(--warn-bg)}
+.box .k{font-size:11.5px;text-transform:uppercase;letter-spacing:.4px;font-weight:700;color:var(--muted)}
+.box .v{font-family:'Space Grotesk';font-size:21px;font-weight:600;margin-top:2px}
+.box .s{font-size:12px;color:var(--muted);margin-top:2px}
+
 .mov{display:flex;align-items:center;gap:13px;padding:13px 0;border-bottom:1px solid var(--line-soft)}
 .mov:last-child{border-bottom:none}
 .mov .ic{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:700;flex-shrink:0}
 .mov .ic.i{background:var(--in-bg);color:var(--in)}
 .mov .ic.e{background:var(--out-bg);color:var(--out)}
+.mov .ic.p{background:var(--card-bg);color:var(--card-c)}
 .mov .info{flex:1;min-width:0}
 .mov .d{font-weight:600;font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .mov .m{font-size:12.5px;color:var(--muted);margin-top:1px}
@@ -97,17 +122,14 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted
 @media(hover:none){.mov .acts{opacity:1}}
 .chip{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:600;background:var(--bg);color:var(--muted);margin-left:6px}
 
-/* ---------- MES ---------- */
 .monthbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
 .monthbar .mname{font-family:'Space Grotesk';font-size:19px;font-weight:600;text-transform:capitalize}
 .nav-m{width:38px;height:38px;border-radius:10px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:16px}
-.nav-m:hover{border-color:var(--ink)}
 .msum{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border-radius:12px;overflow:hidden;margin-bottom:16px}
 .msum div{background:#fff;padding:14px}
 .msum .l{font-size:11.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:700}
 .msum .v{font-family:'Space Grotesk';font-size:19px;font-weight:600;margin-top:3px}
 
-/* ---------- TABLA RECURRENTES ---------- */
 .rec{display:flex;align-items:center;gap:13px;padding:15px 0;border-bottom:1px solid var(--line-soft);flex-wrap:wrap}
 .rec:last-child{border-bottom:none}
 .rec .info{flex:1;min-width:180px}
@@ -117,7 +139,6 @@ h2{font-size:13px;text-transform:uppercase;letter-spacing:.7px;color:var(--muted
 .rec .gen input{width:52px;padding:6px 8px;border:1.5px solid var(--line);border-radius:8px;text-align:center;font-size:13.5px}
 .pausado{opacity:.5}
 
-/* ---------- FORMS ---------- */
 .field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
 label{font-size:13px;font-weight:600;color:var(--ink-soft)}
 input,select{padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;color:var(--text);width:100%}
@@ -128,20 +149,15 @@ input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 
 .seg button.on-in{background:var(--in-bg);border-color:var(--in);color:var(--in)}
 .seg button.on-out{background:var(--out-bg);border-color:var(--out);color:var(--out)}
 
-/* ---------- MODAL ---------- */
-.overlay{position:fixed;inset:0;background:rgba(22,33,43,.55);display:flex;align-items:flex-end;justify-content:center;z-index:100;padding:0}
+.overlay{position:fixed;inset:0;background:rgba(22,33,43,.55);display:flex;align-items:flex-end;justify-content:center;z-index:100}
 .modal{background:#fff;border-radius:18px 18px 0 0;width:100%;max-width:460px;max-height:92vh;overflow-y:auto;animation:up .22s ease}
 @keyframes up{from{transform:translateY(30px);opacity:.6}to{transform:translateY(0);opacity:1}}
-.mhead{padding:20px 22px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;border-radius:18px 18px 0 0}
+.mhead{padding:20px 22px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff}
 .mhead h3{font-family:'Space Grotesk';font-size:17px;font-weight:600}
 .mbody{padding:20px 22px}
 .mfoot{padding:14px 22px 22px;display:flex;gap:10px}
 .mfoot .btn{flex:1}
-@media(min-width:640px){
-  .overlay{align-items:center;padding:20px}
-  .modal{border-radius:18px}
-  .mhead{border-radius:18px 18px 0 0}
-}
+@media(min-width:640px){.overlay{align-items:center;padding:20px}.modal{border-radius:18px}}
 
 .empty{text-align:center;padding:38px 20px;color:var(--muted)}
 .empty .e{font-size:32px;opacity:.35;margin-bottom:10px}
@@ -149,11 +165,7 @@ input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 
 .hint{background:#F7F9FA;border-left:3px solid var(--accent);padding:11px 14px;border-radius:0 8px 8px 0;font-size:13px;color:var(--muted);margin-top:14px}
 .toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,90px);background:var(--ink);color:#fff;padding:13px 22px;border-radius:12px;font-weight:600;font-size:14px;z-index:200;transition:.3s;box-shadow:0 8px 26px rgba(0,0,0,.25)}
 .toast.show{transform:translate(-50%,0)}
-@media(max-width:520px){
-  .total .big{font-size:35px}
-  .msum{grid-template-columns:1fr;}
-  main{padding:16px}
-}
+@media(max-width:520px){.total .big{font-size:35px}.msum{grid-template-columns:1fr}main{padding:16px}}
 </style>
 </head>
 <body>
@@ -162,11 +174,13 @@ input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 
   <div class="hwrap">
     <div class="htop">
       <div class="logo">Mi Dinero <span>· control simple</span></div>
-      <button class="icon-btn" style="color:#93A7B5" onclick="menuDatos()" title="Datos">⋯</button>
+      <button class="icon-btn" style="color:#93A7B5" onclick="menuDatos()">⋯</button>
     </div>
     <nav class="tabs" id="tabs">
       <button data-v="inicio" class="on">Inicio</button>
       <button data-v="historial">Historial</button>
+      <button data-v="tarjetas">Tarjetas</button>
+      <button data-v="prestamos">Préstamos</button>
       <button data-v="recurrentes">Recurrentes</button>
       <button data-v="billeteras">Billeteras</button>
     </nav>
@@ -178,18 +192,39 @@ input:focus,select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 
 <div class="toast" id="toast"></div>
 
 <script>
-/* ═══════════════ DATOS ═══════════════ */
-const KEY='mi_dinero_v1';
+/* ═══════════ ALMACENAMIENTO ═══════════ */
+const KEY='mi_dinero_v2';
 let memoria=null;
-
 const store={
   get(){ try{ return localStorage.getItem(KEY); }catch(e){ return memoria; } },
   set(v){ try{ localStorage.setItem(KEY,v); }catch(e){ memoria=v; } }
 };
-
 const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
 const hoy=()=>new Date().toISOString().slice(0,10);
+const iso=d=>d.toISOString().slice(0,10);
+const D=f=>new Date(f+'T12:00:00');
+function sumarDias(f,n){const d=D(f);d.setDate(d.getDate()+n);return iso(d);}
 
+/* Fecha con ese día del mes, recortada si el mes es más corto */
+function conDia(anio,mes,dia){
+  const ultimo=new Date(anio,mes+1,0).getDate();
+  return iso(new Date(anio,mes,Math.min(dia,ultimo),12));
+}
+function ultimoDia(dia,ref){            /* última vez que pasó ese día */
+  ref=ref||hoy(); const r=D(ref);
+  let f=conDia(r.getFullYear(),r.getMonth(),dia);
+  if(f>ref) f=conDia(r.getFullYear(),r.getMonth()-1,dia);
+  return f;
+}
+function proximoDia(dia,ref){           /* próxima vez que pasará ese día */
+  ref=ref||hoy(); const r=D(ref);
+  let f=conDia(r.getFullYear(),r.getMonth(),dia);
+  if(f<ref) f=conDia(r.getFullYear(),r.getMonth()+1,dia);
+  return f;
+}
+const diasHasta=f=>Math.round((D(f)-D(hoy()))/86400000);
+
+/* ═══════════ DATOS ═══════════ */
 const INICIAL={
   billeteras:[
     {id:'w1',nombre:'Efectivo',icono:'💵',saldoInicial:300},
@@ -197,19 +232,27 @@ const INICIAL={
     {id:'w3',nombre:'Plin',icono:'💬',saldoInicial:120},
     {id:'w4',nombre:'Cuenta de ahorros',icono:'🏦',saldoInicial:2500},
   ],
+  tarjetas:[
+    {id:'t1',nombre:'Visa Clásica',banco:'BCP',linea:6000,diaCierre:25,diaPago:15},
+    {id:'t2',nombre:'Mastercard',banco:'Interbank',linea:4500,diaCierre:5,diaPago:20},
+  ],
+  prestamos:[
+    {id:'p1',nombre:'Crédito vehicular',entidad:'BBVA',cuota:963.79,cuotas:36,pagadas:10,
+     diaPago:10,proxima:proximoDia(10),billeteraId:'w4',activo:true},
+  ],
   movimientos:[
-    {id:uid(),fecha:hoy(),tipo:'Ingreso',monto:2800,descripcion:'Sueldo',categoria:'Sueldo',billeteraId:'w4'},
-    {id:uid(),fecha:hoy(),tipo:'Egreso',monto:65,descripcion:'Almuerzo',categoria:'Comida',billeteraId:'w2'},
-    {id:uid(),fecha:hoy(),tipo:'Egreso',monto:120,descripcion:'Recibo de luz',categoria:'Servicios',billeteraId:'w4'},
+    {id:uid(),fecha:hoy(),tipo:'Ingreso',monto:2800,descripcion:'Sueldo',categoria:'Sueldo',medioId:'w4'},
+    {id:uid(),fecha:hoy(),tipo:'Egreso',monto:65,descripcion:'Almuerzo',categoria:'Comida',medioId:'w2'},
+    {id:uid(),fecha:sumarDias(hoy(),-45),tipo:'Egreso',monto:750,descripcion:'Televisor',categoria:'Compras',medioId:'t1'},
+    {id:uid(),fecha:sumarDias(hoy(),-20),tipo:'Egreso',monto:420,descripcion:'Compra zapatillas',categoria:'Compras',medioId:'t1'},
+    {id:uid(),fecha:sumarDias(hoy(),-2),tipo:'Egreso',monto:180,descripcion:'Supermercado',categoria:'Comida',medioId:'t1'},
+    {id:uid(),fecha:hoy(),tipo:'Egreso',monto:120,descripcion:'Recibo de luz',categoria:'Servicios',medioId:'w4'},
   ],
   recurrentes:[
-    {id:uid(),concepto:'Sueldo',tipo:'Ingreso',monto:2800,categoria:'Sueldo',billeteraId:'w4',frecuencia:'Mensual',proxima:sumarDias(hoy(),30),activo:true},
-    {id:uid(),concepto:'Alquiler',tipo:'Egreso',monto:800,categoria:'Vivienda',billeteraId:'w4',frecuencia:'Mensual',proxima:sumarDias(hoy(),12),activo:true},
-    {id:uid(),concepto:'Internet',tipo:'Egreso',monto:99,categoria:'Servicios',billeteraId:'w4',frecuencia:'Mensual',proxima:sumarDias(hoy(),6),activo:true},
+    {id:uid(),concepto:'Sueldo',tipo:'Ingreso',monto:2800,categoria:'Sueldo',medioId:'w4',frecuencia:'Mensual',proxima:sumarDias(hoy(),30),activo:true},
+    {id:uid(),concepto:'Internet',tipo:'Egreso',monto:99,categoria:'Servicios',medioId:'w4',frecuencia:'Mensual',proxima:sumarDias(hoy(),6),activo:true},
   ],
 };
-
-function sumarDias(f,n){ const d=new Date(f+'T12:00:00'); d.setDate(d.getDate()+n); return d.toISOString().slice(0,10); }
 
 let DB;
 function cargar(){
@@ -217,105 +260,203 @@ function cargar(){
   try{ DB = raw ? JSON.parse(raw) : JSON.parse(JSON.stringify(INICIAL)); }
   catch(e){ DB = JSON.parse(JSON.stringify(INICIAL)); }
   DB.billeteras ||= []; DB.movimientos ||= []; DB.recurrentes ||= [];
+  DB.tarjetas ||= []; DB.prestamos ||= [];
 }
 function guardar(){ store.set(JSON.stringify(DB)); }
 
-/* ═══════════════ CÁLCULOS ═══════════════ */
+/* ═══════════ FORMATO ═══════════ */
 const S=n=>'S/ '+(+n||0).toLocaleString('es-PE',{minimumFractionDigits:2,maximumFractionDigits:2});
+const S0=n=>'S/ '+Math.round(+n||0).toLocaleString('es-PE');
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const mesDe=f=>(f||'').slice(0,7);
 const MESES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 const nombreMes=ym=>{const[a,m]=ym.split('-');return MESES[+m-1]+' '+a;};
 const fechaCorta=f=>{const[a,m,d]=f.split('-');return `${d} ${MESES[+m-1].slice(0,3)}`;};
+const mesActual=()=>hoy().slice(0,7);
 
+/* ═══════════ SALDOS Y DEUDAS ═══════════ */
 const billetera=id=>DB.billeteras.find(b=>b.id===id);
+const tarjeta=id=>DB.tarjetas.find(t=>t.id===id);
+const medioNombre=id=>{const b=billetera(id);if(b)return b.icono+' '+b.nombre;const t=tarjeta(id);return t?'💳 '+t.nombre:'—';};
+
+/* Dinero real que hay en una billetera */
 function saldo(id){
   const b=billetera(id); if(!b) return 0;
   return DB.movimientos.reduce((t,m)=>{
-    if(m.billeteraId!==id) return t;
-    return t + (m.tipo==='Ingreso' ? +m.monto : -m.monto);
+    if(m.medioId!==id) return t;
+    if(m.tipo==='Ingreso') return t + +m.monto;
+    return t - +m.monto;               /* Egreso y Pago restan */
   }, +b.saldoInicial||0);
 }
-const saldoTotal=()=>DB.billeteras.reduce((t,b)=>t+saldo(b.id),0);
+const dineroPropio=()=>DB.billeteras.reduce((t,b)=>t+saldo(b.id),0);
+
+/* Estado de una tarjeta según su ciclo de cierre y pago */
+function estadoTarjeta(t){
+  const consumos=DB.movimientos.filter(m=>m.tipo==='Egreso'&&m.medioId===t.id);
+  const pagos=DB.movimientos.filter(m=>m.tipo==='Pago'&&m.tarjetaId===t.id);
+  const totalConsumo=consumos.reduce((a,m)=>a + +m.monto,0);
+  const totalPagado=pagos.reduce((a,m)=>a + +m.monto,0);
+  const deuda=Math.max(0,totalConsumo-totalPagado);
+
+  const cierreUlt=ultimoDia(t.diaCierre);
+  const cierreProx=proximoDia(t.diaCierre,sumarDias(hoy(),1));
+  /* Lo comprado después del último cierre todavía no se factura */
+  const sinFacturar=consumos.filter(m=>m.fecha>cierreUlt).reduce((a,m)=>a + +m.monto,0);
+  const porPagar=Math.max(0,deuda-sinFacturar);
+
+  const vence=proximoDia(t.diaPago);
+  const dias=diasHasta(vence);
+  const disponible=Math.max(0,(+t.linea||0)-deuda);
+  const uso=t.linea? deuda/t.linea : 0;
+  return {deuda,porPagar,sinFacturar,disponible,uso,cierreUlt,cierreProx,vence,dias};
+}
+const deudaTarjetas=()=>DB.tarjetas.reduce((a,t)=>a+estadoTarjeta(t).deuda,0);
+const creditoDisponible=()=>DB.tarjetas.reduce((a,t)=>a+estadoTarjeta(t).disponible,0);
+
+function estadoPrestamo(p){
+  const restantes=Math.max(0,(+p.cuotas||0)-(+p.pagadas||0));
+  const pendiente=restantes*(+p.cuota||0);
+  const avance=p.cuotas? (+p.pagadas||0)/p.cuotas : 0;
+  return {restantes,pendiente,avance,dias:diasHasta(p.proxima),terminado:restantes===0};
+}
+const deudaPrestamos=()=>DB.prestamos.reduce((a,p)=>a+estadoPrestamo(p).pendiente,0);
+const deudaTotal=()=>deudaTarjetas()+deudaPrestamos();
+
 function totalesMes(ym){
-  let ing=0,egr=0;
+  let ing=0,egr=0,pag=0;
   for(const m of DB.movimientos){
     if(mesDe(m.fecha)!==ym) continue;
-    if(m.tipo==='Ingreso') ing+=+m.monto; else egr+=+m.monto;
+    if(m.tipo==='Ingreso') ing+=+m.monto;
+    else if(m.tipo==='Pago') pag+=+m.monto;
+    else egr+=+m.monto;
   }
-  return {ing,egr,neto:ing-egr};
+  return {ing,egr,pag,neto:ing-egr};
 }
-const mesActual=()=>hoy().slice(0,7);
 
-/* ═══════════════ RECURRENTES ═══════════════ */
+/* ═══════════ RECORDATORIOS ═══════════ */
+function recordatorios(){
+  const lista=[];
+  for(const t of DB.tarjetas){
+    const e=estadoTarjeta(t);
+    if(e.porPagar>0.01)
+      lista.push({tipo:'tarjeta',id:t.id,titulo:'Pagar '+t.nombre,monto:e.porPagar,
+        fecha:e.vence,dias:e.dias,detalle:`Cerró el ${fechaCorta(e.cierreUlt)} · vence ${fechaCorta(e.vence)}`});
+  }
+  for(const p of DB.prestamos){
+    const e=estadoPrestamo(p);
+    if(!p.activo||e.terminado) continue;
+    lista.push({tipo:'prestamo',id:p.id,titulo:'Cuota de '+p.nombre,monto:+p.cuota,
+      fecha:p.proxima,dias:e.dias,detalle:`Cuota ${(+p.pagadas||0)+1} de ${p.cuotas} · ${esc(p.entidad||'')}`});
+  }
+  return lista.sort((a,b)=>a.fecha.localeCompare(b.fecha));
+}
+const urgencia=d=> d<=3?'red' : d<=7?'amb' : 'ok';
+const colorU={red:'var(--out)',amb:'var(--warn)',ok:'var(--in)'};
+function textoDias(d){
+  if(d<0) return `Venció hace ${-d} ${-d===1?'día':'días'}`;
+  if(d===0) return 'Vence hoy';
+  if(d===1) return 'Vence mañana';
+  return `En ${d} días`;
+}
+
+/* ═══════════ RECURRENTES ═══════════ */
 const PASOS={Semanal:{d:7},Quincenal:{d:15},Mensual:{m:1},Bimestral:{m:2},Trimestral:{m:3},Semestral:{m:6},Anual:{m:12}};
 function siguienteFecha(f,frec){
   const p=PASOS[frec]||PASOS.Mensual;
-  const d=new Date(f+'T12:00:00');
-  if(p.d) d.setDate(d.getDate()+p.d);
-  else { const dia=d.getDate(); d.setDate(1); d.setMonth(d.getMonth()+p.m);
-         d.setDate(Math.min(dia,new Date(d.getFullYear(),d.getMonth()+1,0).getDate())); }
-  return d.toISOString().slice(0,10);
+  const d=D(f);
+  if(p.d){ d.setDate(d.getDate()+p.d); return iso(d); }
+  return conDia(d.getFullYear(), d.getMonth()+p.m, d.getDate());
 }
 function crearDesde(r,fecha){
   DB.movimientos.push({id:uid(),fecha,tipo:r.tipo,monto:+r.monto,descripcion:r.concepto,
-    categoria:r.categoria,billeteraId:r.billeteraId,recurrenteId:r.id});
+    categoria:r.categoria,medioId:r.medioId,recurrenteId:r.id});
 }
-/* Automático: crea todo lo que ya venció hasta hoy */
 function generarVencidos(){
   let n=0; const limite=hoy();
   for(const r of DB.recurrentes){
     if(!r.activo||!r.proxima) continue;
-    let guard=0;
-    while(r.proxima<=limite && guard++<200){
+    let g=0;
+    while(r.proxima<=limite && g++<200){
       crearDesde(r,r.proxima);
-      r.proxima=siguienteFecha(r.proxima,r.frecuencia);
-      n++;
+      r.proxima=siguienteFecha(r.proxima,r.frecuencia); n++;
     }
   }
   if(n) guardar();
   return n;
 }
-/* A pedido: adelanta N generaciones futuras */
 function generarVeces(id,veces){
   const r=DB.recurrentes.find(x=>x.id===id);
   veces=Math.max(1,Math.min(60,+veces||1));
-  for(let i=0;i<veces;i++){
-    crearDesde(r,r.proxima);
-    r.proxima=siguienteFecha(r.proxima,r.frecuencia);
-  }
-  pintar(); aviso(`${veces} ${veces===1?'movimiento generado':'movimientos generados'} de ${r.concepto}`);
+  for(let i=0;i<veces;i++){ crearDesde(r,r.proxima); r.proxima=siguienteFecha(r.proxima,r.frecuencia); }
+  pintar(); aviso(`${veces} ${veces===1?'movimiento generado':'movimientos generados'}`);
 }
 
-/* ═══════════════ VISTAS ═══════════════ */
-let vista='inicio';
-let mesVisto=mesActual();
+/* ═══════════ VISTAS ═══════════ */
+let vista='inicio', mesVisto=mesActual();
 const app=()=>document.getElementById('app');
-
 function pintar(){
   guardar();
   document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.v===vista));
-  ({inicio:vInicio,historial:vHistorial,recurrentes:vRecurrentes,billeteras:vBilleteras})[vista]();
+  ({inicio:vInicio,historial:vHistorial,tarjetas:vTarjetas,prestamos:vPrestamos,
+    recurrentes:vRecurrentes,billeteras:vBilleteras})[vista]();
 }
 document.getElementById('tabs').onclick=e=>{
   const b=e.target.closest('button'); if(!b) return;
   vista=b.dataset.v; window.scrollTo(0,0); pintar();
 };
+function irA(v){ vista=v; window.scrollTo(0,0); pintar(); }
 
 /* ---------- INICIO ---------- */
 function vInicio(){
   const t=totalesMes(mesActual());
+  const propio=dineroPropio(), credito=creditoDisponible(), deuda=deudaTotal();
+  const recs=recordatorios();
   const ultimos=DB.movimientos.slice().sort((a,b)=>b.fecha.localeCompare(a.fecha)||b.id.localeCompare(a.id)).slice(0,6);
+
   app().innerHTML=`
     <div class="total">
-      <div class="lbl">Tienes en total</div>
-      <div class="big num">${S(saldoTotal())}</div>
-      <div class="mini">
-        <div>Este mes entró<b class="num">${S(t.ing)}</b></div>
-        <div>Este mes salió<b class="num">${S(t.egr)}</b></div>
-        <div>Diferencia<b class="num">${t.neto>=0?'+':''}${S(t.neto)}</b></div>
+      <div class="lbl">Tu dinero</div>
+      <div class="big num">${S(propio)}</div>
+      <div class="note">Lo que realmente tienes, sumando todas tus billeteras</div>
+      <div class="tiles">
+        <div class="tile">
+          <div class="l">Crédito por usar</div>
+          <div class="v num" style="color:#C9B6F0">${S0(credito)}</div>
+          <div class="s">no es tuyo, es deuda</div>
+        </div>
+        <div class="tile">
+          <div class="l">Podrías gastar</div>
+          <div class="v num">${S0(propio+credito)}</div>
+          <div class="s">tuyo + crédito</div>
+        </div>
+        <div class="tile">
+          <div class="l">Debes</div>
+          <div class="v num" style="color:#F0A8A0">${S0(deuda)}</div>
+          <div class="s">tarjetas + préstamos</div>
+        </div>
+        <div class="tile">
+          <div class="l">Tuyo de verdad</div>
+          <div class="v num" style="color:${propio-deuda>=0?'#7FD4B4':'#F0A8A0'}">${S0(propio-deuda)}</div>
+          <div class="s">tu dinero − deudas</div>
+        </div>
       </div>
     </div>
+
+    ${recs.length?`
+    <div class="card pad mb">
+      <h2>Pagos que vienen</h2>
+      ${recs.map(r=>{
+        const u=urgencia(r.dias);
+        return `<div class="rem">
+          <div class="dot" style="background:${colorU[u]}"></div>
+          <div class="info">
+            <div class="d">${esc(r.titulo)}<span class="badge b-${u}">${textoDias(r.dias)}</span></div>
+            <div class="m">${r.detalle}</div>
+          </div>
+          <div class="v">${S(r.monto)}</div>
+          <button class="btn btn-line btn-sm" onclick="${r.tipo==='tarjeta'?`formPagoTarjeta('${r.id}')`:`formPagoCuota('${r.id}')`}">Pagar</button>
+        </div>`;}).join('')}
+    </div>`:''}
 
     <div class="quick">
       <button class="btn btn-in" onclick="formMov(null,'Ingreso')">＋ Ingreso</button>
@@ -324,43 +465,54 @@ function vInicio(){
 
     <h2>Mis billeteras</h2>
     <div class="grid wallets mb">
-      ${DB.billeteras.map(b=>tarjetaBilletera(b)).join('')}
+      ${DB.billeteras.map(b=>{
+        const s=saldo(b.id);
+        return `<div class="wallet">
+          <div class="top"><div class="emoji">${b.icono||'💼'}</div>
+            <div class="nm">${esc(b.nombre)}</div>
+            <button class="icon-btn" onclick="formBilletera('${b.id}')">✎</button></div>
+          <div class="amt num ${s<0?'neg':''}">${S(s)}</div>
+          <div class="sub">${DB.movimientos.filter(m=>m.medioId===b.id).length} movimientos</div>
+        </div>`;}).join('')}
       <button class="add-wallet" onclick="formBilletera()"><span style="font-size:20px">＋</span>Agregar billetera</button>
     </div>
+
+    ${DB.tarjetas.length?`
+    <h2>Mis tarjetas</h2>
+    <div class="grid wallets mb">
+      ${DB.tarjetas.map(t=>{const e=estadoTarjeta(t);
+        return `<div class="wallet" style="cursor:pointer" onclick="irA('tarjetas')">
+          <div class="top"><div class="emoji" style="background:var(--card-bg)">💳</div>
+            <div class="nm">${esc(t.nombre)}<div style="font-size:11.5px;color:var(--muted);font-weight:500">${esc(t.banco||'')}</div></div></div>
+          <div class="amt num" style="color:var(--card-c)">${S(e.disponible)}</div>
+          <div class="sub">por usar de ${S0(t.linea)} · debes ${S0(e.deuda)}</div>
+        </div>`;}).join('')}
+    </div>`:''}
 
     <div class="card pad">
       <div class="between" style="margin-bottom:10px">
         <h2 style="margin:0">Últimos movimientos</h2>
         ${DB.movimientos.length?`<button class="btn btn-line btn-sm" onclick="irA('historial')">Ver todo</button>`:''}
       </div>
-      ${ultimos.length ? ultimos.map(m=>filaMov(m)).join('')
-        : `<div class="empty"><div class="e">📋</div><p>Aún no registras nada.<br>Usa los botones de arriba.</p></div>`}
+      ${ultimos.length?ultimos.map(m=>filaMov(m)).join('')
+        :`<div class="empty"><div class="e">📋</div><p>Aún no registras nada.</p></div>`}
     </div>`;
 }
-function tarjetaBilletera(b){
-  const s=saldo(b.id);
-  return `<div class="wallet">
-    <div class="top">
-      <div class="emoji">${b.icono||'💼'}</div>
-      <div class="nm">${esc(b.nombre)}</div>
-      <button class="icon-btn" onclick="formBilletera('${b.id}')">✎</button>
-    </div>
-    <div class="amt num ${s<0?'neg':''}">${S(s)}</div>
-    <div class="sub">${DB.movimientos.filter(m=>m.billeteraId===b.id).length} movimientos</div>
-  </div>`;
-}
+
 function filaMov(m){
-  const b=billetera(m.billeteraId);
-  const ing=m.tipo==='Ingreso';
+  const ing=m.tipo==='Ingreso', pago=m.tipo==='Pago';
+  const cls=ing?'i':pago?'p':'e';
+  const flecha=ing?'↓':pago?'⇄':'↑';
+  const destino=pago?(' → '+((tarjeta(m.tarjetaId)||{}).nombre||'tarjeta')):'';
   return `<div class="mov">
-    <div class="ic ${ing?'i':'e'}">${ing?'↓':'↑'}</div>
+    <div class="ic ${cls}">${flecha}</div>
     <div class="info">
-      <div class="d">${esc(m.descripcion||m.categoria||'Sin descripción')}${m.recurrenteId?'<span class="chip">↻ auto</span>':''}</div>
-      <div class="m">${fechaCorta(m.fecha)} · ${b?esc(b.icono+' '+b.nombre):'—'}${m.categoria?' · '+esc(m.categoria):''}</div>
+      <div class="d">${esc(m.descripcion||m.categoria||'Sin descripción')}${m.recurrenteId?'<span class="chip">↻ auto</span>':''}${pago?'<span class="chip">pago de tarjeta</span>':''}</div>
+      <div class="m">${fechaCorta(m.fecha)} · ${medioNombre(m.medioId)}${destino}${m.categoria&&!pago?' · '+esc(m.categoria):''}</div>
     </div>
-    <div class="val ${ing?'pos':'neg'}">${ing?'+':'−'}${S(m.monto)}</div>
+    <div class="val ${ing?'pos':pago?'':'neg'}" ${pago?'style="color:var(--card-c)"':''}>${ing?'+':'−'}${S(m.monto)}</div>
     <div class="acts">
-      <button class="icon-btn" onclick="formMov('${m.id}')">✎</button>
+      ${pago?'':`<button class="icon-btn" onclick="formMov('${m.id}')">✎</button>`}
       <button class="icon-btn" onclick="borrarMov('${m.id}')">✕</button>
     </div>
   </div>`;
@@ -379,23 +531,144 @@ function vHistorial(){
     </div>
     <div class="msum">
       <div><div class="l">Entró</div><div class="v pos num">${S(t.ing)}</div></div>
-      <div><div class="l">Salió</div><div class="v neg num">${S(t.egr)}</div></div>
+      <div><div class="l">Gastaste</div><div class="v neg num">${S(t.egr)}</div></div>
       <div><div class="l">Diferencia</div><div class="v num" style="color:${t.neto>=0?'var(--in)':'var(--out)'}">${t.neto>=0?'+':''}${S(t.neto)}</div></div>
     </div>
+    ${t.pag>0?`<div class="hint" style="margin:0 0 16px">Además pagaste <b>${S(t.pag)}</b> a tus tarjetas. Eso no suma como gasto: ya lo contamos cuando hiciste la compra.</div>`:''}
     <div class="card pad">
       <div class="between" style="margin-bottom:10px">
         <h2 style="margin:0">${lista.length} movimiento${lista.length===1?'':'s'}</h2>
         <button class="btn btn-line btn-sm" onclick="formMov()">＋ Agregar</button>
       </div>
-      ${lista.length ? lista.map(m=>filaMov(m)).join('')
-        : `<div class="empty"><div class="e">📅</div><p>No hay movimientos en ${nombreMes(mesVisto)}.</p>
-           <button class="btn btn-dark btn-sm" onclick="formMov()">Registrar uno</button></div>`}
+      ${lista.length?lista.map(m=>filaMov(m)).join('')
+        :`<div class="empty"><div class="e">📅</div><p>No hay movimientos en ${nombreMes(mesVisto)}.</p>
+          <button class="btn btn-dark btn-sm" onclick="formMov()">Registrar uno</button></div>`}
     </div>`;
 }
 function moverMes(n){
   let [a,m]=mesVisto.split('-').map(Number);
   m+=n; if(m<1){m=12;a--;} if(m>12){m=1;a++;}
   mesVisto=`${a}-${String(m).padStart(2,'0')}`; pintar();
+}
+
+/* ---------- TARJETAS ---------- */
+function vTarjetas(){
+  app().innerHTML=`
+    <div class="card pad mb">
+      <div class="between">
+        <h2 style="margin:0">Mis tarjetas de crédito</h2>
+        <button class="btn btn-dark btn-sm" onclick="formTarjeta()">＋ Nueva</button>
+      </div>
+      <div class="hint"><b>Día de cierre:</b> el banco corta la cuenta del mes. Lo que compres después ya entra al mes siguiente.
+      <b>Día de pago:</b> la fecha límite para pagar lo que te facturaron.</div>
+    </div>
+    ${DB.tarjetas.length? `<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(310px,1fr))">
+      ${DB.tarjetas.map(t=>tarjetaDetalle(t)).join('')}</div>`
+      : `<div class="card"><div class="empty"><div class="e">💳</div><p>Sin tarjetas registradas.</p>
+         <button class="btn btn-dark btn-sm" onclick="formTarjeta()">Agregar la primera</button></div></div>`}`;
+}
+function tarjetaDetalle(t){
+  const e=estadoTarjeta(t);
+  const u=urgencia(e.dias);
+  const colorBarra = e.uso>0.7?'var(--out)':e.uso>0.4?'var(--warn)':'var(--in)';
+  return `<div class="tc">
+    <div class="head">
+      <div class="between">
+        <div><div class="n">${esc(t.nombre)}</div><div class="b">${esc(t.banco||'')}</div></div>
+        <button class="icon-btn" style="color:#C4B8E0" onclick="formTarjeta('${t.id}')">✎</button>
+      </div>
+    </div>
+    <div class="body">
+      ${e.porPagar>0.01?`
+      <div class="box ${u==='red'?'due':u==='amb'?'soon':''}">
+        <div class="k">Debes pagar</div>
+        <div class="v" style="color:${colorU[u]}">${S(e.porPagar)}</div>
+        <div class="s">${textoDias(e.dias)} · ${fechaCorta(e.vence)}</div>
+        <button class="btn btn-dark btn-sm" style="width:100%;margin-top:10px" onclick="formPagoTarjeta('${t.id}')">Registrar pago</button>
+      </div>`:`
+      <div class="box" style="background:var(--in-bg)">
+        <div class="k" style="color:var(--in)">Al día</div>
+        <div class="s" style="color:var(--in)">No tienes nada facturado por pagar</div>
+      </div>`}
+
+      ${e.sinFacturar>0.01?`
+      <div class="box">
+        <div class="k">Gastado este ciclo</div>
+        <div class="v">${S(e.sinFacturar)}</div>
+        <div class="s">Se te factura el ${fechaCorta(e.cierreProx)}</div>
+      </div>`:''}
+
+      <div class="line-row"><span class="k">Te queda por usar</span><span class="v" style="color:var(--card-c)">${S(e.disponible)}</span></div>
+      <div class="bar"><i style="width:${Math.min(100,e.uso*100).toFixed(1)}%;background:${colorBarra}"></i></div>
+      <div class="line-row"><span class="k">Deuda total</span><span class="v">${S(e.deuda)}</span></div>
+      <div class="line-row"><span class="k">Línea de crédito</span><span class="v">${S0(t.linea)}</span></div>
+      <div class="line-row"><span class="k">Usado</span><span class="v">${(e.uso*100).toFixed(0)}%</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:12px;border-top:1px solid var(--line-soft);padding-top:10px">
+        Cierra el ${t.diaCierre} de cada mes · se paga el ${t.diaPago}
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button class="btn btn-line btn-sm" style="flex:1" onclick="formMov(null,'Egreso','${t.id}')">Registrar consumo</button>
+        <button class="btn btn-line btn-sm" onclick="borrarTarjeta('${t.id}')">✕</button>
+      </div>
+    </div>
+  </div>`;
+}
+function borrarTarjeta(id){
+  const n=DB.movimientos.filter(m=>m.medioId===id||m.tarjetaId===id).length;
+  if(!confirm(n?`Esta tarjeta tiene ${n} movimientos. Se eliminarán también. ¿Continuar?`:'¿Eliminar esta tarjeta?')) return;
+  DB.movimientos=DB.movimientos.filter(m=>m.medioId!==id&&m.tarjetaId!==id);
+  DB.tarjetas=DB.tarjetas.filter(t=>t.id!==id);
+  pintar(); aviso('Tarjeta eliminada');
+}
+
+/* ---------- PRÉSTAMOS ---------- */
+function vPrestamos(){
+  app().innerHTML=`
+    <div class="card pad mb">
+      <div class="between">
+        <h2 style="margin:0">Mis préstamos</h2>
+        <button class="btn btn-dark btn-sm" onclick="formPrestamo()">＋ Nuevo</button>
+      </div>
+      <div class="hint">Registra la cuota mensual y cuántas llevas pagadas. Cada mes te recordamos la siguiente.</div>
+    </div>
+    ${DB.prestamos.length? `<div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(310px,1fr))">
+      ${DB.prestamos.map(p=>prestamoDetalle(p)).join('')}</div>`
+      : `<div class="card"><div class="empty"><div class="e">🏦</div><p>Sin préstamos registrados.</p>
+         <button class="btn btn-dark btn-sm" onclick="formPrestamo()">Agregar el primero</button></div></div>`}`;
+}
+function prestamoDetalle(p){
+  const e=estadoPrestamo(p);
+  const u=urgencia(e.dias);
+  return `<div class="card"><div class="pad">
+      <div class="between" style="margin-bottom:14px">
+        <div><div style="font-weight:700;font-size:15.5px">${esc(p.nombre)}</div>
+          <div style="font-size:12px;color:var(--muted)">${esc(p.entidad||'')}</div></div>
+        <button class="icon-btn" onclick="formPrestamo('${p.id}')">✎</button>
+      </div>
+      ${e.terminado?`
+      <div class="box" style="background:var(--in-bg)">
+        <div class="k" style="color:var(--in)">Terminado 🎉</div>
+        <div class="s" style="color:var(--in)">Pagaste las ${p.cuotas} cuotas</div>
+      </div>`:`
+      <div class="box ${u==='red'?'due':u==='amb'?'soon':''}">
+        <div class="k">Próxima cuota</div>
+        <div class="v" style="color:${colorU[u]}">${S(p.cuota)}</div>
+        <div class="s">${textoDias(e.dias)} · ${fechaCorta(p.proxima)}</div>
+        <button class="btn btn-dark btn-sm" style="width:100%;margin-top:10px" onclick="formPagoCuota('${p.id}')">Registrar pago de cuota</button>
+      </div>`}
+      <div class="line-row"><span class="k">Avance</span><span class="v">${p.pagadas} de ${p.cuotas}</span></div>
+      <div class="bar"><i style="width:${(e.avance*100).toFixed(1)}%;background:var(--in)"></i></div>
+      <div class="line-row"><span class="k">Te faltan</span><span class="v">${e.restantes} cuota${e.restantes===1?'':'s'}</span></div>
+      <div class="line-row"><span class="k">Deuda pendiente</span><span class="v neg">${S(e.pendiente)}</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:12px;border-top:1px solid var(--line-soft);padding-top:10px">
+        Se paga el ${p.diaPago} de cada mes desde ${medioNombre(p.billeteraId)}
+      </div>
+      <button class="btn btn-line btn-sm" style="width:100%;margin-top:12px" onclick="borrarPrestamo('${p.id}')">Eliminar préstamo</button>
+  </div></div>`;
+}
+function borrarPrestamo(id){
+  if(!confirm('¿Eliminar este préstamo? Los pagos ya registrados se mantienen.')) return;
+  DB.prestamos=DB.prestamos.filter(p=>p.id!==id); pintar(); aviso('Préstamo eliminado');
 }
 
 /* ---------- RECURRENTES ---------- */
@@ -406,30 +679,29 @@ function vRecurrentes(){
         <h2 style="margin:0">Ingresos y egresos que se repiten</h2>
         <button class="btn btn-dark btn-sm" onclick="formRecurrente()">＋ Nuevo</button>
       </div>
-      <div class="hint">Cada uno se registra solo cuando llega su fecha. Si quieres adelantarte, escribe cuántas veces y pulsa <b>Generar</b>.</div>
+      <div class="hint">Cada uno se registra solo cuando llega su fecha. Para adelantarte, escribe cuántas veces y pulsa <b>Generar</b>.</div>
     </div>
     <div class="card pad">
-      ${DB.recurrentes.length ? DB.recurrentes.map(r=>filaRec(r)).join('')
-        : `<div class="empty"><div class="e">🔁</div><p>Sin recurrentes.<br>Agrega tu sueldo, alquiler o recibos.</p>
-           <button class="btn btn-dark btn-sm" onclick="formRecurrente()">Crear el primero</button></div>`}
+      ${DB.recurrentes.length?DB.recurrentes.map(r=>filaRec(r)).join('')
+        :`<div class="empty"><div class="e">🔁</div><p>Sin recurrentes.</p>
+          <button class="btn btn-dark btn-sm" onclick="formRecurrente()">Crear el primero</button></div>`}
     </div>`;
 }
 function filaRec(r){
-  const b=billetera(r.billeteraId);
   const ing=r.tipo==='Ingreso';
-  const dias=Math.ceil((new Date(r.proxima+'T12:00:00')-new Date(hoy()+'T12:00:00'))/86400000);
-  const cuando = !r.activo ? 'Pausado' : dias<=0?'Se registra hoy' : dias===1?'Mañana' : `En ${dias} días`;
+  const d=diasHasta(r.proxima);
+  const cuando=!r.activo?'Pausado':d<=0?'Se registra hoy':d===1?'Mañana':`En ${d} días`;
   return `<div class="rec ${r.activo?'':'pausado'}">
-    <div class="ic mov-ic" style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;background:${ing?'var(--in-bg)':'var(--out-bg)'};color:${ing?'var(--in)':'var(--out)'}">${ing?'↓':'↑'}</div>
+    <div style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:700;background:${ing?'var(--in-bg)':'var(--out-bg)'};color:${ing?'var(--in)':'var(--out)'}">${ing?'↓':'↑'}</div>
     <div class="info">
       <div class="d">${esc(r.concepto)}</div>
-      <div class="m">${r.frecuencia} · ${b?esc(b.nombre):'—'} · ${cuando} (${fechaCorta(r.proxima)})</div>
+      <div class="m">${r.frecuencia} · ${medioNombre(r.medioId)} · ${cuando} (${fechaCorta(r.proxima)})</div>
     </div>
-    <div class="val num ${ing?'pos':'neg'}" style="font-family:'Space Grotesk';font-weight:600">${ing?'+':'−'}${S(r.monto)}</div>
+    <div class="num ${ing?'pos':'neg'}" style="font-weight:600;font-size:15.5px">${ing?'+':'−'}${S(r.monto)}</div>
     <div class="gen">
       <input type="number" min="1" max="60" value="1" id="g_${r.id}">
       <button class="btn btn-line btn-sm" onclick="generarVeces('${r.id}',document.getElementById('g_${r.id}').value)">Generar</button>
-      <button class="icon-btn" onclick="pausarRec('${r.id}')" title="${r.activo?'Pausar':'Activar'}">${r.activo?'⏸':'▶'}</button>
+      <button class="icon-btn" onclick="pausarRec('${r.id}')">${r.activo?'⏸':'▶'}</button>
       <button class="icon-btn" onclick="formRecurrente('${r.id}')">✎</button>
       <button class="icon-btn" onclick="borrarRec('${r.id}')">✕</button>
     </div>
@@ -437,7 +709,7 @@ function filaRec(r){
 }
 function pausarRec(id){const r=DB.recurrentes.find(x=>x.id===id);r.activo=!r.activo;pintar();aviso(r.activo?'Activado':'Pausado');}
 function borrarRec(id){
-  if(!confirm('¿Eliminar este recurrente? Los movimientos ya registrados se mantienen.')) return;
+  if(!confirm('¿Eliminar este recurrente?')) return;
   DB.recurrentes=DB.recurrentes.filter(x=>x.id!==id); pintar(); aviso('Recurrente eliminado');
 }
 
@@ -449,77 +721,73 @@ function vBilleteras(){
         <h2 style="margin:0">Mis billeteras</h2>
         <button class="btn btn-dark btn-sm" onclick="formBilletera()">＋ Nueva</button>
       </div>
-      <div class="hint">El <b>saldo inicial</b> es el dinero que ya tenías cuando empezaste a usar esto. De ahí en adelante suma y resta según tus movimientos.</div>
+      <div class="hint">El <b>saldo inicial</b> es el dinero que ya tenías cuando empezaste a usar esto.</div>
     </div>
     <div class="grid wallets">
-      ${DB.billeteras.map(b=>{
-        const s=saldo(b.id);
+      ${DB.billeteras.map(b=>{const s=saldo(b.id);
         return `<div class="wallet">
-          <div class="top">
-            <div class="emoji">${b.icono||'💼'}</div>
-            <div class="nm">${esc(b.nombre)}</div>
-          </div>
+          <div class="top"><div class="emoji">${b.icono||'💼'}</div><div class="nm">${esc(b.nombre)}</div></div>
           <div class="amt num ${s<0?'neg':''}">${S(s)}</div>
           <div class="sub">Inicial ${S(b.saldoInicial)}</div>
           <div style="display:flex;gap:8px;margin-top:12px">
             <button class="btn btn-line btn-sm" style="flex:1" onclick="formBilletera('${b.id}')">Editar</button>
             <button class="btn btn-line btn-sm" onclick="borrarBilletera('${b.id}')">✕</button>
-          </div>
-        </div>`}).join('')}
+          </div></div>`;}).join('')}
       <button class="add-wallet" onclick="formBilletera()"><span style="font-size:20px">＋</span>Agregar billetera</button>
     </div>`;
 }
 function borrarBilletera(id){
-  const n=DB.movimientos.filter(m=>m.billeteraId===id).length;
-  if(n && !confirm(`Esta billetera tiene ${n} movimientos. Si la eliminas, también se eliminan. ¿Continuar?`)) return;
-  if(!n && !confirm('¿Eliminar esta billetera?')) return;
-  DB.movimientos=DB.movimientos.filter(m=>m.billeteraId!==id);
-  DB.recurrentes=DB.recurrentes.filter(r=>r.billeteraId!==id);
+  const n=DB.movimientos.filter(m=>m.medioId===id).length;
+  if(!confirm(n?`Esta billetera tiene ${n} movimientos. Se eliminarán también. ¿Continuar?`:'¿Eliminar esta billetera?')) return;
+  DB.movimientos=DB.movimientos.filter(m=>m.medioId!==id);
+  DB.recurrentes=DB.recurrentes.filter(r=>r.medioId!==id);
   DB.billeteras=DB.billeteras.filter(b=>b.id!==id);
   pintar(); aviso('Billetera eliminada');
 }
 
-/* ═══════════════ FORMULARIOS ═══════════════ */
+/* ═══════════ FORMULARIOS ═══════════ */
 let tipoSel='Egreso';
-const CATEGORIAS=['Sueldo','Negocio','Venta','Comida','Transporte','Servicios','Vivienda','Salud','Educación','Compras','Ocio','Otros'];
+const CATEGORIAS=['Sueldo','Negocio','Venta','Comida','Transporte','Servicios','Vivienda','Salud','Educación','Compras','Ocio','Préstamo','Otros'];
 
-function formMov(id,tipo){
-  const m = id ? DB.movimientos.find(x=>x.id===id) : null;
-  tipoSel = m ? m.tipo : (tipo||'Egreso');
+function opcionesMedio(sel,soloBilleteras){
+  let h=`<optgroup label="Billeteras">${DB.billeteras.map(b=>
+    `<option value="${b.id}" ${sel===b.id?'selected':''}>${b.icono} ${esc(b.nombre)}</option>`).join('')}</optgroup>`;
+  if(!soloBilleteras && DB.tarjetas.length)
+    h+=`<optgroup label="Tarjetas de crédito">${DB.tarjetas.map(t=>
+      `<option value="${t.id}" ${sel===t.id?'selected':''}>💳 ${esc(t.nombre)}</option>`).join('')}</optgroup>`;
+  return h;
+}
+
+function formMov(id,tipo,medio){
+  const m=id?DB.movimientos.find(x=>x.id===id):null;
+  tipoSel=m?m.tipo:(tipo||'Egreso');
   if(!DB.billeteras.length){ aviso('Primero crea una billetera'); return formBilletera(); }
   abrir(id?'Editar movimiento':'Nuevo movimiento',`
     <div class="seg">
       <button id="sIng" onclick="setTipo('Ingreso')">↓ Ingreso</button>
       <button id="sEgr" onclick="setTipo('Egreso')">↑ Egreso</button>
     </div>
-    <div class="field">
-      <label>¿Cuánto?</label>
-      <input id="f_monto" type="number" step="0.01" inputmode="decimal" value="${m?m.monto:''}" placeholder="0.00" autofocus>
+    <div class="field"><label>¿Cuánto?</label>
+      <input id="f_monto" type="number" step="0.01" inputmode="decimal" value="${m?m.monto:''}" placeholder="0.00"></div>
+    <div class="field"><label id="labMedio">¿Con qué pagaste?</label>
+      <select id="f_medio">${opcionesMedio(m?m.medioId:medio, tipoSel==='Ingreso')}</select>
+      <div id="avisoTarjeta" style="display:none;font-size:12.5px;color:var(--card-c);background:var(--card-bg);padding:9px 12px;border-radius:9px;margin-top:2px">
+        💳 Al pagar con tarjeta no sale dinero de tus billeteras: se suma a tu deuda y la pagas en la fecha de pago.</div>
     </div>
-    <div class="field">
-      <label>¿En qué billetera?</label>
-      <select id="f_bill">${DB.billeteras.map(b=>`<option value="${b.id}" ${m&&m.billeteraId===b.id?'selected':''}>${b.icono} ${esc(b.nombre)}</option>`).join('')}</select>
-    </div>
-    <div class="field">
-      <label>¿Qué fue?</label>
-      <input id="f_desc" value="${m?esc(m.descripcion):''}" placeholder="Ej. Almuerzo, recibo de luz">
-    </div>
+    <div class="field"><label>¿Qué fue?</label>
+      <input id="f_desc" value="${m?esc(m.descripcion):''}" placeholder="Ej. Almuerzo, recibo de luz"></div>
     <div class="two">
-      <div class="field">
-        <label>Categoría</label>
+      <div class="field"><label>Categoría</label>
         <input id="f_cat" list="cats" value="${m?esc(m.categoria):''}" placeholder="Comida">
-        <datalist id="cats">${CATEGORIAS.map(c=>`<option value="${c}">`).join('')}</datalist>
-      </div>
-      <div class="field">
-        <label>Fecha</label>
-        <input id="f_fecha" type="date" value="${m?m.fecha:hoy()}">
-      </div>
+        <datalist id="cats">${CATEGORIAS.map(c=>`<option value="${c}">`).join('')}</datalist></div>
+      <div class="field"><label>Fecha</label>
+        <input id="f_fecha" type="date" value="${m?m.fecha:hoy()}"></div>
     </div>`,
     ()=>{
       const monto=+val('f_monto');
       if(!monto||monto<=0){ aviso('Escribe un monto'); return false; }
       const d={fecha:val('f_fecha')||hoy(),tipo:tipoSel,monto,descripcion:val('f_desc'),
-               categoria:val('f_cat'),billeteraId:val('f_bill')};
+               categoria:val('f_cat'),medioId:val('f_medio')};
       if(id) Object.assign(DB.movimientos.find(x=>x.id===id),d);
       else DB.movimientos.push({id:uid(),...d});
       pintar(); aviso(id?'Movimiento actualizado':(tipoSel==='Ingreso'?'Ingreso registrado':'Egreso registrado'));
@@ -531,107 +799,224 @@ function setTipo(t){
   tipoSel=t;
   const i=document.getElementById('sIng'), e=document.getElementById('sEgr');
   if(!i) return;
-  i.className = t==='Ingreso'?'on-in':''; e.className = t==='Egreso'?'on-out':'';
+  i.className=t==='Ingreso'?'on-in':''; e.className=t==='Egreso'?'on-out':'';
+  const sel=document.getElementById('f_medio'), lab=document.getElementById('labMedio');
+  if(sel){
+    const actual=sel.value;
+    lab.textContent = t==='Ingreso'?'¿A dónde entró?':'¿Con qué pagaste?';
+    sel.innerHTML=opcionesMedio(actual, t==='Ingreso');
+    sel.onchange=revisarTarjeta;
+    revisarTarjeta();
+  }
+}
+function revisarTarjeta(){
+  const sel=document.getElementById('f_medio'), av=document.getElementById('avisoTarjeta');
+  if(!sel||!av) return;
+  av.style.display = tarjeta(sel.value) ? 'block' : 'none';
 }
 function borrarMov(id){
   if(!confirm('¿Eliminar este movimiento?')) return;
+  const m=DB.movimientos.find(x=>x.id===id);
+  if(m&&m.prestamoId){
+    const p=DB.prestamos.find(x=>x.id===m.prestamoId);
+    if(p&&p.pagadas>0){
+      p.pagadas--;
+      p.proxima=conDia(D(p.proxima).getFullYear(),D(p.proxima).getMonth()-1,p.diaPago);
+    }
+  }
   DB.movimientos=DB.movimientos.filter(x=>x.id!==id); pintar(); aviso('Movimiento eliminado');
 }
 
 function formBilletera(id){
-  const b = id ? DB.billeteras.find(x=>x.id===id) : null;
+  const b=id?DB.billeteras.find(x=>x.id===id):null;
   const iconos=['💵','📱','💬','🏦','💳','🐷','👛','💰','🏧','📦'];
   abrir(id?'Editar billetera':'Nueva billetera',`
-    <div class="field">
-      <label>Nombre</label>
-      <input id="b_nom" value="${b?esc(b.nombre):''}" placeholder="Ej. Yape, Efectivo, BCP" autofocus>
-    </div>
-    <div class="field">
-      <label>Ícono</label>
+    <div class="field"><label>Nombre</label>
+      <input id="b_nom" value="${b?esc(b.nombre):''}" placeholder="Ej. Yape, Efectivo, BCP"></div>
+    <div class="field"><label>Ícono</label>
       <div style="display:flex;gap:7px;flex-wrap:wrap" id="iconos">
         ${iconos.map(i=>`<button type="button" onclick="pickIcono('${i}')" data-i="${i}"
           style="width:42px;height:42px;border-radius:10px;border:1.5px solid var(--line);background:#fff;font-size:19px">${i}</button>`).join('')}
-      </div>
-      <input type="hidden" id="b_ico" value="${b?b.icono:'💼'}">
-    </div>
-    <div class="field">
-      <label>Saldo inicial <span style="color:var(--muted);font-weight:400">— lo que ya tienes ahí</span></label>
-      <input id="b_saldo" type="number" step="0.01" inputmode="decimal" value="${b?b.saldoInicial:0}">
-    </div>`,
+      </div><input type="hidden" id="b_ico" value="${b?b.icono:'💼'}"></div>
+    <div class="field"><label>Saldo inicial <span style="color:var(--muted);font-weight:400">— lo que ya tienes ahí</span></label>
+      <input id="b_saldo" type="number" step="0.01" inputmode="decimal" value="${b?b.saldoInicial:0}"></div>`,
     ()=>{
       const nom=val('b_nom').trim();
       if(!nom){ aviso('Ponle un nombre'); return false; }
       const d={nombre:nom,icono:val('b_ico')||'💼',saldoInicial:+val('b_saldo')||0};
       if(id) Object.assign(DB.billeteras.find(x=>x.id===id),d);
       else DB.billeteras.push({id:uid(),...d});
-      pintar(); aviso(id?'Billetera actualizada':'Billetera creada');
-      return true;
+      pintar(); aviso(id?'Billetera actualizada':'Billetera creada'); return true;
     });
   pickIcono(b?b.icono:'💼');
 }
 function pickIcono(i){
   const h=document.getElementById('b_ico'); if(!h) return;
   h.value=i;
-  document.querySelectorAll('#iconos button').forEach(btn=>{
-    const on=btn.dataset.i===i;
-    btn.style.borderColor = on?'var(--accent)':'var(--line)';
-    btn.style.background  = on?'#E9F2F1':'#fff';
+  document.querySelectorAll('#iconos button').forEach(b=>{
+    const on=b.dataset.i===i;
+    b.style.borderColor=on?'var(--accent)':'var(--line)';
+    b.style.background=on?'#E9F2F1':'#fff';
   });
 }
 
-function formRecurrente(id){
-  const r = id ? DB.recurrentes.find(x=>x.id===id) : null;
-  if(!DB.billeteras.length){ aviso('Primero crea una billetera'); return formBilletera(); }
-  abrir(id?'Editar recurrente':'Nuevo recurrente',`
-    <div class="field">
-      <label>¿Qué es?</label>
-      <input id="r_con" value="${r?esc(r.concepto):''}" placeholder="Ej. Sueldo, alquiler, Netflix" autofocus>
-    </div>
+function formTarjeta(id){
+  const t=id?tarjeta(id):null;
+  abrir(id?'Editar tarjeta':'Nueva tarjeta',`
+    <div class="field"><label>Nombre de la tarjeta</label>
+      <input id="t_nom" value="${t?esc(t.nombre):''}" placeholder="Ej. Visa Clásica"></div>
+    <div class="field"><label>Banco</label>
+      <input id="t_ban" value="${t?esc(t.banco||''):''}" placeholder="Ej. BCP, Interbank"></div>
+    <div class="field"><label>Línea de crédito <span style="color:var(--muted);font-weight:400">— cuánto te presta el banco</span></label>
+      <input id="t_lin" type="number" step="0.01" inputmode="decimal" value="${t?t.linea:''}" placeholder="6000"></div>
     <div class="two">
-      <div class="field">
-        <label>Tipo</label>
-        <select id="r_tipo"><option ${r&&r.tipo==='Ingreso'?'selected':''}>Ingreso</option><option ${!r||r.tipo==='Egreso'?'selected':''}>Egreso</option></select>
-      </div>
-      <div class="field">
-        <label>Monto</label>
-        <input id="r_monto" type="number" step="0.01" inputmode="decimal" value="${r?r.monto:''}" placeholder="0.00">
-      </div>
+      <div class="field"><label>Día de cierre</label>
+        <input id="t_cie" type="number" min="1" max="31" value="${t?t.diaCierre:25}"></div>
+      <div class="field"><label>Día de pago</label>
+        <input id="t_pag" type="number" min="1" max="31" value="${t?t.diaPago:15}"></div>
     </div>
-    <div class="field">
-      <label>Billetera</label>
-      <select id="r_bill">${DB.billeteras.map(b=>`<option value="${b.id}" ${r&&r.billeteraId===b.id?'selected':''}>${b.icono} ${esc(b.nombre)}</option>`).join('')}</select>
-    </div>
-    <div class="two">
-      <div class="field">
-        <label>¿Cada cuánto?</label>
-        <select id="r_frec">${Object.keys(PASOS).map(f=>`<option ${r&&r.frecuencia===f?'selected':(!r&&f==='Mensual'?'selected':'')}>${f}</option>`).join('')}</select>
-      </div>
-      <div class="field">
-        <label>Próxima fecha</label>
-        <input id="r_prox" type="date" value="${r?r.proxima:hoy()}">
-      </div>
-    </div>
-    <div class="field">
-      <label>Categoría</label>
-      <input id="r_cat" list="cats2" value="${r?esc(r.categoria):''}" placeholder="Servicios">
-      <datalist id="cats2">${CATEGORIAS.map(c=>`<option value="${c}">`).join('')}</datalist>
-    </div>
-    <div class="hint">Llegada esa fecha se registra solo. Después salta a la siguiente según la frecuencia.</div>`,
+    <div class="hint">Ambos días vienen en tu estado de cuenta. El <b>cierre</b> corta el consumo del mes; el <b>pago</b> es la fecha límite.</div>`,
     ()=>{
-      const con=val('r_con').trim(), monto=+val('r_monto');
-      if(!con){ aviso('Ponle un nombre'); return false; }
+      const nom=val('t_nom').trim();
+      if(!nom){ aviso('Ponle un nombre'); return false; }
+      const lin=+val('t_lin');
+      if(!lin||lin<=0){ aviso('Escribe la línea de crédito'); return false; }
+      const d={nombre:nom,banco:val('t_ban'),linea:lin,
+               diaCierre:Math.min(31,Math.max(1,+val('t_cie')||25)),
+               diaPago:Math.min(31,Math.max(1,+val('t_pag')||15))};
+      if(id) Object.assign(tarjeta(id),d);
+      else DB.tarjetas.push({id:uid(),...d});
+      pintar(); aviso(id?'Tarjeta actualizada':'Tarjeta creada'); return true;
+    });
+}
+
+function formPagoTarjeta(id){
+  const t=tarjeta(id), e=estadoTarjeta(t);
+  if(!DB.billeteras.length){ aviso('Necesitas una billetera'); return; }
+  abrir('Pagar '+t.nombre,`
+    <div class="box" style="margin-bottom:16px">
+      <div class="k">Facturado por pagar</div>
+      <div class="v">${S(e.porPagar)}</div>
+      <div class="s">Vence el ${fechaCorta(e.vence)}${e.sinFacturar>0?` · aparte llevas ${S(e.sinFacturar)} de este ciclo`:''}</div>
+    </div>
+    <div class="field"><label>¿Cuánto vas a pagar?</label>
+      <input id="p_monto" type="number" step="0.01" inputmode="decimal" value="${e.porPagar.toFixed(2)}"></div>
+    <div class="field"><label>¿Desde qué billetera?</label>
+      <select id="p_bill">${DB.billeteras.map(b=>`<option value="${b.id}">${b.icono} ${esc(b.nombre)} — ${S(saldo(b.id))}</option>`).join('')}</select></div>
+    <div class="field"><label>Fecha</label><input id="p_fecha" type="date" value="${hoy()}"></div>
+    <div class="hint">Se descuenta de tu billetera y baja tu deuda. No cuenta como gasto nuevo: ya lo registraste al comprar.</div>`,
+    ()=>{
+      const monto=+val('p_monto');
       if(!monto||monto<=0){ aviso('Escribe un monto'); return false; }
-      const d={concepto:con,tipo:val('r_tipo'),monto,categoria:val('r_cat'),billeteraId:val('r_bill'),
-               frecuencia:val('r_frec'),proxima:val('r_prox')||hoy(),activo:r?r.activo:true};
-      if(id) Object.assign(DB.recurrentes.find(x=>x.id===id),d);
-      else DB.recurrentes.push({id:uid(),...d});
-      pintar(); aviso(id?'Recurrente actualizado':'Recurrente creado');
+      DB.movimientos.push({id:uid(),fecha:val('p_fecha')||hoy(),tipo:'Pago',monto,
+        descripcion:'Pago '+t.nombre,categoria:'Tarjeta',medioId:val('p_bill'),tarjetaId:t.id});
+      pintar(); aviso('Pago registrado'); return true;
+    });
+}
+
+function formPrestamo(id){
+  const p=id?DB.prestamos.find(x=>x.id===id):null;
+  if(!DB.billeteras.length){ aviso('Primero crea una billetera'); return formBilletera(); }
+  abrir(id?'Editar préstamo':'Nuevo préstamo',`
+    <div class="field"><label>Nombre</label>
+      <input id="l_nom" value="${p?esc(p.nombre):''}" placeholder="Ej. Crédito vehicular"></div>
+    <div class="field"><label>Entidad</label>
+      <input id="l_ent" value="${p?esc(p.entidad||''):''}" placeholder="Ej. BBVA"></div>
+    <div class="field"><label>Cuota mensual</label>
+      <input id="l_cuo" type="number" step="0.01" inputmode="decimal" value="${p?p.cuota:''}" placeholder="500.00"></div>
+    <div class="two">
+      <div class="field"><label>Total de cuotas</label>
+        <input id="l_tot" type="number" min="1" value="${p?p.cuotas:12}"></div>
+      <div class="field"><label>Ya pagadas</label>
+        <input id="l_pag" type="number" min="0" value="${p?p.pagadas:0}"></div>
+    </div>
+    <div class="two">
+      <div class="field"><label>Día de pago</label>
+        <input id="l_dia" type="number" min="1" max="31" value="${p?p.diaPago:10}"></div>
+      <div class="field"><label>Próxima cuota</label>
+        <input id="l_prox" type="date" value="${p?p.proxima:proximoDia(10)}"></div>
+    </div>
+    <div class="field"><label>Se paga desde</label>
+      <select id="l_bill">${DB.billeteras.map(b=>`<option value="${b.id}" ${p&&p.billeteraId===b.id?'selected':''}>${b.icono} ${esc(b.nombre)}</option>`).join('')}</select></div>`,
+    ()=>{
+      const nom=val('l_nom').trim(), cuo=+val('l_cuo');
+      if(!nom){ aviso('Ponle un nombre'); return false; }
+      if(!cuo||cuo<=0){ aviso('Escribe la cuota mensual'); return false; }
+      const dia=Math.min(31,Math.max(1,+val('l_dia')||10));
+      const d={nombre:nom,entidad:val('l_ent'),cuota:cuo,
+               cuotas:Math.max(1,+val('l_tot')||1),pagadas:Math.max(0,+val('l_pag')||0),
+               diaPago:dia,proxima:val('l_prox')||proximoDia(dia),
+               billeteraId:val('l_bill'),activo:true};
+      if(id) Object.assign(DB.prestamos.find(x=>x.id===id),d);
+      else DB.prestamos.push({id:uid(),...d});
+      pintar(); aviso(id?'Préstamo actualizado':'Préstamo creado'); return true;
+    });
+}
+
+function formPagoCuota(id){
+  const p=DB.prestamos.find(x=>x.id===id);
+  abrir('Pagar cuota',`
+    <div class="box" style="margin-bottom:16px">
+      <div class="k">Cuota ${(+p.pagadas||0)+1} de ${p.cuotas}</div>
+      <div class="v">${S(p.cuota)}</div>
+      <div class="s">${esc(p.nombre)} · vence ${fechaCorta(p.proxima)}</div>
+    </div>
+    <div class="field"><label>Monto</label>
+      <input id="c_monto" type="number" step="0.01" inputmode="decimal" value="${(+p.cuota).toFixed(2)}"></div>
+    <div class="field"><label>¿Desde qué billetera?</label>
+      <select id="c_bill">${DB.billeteras.map(b=>`<option value="${b.id}" ${p.billeteraId===b.id?'selected':''}>${b.icono} ${esc(b.nombre)} — ${S(saldo(b.id))}</option>`).join('')}</select></div>
+    <div class="field"><label>Fecha</label><input id="c_fecha" type="date" value="${hoy()}"></div>`,
+    ()=>{
+      const monto=+val('c_monto');
+      if(!monto||monto<=0){ aviso('Escribe un monto'); return false; }
+      DB.movimientos.push({id:uid(),fecha:val('c_fecha')||hoy(),tipo:'Egreso',monto,
+        descripcion:'Cuota '+p.nombre,categoria:'Préstamo',medioId:val('c_bill'),prestamoId:p.id});
+      p.pagadas=Math.min(p.cuotas,(+p.pagadas||0)+1);
+      p.proxima=conDia(D(p.proxima).getFullYear(), D(p.proxima).getMonth()+1, p.diaPago);
+      pintar();
+      aviso(p.pagadas>=p.cuotas?'¡Préstamo terminado! 🎉':'Cuota registrada');
       return true;
     });
 }
 
-/* ═══════════════ UI ═══════════════ */
-const val=id=>document.getElementById(id)?.value ?? '';
+function formRecurrente(id){
+  const r=id?DB.recurrentes.find(x=>x.id===id):null;
+  if(!DB.billeteras.length){ aviso('Primero crea una billetera'); return formBilletera(); }
+  abrir(id?'Editar recurrente':'Nuevo recurrente',`
+    <div class="field"><label>¿Qué es?</label>
+      <input id="r_con" value="${r?esc(r.concepto):''}" placeholder="Ej. Sueldo, alquiler, Netflix"></div>
+    <div class="two">
+      <div class="field"><label>Tipo</label>
+        <select id="r_tipo"><option ${r&&r.tipo==='Ingreso'?'selected':''}>Ingreso</option><option ${!r||r.tipo==='Egreso'?'selected':''}>Egreso</option></select></div>
+      <div class="field"><label>Monto</label>
+        <input id="r_monto" type="number" step="0.01" inputmode="decimal" value="${r?r.monto:''}" placeholder="0.00"></div>
+    </div>
+    <div class="field"><label>Billetera o tarjeta</label>
+      <select id="r_medio">${opcionesMedio(r?r.medioId:null,false)}</select></div>
+    <div class="two">
+      <div class="field"><label>¿Cada cuánto?</label>
+        <select id="r_frec">${Object.keys(PASOS).map(f=>`<option ${r&&r.frecuencia===f?'selected':(!r&&f==='Mensual'?'selected':'')}>${f}</option>`).join('')}</select></div>
+      <div class="field"><label>Próxima fecha</label>
+        <input id="r_prox" type="date" value="${r?r.proxima:hoy()}"></div>
+    </div>
+    <div class="field"><label>Categoría</label>
+      <input id="r_cat" list="cats2" value="${r?esc(r.categoria):''}" placeholder="Servicios">
+      <datalist id="cats2">${CATEGORIAS.map(c=>`<option value="${c}">`).join('')}</datalist></div>
+    <div class="hint">Llegada esa fecha se registra solo, y salta a la siguiente según la frecuencia.</div>`,
+    ()=>{
+      const con=val('r_con').trim(), monto=+val('r_monto');
+      if(!con){ aviso('Ponle un nombre'); return false; }
+      if(!monto||monto<=0){ aviso('Escribe un monto'); return false; }
+      const d={concepto:con,tipo:val('r_tipo'),monto,categoria:val('r_cat'),medioId:val('r_medio'),
+               frecuencia:val('r_frec'),proxima:val('r_prox')||hoy(),activo:r?r.activo:true};
+      if(id) Object.assign(DB.recurrentes.find(x=>x.id===id),d);
+      else DB.recurrentes.push({id:uid(),...d});
+      pintar(); aviso(id?'Recurrente actualizado':'Recurrente creado'); return true;
+    });
+}
+
+/* ═══════════ UI ═══════════ */
+const val=id=>{const e=document.getElementById(id);return e?e.value:'';};
 let alGuardar=null;
 function abrir(titulo,cuerpo,onSave){
   alGuardar=onSave;
@@ -646,11 +1031,10 @@ function abrir(titulo,cuerpo,onSave){
         </div>
       </div>
     </div>`;
-  setTimeout(()=>document.querySelector('.mbody input')?.focus(),80);
+  setTimeout(()=>{const i=document.querySelector('.mbody input');if(i)i.focus();},80);
 }
 function cerrar(){ document.getElementById('modal').innerHTML=''; alGuardar=null; }
 function confirmar(){ if(!alGuardar) return cerrar(); if(alGuardar()!==false) cerrar(); }
-function irA(v){ vista=v; window.scrollTo(0,0); pintar(); }
 
 let tT;
 function aviso(msg){
@@ -667,10 +1051,9 @@ function menuDatos(){
     ()=>true);
 }
 function exportar(){
-  const filas=[['Fecha','Tipo','Descripcion','Categoria','Billetera','Monto']];
+  const filas=[['Fecha','Tipo','Descripcion','Categoria','Medio','Monto']];
   DB.movimientos.slice().sort((a,b)=>a.fecha.localeCompare(b.fecha)).forEach(m=>{
-    const b=billetera(m.billeteraId);
-    filas.push([m.fecha,m.tipo,m.descripcion||'',m.categoria||'',b?b.nombre:'',(+m.monto).toFixed(2)]);
+    filas.push([m.fecha,m.tipo,m.descripcion||'',m.categoria||'',medioNombre(m.medioId),(+m.monto).toFixed(2)]);
   });
   const csv=filas.map(f=>f.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
   const a=document.createElement('a');
@@ -679,11 +1062,11 @@ function exportar(){
   cerrar(); aviso('Copia descargada');
 }
 function reiniciar(){
-  if(!confirm('Se borrarán todas tus billeteras y movimientos. ¿Seguro?')) return;
+  if(!confirm('Se borrará todo: billeteras, tarjetas, préstamos y movimientos. ¿Seguro?')) return;
   DB=JSON.parse(JSON.stringify(INICIAL)); cerrar(); pintar(); aviso('Todo reiniciado');
 }
 
-/* ═══════════════ INICIO ═══════════════ */
+/* ═══════════ ARRANQUE ═══════════ */
 cargar();
 const generados=generarVencidos();
 pintar();
