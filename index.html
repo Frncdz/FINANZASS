@@ -100,6 +100,28 @@ svg.ic{display:block;flex-shrink:0}
 .stat .f{font-size:11.5px;color:var(--muted);margin-top:5px;display:flex;align-items:center;gap:6px}
 .stat.dark .f{color:rgba(255,255,255,.6)}
 .chip{display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:2px 7px;border-radius:5px}
+
+/* desglose disponible */
+.split{display:flex;gap:3px;height:6px;margin:12px 0 11px;border-radius:3px;overflow:hidden}
+.split i{display:block;border-radius:3px;min-width:2px}
+.kk{font-size:10px;text-transform:uppercase;letter-spacing:.9px;font-weight:600;color:rgba(255,255,255,.55)}
+.dotl{width:8px;height:8px;border-radius:2px;display:inline-block;margin-right:6px;vertical-align:0}
+.vv{font-family:'Archivo';font-size:16px;font-weight:600;font-variant-numeric:tabular-nums;margin-top:2px}
+.dline{display:flex;justify-content:space-between;gap:10px;font-size:12px;padding:3.5px 0;
+  color:rgba(255,255,255,.72);border-bottom:1px solid rgba(255,255,255,.07)}
+.dline:last-child{border-bottom:none}
+.dline b{font-family:'Archivo';font-variant-numeric:tabular-nums;font-weight:600;color:#fff;white-space:nowrap}
+.dline span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dft{margin-top:14px;padding-top:12px;border-top:1px solid rgba(255,255,255,.1);
+  font-size:11.5px;color:rgba(255,255,255,.6);line-height:1.55}
+
+/* resumen del mes */
+.mrow{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--hair)}
+.mrow:last-child{border-bottom:none}
+.mrow.tot{border-top:1px solid var(--line);border-bottom:none;margin-top:2px;padding-top:9px}
+.mrow .ml{flex:1;display:flex;align-items:center;gap:7px;font-size:12.5px;color:var(--muted);font-weight:500}
+.mrow .mv{font-family:'Archivo';font-variant-numeric:tabular-nums;font-weight:600;font-size:14.5px;white-space:nowrap}
+.mrow .chip{min-width:46px;justify-content:center}
 .c-up{background:var(--pos-bg);color:var(--pos)} .c-dn{background:var(--neg-bg);color:var(--neg)}
 .stat.dark .c-up{background:rgba(79,180,137,.18);color:#7FD4AF}
 .stat.dark .c-dn{background:rgba(217,112,92,.18);color:#EFA294}
@@ -295,6 +317,9 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
   .msum div{flex:1;padding:7px 10px}
 }
 @media(max-width:640px){
+  .stat.dark .g-2{grid-template-columns:1fr!important;gap:10px!important}
+  .stat.dark .v{font-size:27px!important}
+  .mrow .chip{min-width:42px;font-size:10.5px}
   body{padding-bottom:0}
   .side{display:none}
   .topbar{padding:14px 14px 8px;background:var(--paper);border-bottom:1px solid var(--line)}
@@ -915,28 +940,81 @@ function vInicio(){
   const oblMes=obls.reduce((a,o)=>a+o.monto+(o.interes||0),0);
   const venc=vencidas(), tVenc=totalVencido(), tInt=totalIntereses();
   const prog=programados(), nProg=netoProgramado();
+  const totalDisp=propio+credito;
+  const pTang = totalDisp>0 ? (propio/totalDisp)*100 : 100;
 
   app().innerHTML=`
-    <div class="g g-stat mb">
-      <div class="stat dark">
-        <div class="top"><span class="k">Tu dinero</span><span class="ico">${ic('wallet',15)}</span></div>
-        <div class="v">${S(propio)}</div>
-        <div class="f">${prog.length?`${nProg>=0?'+':'−'}${S0(Math.abs(nProg))} programado a futuro`:`En ${DB.billeteras.length} billeteras`}</div>
+    <div class="g g-73 mb">
+      <div class="stat dark" style="padding:18px 20px">
+        <div class="top" style="margin-bottom:6px">
+          <span class="k">Disponible para usar</span><span class="ico">${ic('wallet',15)}</span></div>
+        <div class="v" style="font-size:33px">${S(propio+credito)}</div>
+        <div class="split">
+          <i style="width:${pTang.toFixed(1)}%;background:#4FB489"></i>
+          <i style="width:${(100-pTang).toFixed(1)}%;background:#7E8FA0"></i>
+        </div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:14px">
+          <div><span class="dotl" style="background:#4FB489"></span><span class="kk">Tuyo</span>
+            <div class="vv">${S(propio)}</div></div>
+          <div><span class="dotl" style="background:#7E8FA0"></span><span class="kk">Crédito por usar</span>
+            <div class="vv">${S(credito)}</div></div>
+        </div>
+
+        <div class="g g-2" style="gap:16px">
+          <div>
+            <div class="kk" style="margin-bottom:5px">Billeteras</div>
+            ${DB.billeteras.map(b=>`<div class="dline">
+              <span>${esc(b.nombre)}</span><b>${S(saldo(b.id))}</b></div>`).join('')
+              ||'<div class="dline"><span>Sin billeteras</span></div>'}
+          </div>
+          <div>
+            <div class="kk" style="margin-bottom:5px">Tarjetas · por usar</div>
+            ${DB.tarjetas.map(t2=>{const e=estadoTarjeta(t2);
+              return `<div class="dline"><span>${esc(t2.nombre)}</span><b>${S(e.disponible)}</b></div>`;}).join('')
+              ||'<div class="dline"><span>Sin tarjetas</span></div>'}
+          </div>
+        </div>
+
+        <div class="dft">
+          Tuyo de verdad, descontando lo que debes:
+          <b style="color:${propio-deuda>=0?'#7FD4AF':'#EFA294'}">${S(propio-deuda)}</b>
+          ${credito>0?`<br><span style="opacity:.7">El crédito no es dinero tuyo: si lo usas, se vuelve deuda.</span>`:''}
+        </div>
       </div>
-      <div class="stat">
-        <div class="top"><span class="k">Entró este mes</span><span class="ico">${ic('down',15)}</span></div>
-        <div class="v pos">${S0(t.ing)}</div>
-        <div class="f"><span class="chip ${cI>=0?'c-up':'c-dn'}">${cI>=0?'+':'−'}${Math.abs(cI*100).toFixed(0)}%</span> vs mes anterior</div>
-      </div>
-      <div class="stat">
-        <div class="top"><span class="k">Gastaste</span><span class="ico">${ic('up',15)}</span></div>
-        <div class="v neg">${S0(t.egr)}</div>
-        <div class="f"><span class="chip ${cE<=0?'c-up':'c-dn'}">${cE>=0?'+':'−'}${Math.abs(cE*100).toFixed(0)}%</span> vs mes anterior</div>
-      </div>
-      <div class="stat">
-        <div class="top"><span class="k">A pagar este mes</span><span class="ico">${ic('calendar',15)}</span></div>
-        <div class="v ${oblMes>0?'neg':''}">${S0(oblMes)}</div>
-        <div class="f">${oblMes>0?`${obls.length} vencimiento${obls.length===1?'':'s'} en ${MESES[+mesActual().slice(5)-1]}`:'Nada vence este mes'}</div>
+
+      <div>
+        <div class="card cb mb">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <b style="font-size:13.5px">Este mes</b>
+            <span class="sm" style="text-transform:capitalize">${MESES[+mesActual().slice(5)-1]}</span>
+          </div>
+          <div class="mrow">
+            <span class="ml">${ic('down',14)} Entró</span>
+            <span class="mv pos">${S(t.ing)}</span>
+            <span class="chip ${cI>=0?'c-up':'c-dn'}">${cI>=0?'+':'−'}${Math.abs(cI*100).toFixed(0)}%</span>
+          </div>
+          <div class="mrow">
+            <span class="ml">${ic('up',14)} Gastaste</span>
+            <span class="mv neg">${S(t.egr)}</span>
+            <span class="chip ${cE<=0?'c-up':'c-dn'}">${cE>=0?'+':'−'}${Math.abs(cE*100).toFixed(0)}%</span>
+          </div>
+          <div class="mrow tot">
+            <span class="ml">Diferencia</span>
+            <span class="mv" style="color:${t.neto>=0?'var(--pos)':'var(--neg)'}">${t.neto>=0?'+':'−'}${S(Math.abs(t.neto))}</span>
+            <span></span>
+          </div>
+        </div>
+
+        <div class="card cb">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <b style="font-size:13.5px">A pagar este mes</b>
+            <span class="ico" style="width:26px;height:26px;border-radius:7px;background:var(--sunk);display:flex;align-items:center;justify-content:center;color:var(--muted)">${ic('calendar',14)}</span>
+          </div>
+          <div class="num ${oblMes>0?'neg':''}" style="font-size:25px;font-weight:600;margin:7px 0 3px;letter-spacing:-1px">${S(oblMes)}</div>
+          <div class="sm">${oblMes>0?`${obls.length} vencimiento${obls.length===1?'':'s'}${venc.length?` · ${venc.length} vencido${venc.length===1?'':'s'}`:''}`:'Nada vence este mes'}</div>
+          ${prog.length?`<div class="sm" style="margin-top:8px;padding-top:8px;border-top:1px solid var(--hair)">
+            ${nProg>=0?'+':'−'}${S(Math.abs(nProg))} programado a futuro</div>`:''}
+        </div>
       </div>
     </div>
 
