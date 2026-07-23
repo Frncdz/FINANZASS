@@ -1,3 +1,6 @@
+
+
+Sistema financiero · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -44,7 +47,7 @@ svg.ic{display:block;flex-shrink:0}
 .num{font-family:'Archivo',sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.2px}
 .mut{color:var(--muted)}
 .lab{font-size:10px;text-transform:uppercase;letter-spacing:1.1px;font-weight:600;color:var(--faint)}
-
+ 
 /* ══ LAYOUT ══ */
 .layout{display:flex;min-height:100vh}
 .side{width:216px;flex-shrink:0;background:var(--paper);border-right:1px solid var(--line);
@@ -64,7 +67,7 @@ svg.ic{display:block;flex-shrink:0}
   min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 5px}
 .nav a.on .bdg{background:var(--paper);color:var(--ink)}
 .side-ft{padding:10px;border-top:1px solid var(--hair)}
-
+ 
 .content{flex:1;min-width:0;display:flex;flex-direction:column}
 .topbar{background:var(--page);position:sticky;top:0;z-index:30;padding:18px 26px 10px}
 .topbar .in{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -73,7 +76,7 @@ svg.ic{display:block;flex-shrink:0}
 .tacts{display:flex;gap:8px;align-items:center}
 .body{padding:14px 26px 40px;flex:1}
 .bottomnav{display:none}
-
+ 
 /* ══ COMPONENTES ══ */
 .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
 .ch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px 0}
@@ -86,7 +89,7 @@ svg.ic{display:block;flex-shrink:0}
 .g-stat{grid-template-columns:repeat(4,1fr)}
 .g-73{grid-template-columns:1.55fr 1fr}
 .g-2{grid-template-columns:1fr 1fr}
-
+ 
 /* stat */
 .stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;box-shadow:var(--sh)}
 .stat.dark{background:var(--ink);border-color:var(--ink);color:var(--paper)}
@@ -103,7 +106,7 @@ svg.ic{display:block;flex-shrink:0}
 .c-up{background:var(--pos-bg);color:var(--pos)} .c-dn{background:var(--neg-bg);color:var(--neg)}
 .stat.dark .c-up{background:rgba(79,180,137,.18);color:#7FD4AF}
 .stat.dark .c-dn{background:rgba(217,112,92,.18);color:#EFA294}
-
+ 
 /* chart */
 .chart{display:flex;align-items:flex-end;gap:2px;height:150px;padding-top:6px}
 .cg{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0}
@@ -115,7 +118,7 @@ html[data-theme="dark"] .cbars i.a{background:var(--ink-soft)}
 .leg{display:flex;gap:13px}
 .leg span{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:500}
 .leg i{width:9px;height:9px;border-radius:2px}
-
+ 
 /* listas */
 .lrow{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--hair)}
 .lrow:last-child{border-bottom:none}
@@ -126,7 +129,7 @@ html[data-theme="dark"] .cbars i.a{background:var(--ink-soft)}
 .lrow .i span{font-size:11.5px;color:var(--muted)}
 .lrow .v{font-family:'Archivo';font-variant-numeric:tabular-nums;font-weight:600;font-size:14px;white-space:nowrap}
 .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
-
+ 
 /* tabla */
 .tw{overflow-x:auto}
 .tbl{width:100%;border-collapse:collapse}
@@ -151,7 +154,7 @@ html[data-theme="dark"] .cbars i.a{background:var(--ink-soft)}
 .acts{display:flex;gap:2px;justify-content:flex-end;opacity:0;transition:.12s}
 tr:hover .acts{opacity:1}
 @media(hover:none){.acts{opacity:1}}
-
+ 
 /* botones */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 15px;border-radius:9px;
   font-size:13.5px;font-weight:550;border:1px solid transparent;transition:.12s;white-space:nowrap}
@@ -169,7 +172,7 @@ tr:hover .acts{opacity:1}
 .ib{width:28px;height:28px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;
   color:var(--faint);transition:.12s}
 .ib:hover{background:var(--sunk);color:var(--text)}
-
+ 
 /* alertas */
 .al{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--hair)}
 .al:last-child{border-bottom:none}
@@ -177,7 +180,7 @@ tr:hover .acts{opacity:1}
 .al .i b{font-size:13.5px;font-weight:550;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .al .i span{font-size:11.5px;color:var(--muted)}
 .al .v{font-family:'Archivo';font-variant-numeric:tabular-nums;font-weight:600;font-size:13.5px;white-space:nowrap}
-
+ 
 /* mini card */
 .mc{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
 .mc .h{padding:13px 15px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
@@ -201,7 +204,7 @@ tr:hover .acts{opacity:1}
 .n-pos{background:var(--pos-bg);color:var(--pos)}
 .n-flat{background:var(--sunk);color:var(--text)}
 .ft{font-size:11px;color:var(--faint);margin-top:11px;padding-top:10px;border-top:1px solid var(--hair)}
-
+ 
 /* mes */
 .mbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .mnav{display:flex;gap:4px}
@@ -215,7 +218,7 @@ tr:hover .acts{opacity:1}
 .msum div:last-child{border-right:none}
 .msum .k{font-size:9.5px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:600}
 .msum .v{font-family:'Archivo';font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;margin-top:1px}
-
+ 
 /* config */
 .snav{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px;background:var(--paper);padding:4px;
   border:1px solid var(--line);border-radius:10px;width:fit-content;max-width:100%;overflow-x:auto}
@@ -237,7 +240,7 @@ tr:hover .acts{opacity:1}
 .icp button{width:40px;height:40px;border-radius:9px;border:1px solid var(--line);background:var(--paper);
   display:flex;align-items:center;justify-content:center;color:var(--muted)}
 .icp button.on{border-color:var(--ink);background:var(--sunk);color:var(--text)}
-
+ 
 /* form */
 .field{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
 label{font-size:12px;font-weight:550;color:var(--text)}
@@ -252,7 +255,7 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
 .seg button.on-e{background:var(--neg-bg);border-color:var(--neg);color:var(--neg)}
 .seg button.on-t{background:var(--info-bg);border-color:var(--info);color:var(--info)}
 .seg button{padding:10px 8px;font-size:13px}
-
+ 
 .ov{position:fixed;inset:0;background:rgba(20,21,19,.55);backdrop-filter:blur(2px);display:flex;
   align-items:flex-end;justify-content:center;z-index:200}
 .md{background:var(--paper);border-radius:16px 16px 0 0;width:100%;max-width:440px;max-height:92vh;overflow-y:auto}
@@ -263,7 +266,7 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
 .mf{padding:13px 18px calc(18px + env(safe-area-inset-bottom));display:flex;gap:9px}
 .mf .btn{flex:1}
 @media(min-width:640px){.ov{align-items:center;padding:20px}.md{border-radius:14px}}
-
+ 
 .empty{text-align:center;padding:36px 18px;color:var(--muted)}
 .empty .ico{width:40px;height:40px;border-radius:10px;background:var(--sunk);display:flex;align-items:center;
   justify-content:center;margin:0 auto 12px;color:var(--faint)}
@@ -273,7 +276,7 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
   padding:10px 18px;border-radius:10px;font-weight:550;font-size:13px;z-index:300;transition:.24s;box-shadow:var(--sh2)}
 .toast.show{transform:translate(-50%,0)}
 .kbd{font-size:10px;padding:1px 5px;border:1px solid currentColor;border-radius:3px;opacity:.5}
-
+ 
 /* ══ RESPONSIVE ══ */
 @media(max-width:1180px){ .g-stat{grid-template-columns:repeat(2,1fr)} .g-73{grid-template-columns:1fr} }
 @media(max-width:1023px){
@@ -337,7 +340,7 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
       <button class="btn b-o b-w b-s" onclick="toggleTema()" id="btnTema"></button>
     </div>
   </aside>
-
+ 
   <div class="content">
     <header class="topbar"><div class="in">
       <div class="ttl"><h1 id="pgT"></h1><p id="pgS"></p></div>
@@ -346,11 +349,11 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
     <main class="body" id="app"></main>
   </div>
 </div>
-
+ 
 <nav class="bottomnav" id="bnav"></nav>
 <div id="modal"></div>
 <div class="toast" id="toast"></div>
-
+ 
 <script>
 /* ════════ ICONOS ════════ */
 const P={
@@ -391,7 +394,7 @@ const P={
 };
 function ic(n,s){return `<svg class="ic" width="${s||16}" height="${s||16}" viewBox="0 0 24 24" fill="none"
   stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${P[n]||''}</svg>`;}
-
+ 
 /* ════════ ALMACENAMIENTO ════════ */
 const KEY='mi_dinero_v2';
 let memoria=null;
@@ -410,7 +413,7 @@ function ultimoDia(dia,ref){ref=ref||hoy();const r=D(ref);let f=conDia(r.getFull
 function proximoDia(dia,ref){ref=ref||hoy();const r=D(ref);let f=conDia(r.getFullYear(),r.getMonth(),dia);
   if(f<ref)f=conDia(r.getFullYear(),r.getMonth()+1,dia);return f;}
 const diasHasta=f=>Math.round((D(f)-D(hoy()))/86400000);
-
+ 
 /* ════════ DEFAULTS ════════ */
 const PERFIL={nombre:'',simbolo:'S/',limiteMensual:0,diasAviso:7,tema:'claro',cobrarIntereses:false};
 const ICONOS=['wallet','cash','card','bank','phone','coins','safe','chart'];
@@ -434,7 +437,12 @@ const CATS=[
   {id:'c16',nombre:'Traslado',tipo:'Egreso',color:'#3C5A73'},
 ];
 const PALETA=['#1F6B4F','#3C5A73','#9E3B2C','#8A6414','#5B5470','#8C3F5C','#6B7B3A','#6E5844','#42557E','#7A5480','#A85C3C','#5A6169'];
-
+const MONEDAS=[
+  {cod:'PEN',nombre:'Sol peruano',simbolo:'S/',tasa:1},
+  {cod:'USD',nombre:'Dólar',simbolo:'$',tasa:3.75},
+  {cod:'EUR',nombre:'Euro',simbolo:'€',tasa:4.05},
+];
+ 
 const INICIAL={
   perfil:{...PERFIL,limiteMensual:2000},
   categorias:JSON.parse(JSON.stringify(CATS)),
@@ -467,12 +475,13 @@ const INICIAL={
     {id:uid(),concepto:'Internet',tipo:'Egreso',monto:99,categoria:'Servicios',medioId:'w4',frecuencia:'Mensual',proxima:sumarDias(hoy(),6),activo:true},
   ],
 };
-
+ 
 let DB;
 function normalizar(){
   DB.billeteras ||= []; DB.movimientos ||= []; DB.recurrentes ||= [];
   DB.tarjetas ||= []; DB.prestamos ||= [];
   DB.categorias = (DB.categorias&&DB.categorias.length)?DB.categorias:JSON.parse(JSON.stringify(CATS));
+  DB.monedas = (DB.monedas&&DB.monedas.length)?DB.monedas:JSON.parse(JSON.stringify(MONEDAS));
   DB.perfil = Object.assign({},PERFIL,DB.perfil||{});
   DB.billeteras.forEach(b=>{ if(!ICONOS.includes(b.icono)) b.icono = MAPI[b.icono] || 'wallet'; });
   aplicarTema();
@@ -484,7 +493,7 @@ function cargar(){
   normalizar();
 }
 function guardar(){ store.set(JSON.stringify(DB)); }
-
+ 
 /* ════════ FORMATO ════════ */
 const sim=()=>DB.perfil.simbolo||'S/';
 const S=n=>sim()+' '+(+n||0).toLocaleString('es-PE',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -496,7 +505,7 @@ const nombreMes=ym=>{const[a,m]=ym.split('-');return MESES[+m-1]+' '+a;};
 const fechaCorta=f=>{const[a,m,d]=f.split('-');return `${d} ${MESES[+m-1].slice(0,3)}`;};
 const mesActual=()=>hoy().slice(0,7);
 function mesRel(n){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+n);return d.toISOString().slice(0,7);}
-
+ 
 /* ════════ CÁLCULOS ════════ */
 const billetera=id=>DB.billeteras.find(b=>b.id===id);
 const tarjeta=id=>DB.tarjetas.find(t=>t.id===id);
@@ -504,7 +513,7 @@ const medioNombre=id=>{const b=billetera(id);if(b)return b.nombre;const t=tarjet
 const medioIcono=id=>{const b=billetera(id);if(b)return b.icono||'wallet';return tarjeta(id)?'card':'wallet';};
 const catObj=n=>DB.categorias.find(c=>c.nombre===n);
 const catColor=n=>{const c=catObj(n);return c?c.color:'#9B9C93';};
-
+ 
 const esFuturo=f=>f>hoy();
 /* Saldo REAL de hoy: solo cuenta lo que ya ocurrió */
 function saldo(id){
@@ -521,7 +530,7 @@ function saldo(id){
   }, +b.saldoInicial||0);
 }
 const dineroPropio=()=>DB.billeteras.reduce((t,b)=>t+saldo(b.id),0);
-
+ 
 /* Saldo total acumulado hasta una fecha (el dinero NO se reinicia cada mes) */
 function saldoHasta(fechaLim){
   return DB.billeteras.reduce((tot,b)=>{
@@ -550,7 +559,7 @@ function netoProgramado(){
     return m.tipo==='Ingreso' ? t + +m.monto : t - +m.monto;
   },0);
 }
-
+ 
 function estadoTarjeta(t){
   const consumos=DB.movimientos.filter(m=>m.tipo==='Egreso'&&m.medioId===t.id&&!esFuturo(m.fecha));
   const pagos=DB.movimientos.filter(m=>m.tipo==='Pago'&&m.tarjetaId===t.id&&!esFuturo(m.fecha));
@@ -590,7 +599,18 @@ function estadoPrestamo(p){
 }
 const deudaPrestamos=()=>DB.prestamos.reduce((a,p)=>a+estadoPrestamo(p).pendiente,0);
 const deudaTotal=()=>deudaTarjetas()+deudaPrestamos();
-
+ 
+/* Cuánto puedes pagar con este medio.
+   Al editar un movimiento se le devuelve su propio importe, porque ya está descontado. */
+function disponiblePara(id,movEdit){
+  const b=billetera(id);
+  let s = b ? saldo(id) : (tarjeta(id) ? estadoTarjeta(tarjeta(id)).disponible : 0);
+  if(movEdit && !esFuturo(movEdit.fecha) && movEdit.medioId===id
+     && (movEdit.tipo==='Egreso'||movEdit.tipo==='Transferencia'||movEdit.tipo==='Pago'))
+    s += +movEdit.monto||0;
+  return s;
+}
+ 
 /* ════════ OBLIGACIONES CON FECHA ════════
    Una deuda no es un monto suelto: vence un día concreto.
    Aquí se arma el calendario real de lo que hay que pagar y cuándo. */
@@ -636,7 +656,7 @@ const totalObligacionesMes=ym=>obligacionesMes(ym).reduce((a,o)=>a+o.monto+(o.in
 const vencidas=()=>obligaciones().filter(o=>o.vencido);
 const totalVencido=()=>vencidas().reduce((a,o)=>a+o.monto+(o.interes||0),0);
 const totalIntereses=()=>vencidas().reduce((a,o)=>a+(o.interes||0),0);
-
+ 
 /* Recurrentes proyectados hacia adelante, sin crear movimientos */
 function recurrentesProyectados(hastaYM){
   const out=[];
@@ -650,7 +670,7 @@ function recurrentesProyectados(hastaYM){
   });
   return out;
 }
-
+ 
 /* Proyección de los 12 meses del año */
 function proyeccionAnual(anio){
   const hastaYM=`${anio}-12`;
@@ -678,7 +698,7 @@ function proyeccionAnual(anio){
   }
   return filas;
 }
-
+ 
 function totalesMes(ym){
   let ing=0,egr=0,pag=0,tra=0;
   for(const m of DB.movimientos){
@@ -700,7 +720,7 @@ function porCategoria(ym){
     .sort((a,b)=>b.total-a.total);
 }
 const pctCambio=(h,a)=> a>0 ? (h-a)/a : (h>0?1:0);
-
+ 
 function recordatorios(){
   const l=[];
   DB.tarjetas.forEach(t=>{const e=estadoTarjeta(t);
@@ -720,7 +740,7 @@ function textoDias(d){
   if(d===1) return 'vence mañana';
   return `en ${d} días`;
 }
-
+ 
 const PASOS={Semanal:{d:7},Quincenal:{d:15},Mensual:{m:1},Bimestral:{m:2},Trimestral:{m:3},Semestral:{m:6},Anual:{m:12}};
 function siguienteFecha(f,frec){
   const p=PASOS[frec]||PASOS.Mensual; const d=D(f);
@@ -747,7 +767,7 @@ function generarVeces(id,veces){
   for(let i=0;i<veces;i++){ crearDesde(r,r.proxima); r.proxima=siguienteFecha(r.proxima,r.frecuencia); }
   pintar(); aviso(`${veces} ${veces===1?'movimiento generado':'movimientos generados'}`);
 }
-
+ 
 function aplicarTema(){
   document.documentElement.setAttribute('data-theme', DB.perfil.tema==='oscuro'?'dark':'light');
 }
@@ -755,7 +775,7 @@ function toggleTema(){
   DB.perfil.tema = DB.perfil.tema==='oscuro'?'claro':'oscuro';
   aplicarTema(); guardar(); pintar();
 }
-
+ 
 /* ════════ NAVEGACIÓN ════════ */
 const VISTAS=[
   {v:'inicio',t:'Resumen',i:'home',s:'Tu situación de un vistazo'},
@@ -771,7 +791,7 @@ const BNAV=['inicio','historial','proyeccion','config'];
 let vista='inicio', mesVisto=mesActual(), setTab='general', anioVisto=+hoy().slice(0,4);
 const app=()=>document.getElementById('app');
 const $=id=>document.getElementById(id);
-
+ 
 function pintarNav(){
   const pend=recordatorios().filter(r=>r.dias<=(DB.perfil.diasAviso||7)).length;
   $('logoMk').innerHTML=ic('chart',16);
@@ -799,7 +819,7 @@ function bItem(v){
   return `<a class="${vista===v?'on':''}" onclick="irA('${v}')">${ic(x.i,19)}<span>${x.t}</span></a>`;
 }
 function irA(v){ vista=v; window.scrollTo(0,0); pintar(); }
-
+ 
 function pintar(){
   guardar(); pintarNav();
   const x=VISTAS.find(y=>y.v===vista);
@@ -811,7 +831,7 @@ function pintar(){
   ({inicio:vInicio,historial:vHistorial,proyeccion:vProyeccion,tarjetas:vTarjetas,prestamos:vPrestamos,
     recurrentes:vRecurrentes,billeteras:vBilleteras,config:vConfig}[vista])();
 }
-
+ 
 /* ════════ TABLA MOVIMIENTOS ════════ */
 function tablaMovs(lista,acc){
   acc = acc!==false;
@@ -833,7 +853,8 @@ function tablaMovs(lista,acc){
           <span class="sub2">${esc(m.categoria||'')} · ${esc(medioNombre(m.medioId))}${dst}</span></td>
         <td class="sm hide-s">${tr?'<span class="mut">Entre billeteras</span>':`<span class="cdot" style="background:${catColor(m.categoria)}"></span>${esc(m.categoria||'—')}`}</td>
         <td class="sm hide-s">${esc(medioNombre(m.medioId))}${dst}</td>
-        <td class="r amt ${ing?'pos':(pg||tr)?'inf':'neg'}">${ing?'+':tr?'':'−'}${S(m.monto)}</td>
+        <td class="r amt ${ing?'pos':(pg||tr)?'inf':'neg'}">${ing?'+':tr?'':'−'}${S(m.monto)}
+          ${m.moneda&&m.montoOrig!=null?`<div style="font-size:10.5px;font-weight:500;color:var(--faint)">${moneda(m.moneda).simbolo} ${(+m.montoOrig).toLocaleString('es-PE',{minimumFractionDigits:2})}</div>`:''}</td>
         ${acc?`<td><div class="acts">${pg?'':`<button class="ib" onclick="formMov('${m.id}')">${ic('pencil',14)}</button>`}
           <button class="ib" onclick="borrarMov('${m.id}')">${ic('x',14)}</button></div></td>`:''}
       </tr>`;}).join('')}</tbody></table></div>`;
@@ -841,7 +862,7 @@ function tablaMovs(lista,acc){
 function vacio(icono,texto,btn){
   return `<div class="empty"><div class="ico">${ic(icono,20)}</div><p>${texto}</p>${btn||''}</div>`;
 }
-
+ 
 /* ════════ RESUMEN ════════ */
 function vInicio(){
   const t=totalesMes(mesActual()), ant=totalesMes(mesRel(-1));
@@ -859,7 +880,7 @@ function vInicio(){
   const oblMes=obls.reduce((a,o)=>a+o.monto+(o.interes||0),0);
   const venc=vencidas(), tVenc=totalVencido(), tInt=totalIntereses();
   const prog=programados(), nProg=netoProgramado();
-
+ 
   app().innerHTML=`
     <div class="g g-stat mb">
       <div class="stat dark">
@@ -883,7 +904,7 @@ function vInicio(){
         <div class="f">${oblMes>0?`${obls.length} vencimiento${obls.length===1?'':'s'} en ${MESES[+mesActual().slice(5)-1]}`:'Nada vence este mes'}</div>
       </div>
     </div>
-
+ 
     ${venc.length?`<div class="card cb mb" style="border-color:var(--neg)">
       <div style="display:flex;gap:11px;align-items:flex-start">
         <span style="color:var(--neg);margin-top:1px">${ic('alert',18)}</span>
@@ -898,7 +919,7 @@ function vInicio(){
           </div>
         </div>
       </div></div>`:''}
-
+ 
     <div class="g g-73 mb">
       <div class="card">
         <div class="ch"><div><h3>Entradas y salidas</h3><p>Últimos 6 meses</p></div>
@@ -911,7 +932,7 @@ function vInicio(){
             <span>${MESES[+d.m.slice(5)-1].slice(0,3)}</span></div>`).join('')}</div>
         </div>
       </div>
-
+ 
       <div class="card">
         <div class="ch"><div><h3>Próximos pagos</h3><p>${recs.length?recs.length+' pendiente'+(recs.length===1?'':'s'):'Nada por vencer'}</p></div></div>
         <div class="cb cb-t">
@@ -926,7 +947,7 @@ function vInicio(){
         </div>
       </div>
     </div>
-
+ 
     <div class="g g-73">
       <div class="card">
         <div class="ch"><div><h3>Movimientos recientes</h3><p>Lo último registrado</p></div>
@@ -936,7 +957,7 @@ function vInicio(){
             :vacio('list','Aún no registras movimientos.',`<button class="btn b-p b-s" onclick="formMov()">Registrar el primero</button>`)}
         </div>
       </div>
-
+ 
       <div>
         ${lim?`<div class="card cb mb">
           <div style="display:flex;justify-content:space-between;align-items:baseline">
@@ -947,7 +968,7 @@ function vInicio(){
           <div style="display:flex;justify-content:space-between;font-size:12px" class="mut">
             <span><b class="num" style="color:var(--text)">${S(t.egr)}</b> gastado</span><span>de ${S0(lim)}</span></div>
         </div>`:''}
-
+ 
         ${DB.tarjetas.length?`<div class="card mb">
           <div class="ch"><h3>Tarjetas</h3><button class="btn b-o b-s" onclick="irA('tarjetas')">Ver</button></div>
           <div class="cb cb-t">${DB.tarjetas.map(t2=>{const e=estadoTarjeta(t2);
@@ -955,7 +976,7 @@ function vInicio(){
               <div class="i"><b>${esc(t2.nombre)}</b><span>${S0(e.disponible)} por usar</span></div>
               <span class="v ${e.porPagar>0?'neg':'mut'}">${e.porPagar>0?S0(e.porPagar):'Al día'}</span></div>`;}).join('')}</div>
         </div>`:''}
-
+ 
         ${cats.length?`<div class="card">
           <div class="ch"><div><h3>En qué se te va</h3><p>${nombreMes(mesActual())}</p></div></div>
           <div class="cb cb-t">${cats.map(c=>`<div style="margin-bottom:11px">
@@ -968,7 +989,7 @@ function vInicio(){
       </div>
     </div>`;
 }
-
+ 
 /* ════════ HISTORIAL ════════ */
 function vHistorial(){
   const t=totalesMes(mesVisto);
@@ -990,7 +1011,7 @@ function vHistorial(){
         <div><div class="k">Diferencia</div><div class="v" style="color:${t.neto>=0?'var(--pos)':'var(--neg)'}">${t.neto>=0?'+':'−'}${S0(Math.abs(t.neto))}</div></div>
       </div>
     </div>
-
+ 
     <div class="card cb mb" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <div style="flex:1;min-width:130px">
         <div class="lab">Vienes con</div>
@@ -1010,7 +1031,7 @@ function vHistorial(){
         <div style="font-size:11.5px" class="mut">${esFut?'mes aún no iniciado':'pasa al mes siguiente'}</div>
       </div>
     </div>
-
+ 
     ${t.tra>0?`<div class="hint mb">Trasladaste <b>${S(t.tra)}</b> entre tus billeteras. No suma como ingreso ni gasto: solo cambió de bolsillo.</div>`:''}
     ${t.pag>0?`<div class="hint mb">Además pagaste <b>${S(t.pag)}</b> a tus tarjetas. No suma como gasto: ya se contó al comprar.</div>`:''}
     <div class="card">
@@ -1032,7 +1053,7 @@ function moverMes(n){
   m+=n; if(m<1){m=12;a--;} if(m>12){m=1;a++;}
   mesVisto=`${a}-${String(m).padStart(2,'0')}`; pintar();
 }
-
+ 
 /* ════════ PROYECCIÓN ANUAL ════════ */
 function vProyeccion(){
   const f=proyeccionAnual(anioVisto);
@@ -1045,7 +1066,7 @@ function vProyeccion(){
   const mejor=conDatos.slice().sort((a,b)=>b.flujo-a.flujo)[0];
   const peor=conDatos.slice().sort((a,b)=>a.flujo-b.flujo)[0];
   const negativos=f.filter(x=>x.acum!==null&&x.acum<0);
-
+ 
   app().innerHTML=`
     <div class="mbar">
       <div class="mnav">
@@ -1059,16 +1080,16 @@ function vProyeccion(){
         <div><div class="k">Balance</div><div class="v" style="color:${bal>=0?'var(--pos)':'var(--neg)'}">${bal>=0?'+':'−'}${S0(Math.abs(bal))}</div></div>
       </div>
     </div>
-
+ 
     <div class="hint mb">Los meses <b>pasados</b> son datos reales. Los <b>futuros</b> se estiman con tus recurrentes activos, las cuotas de préstamos y los pagos de tarjeta ya comprometidos. Los meses sin nada quedan vacíos.</div>
-
+ 
     ${negativos.length?`<div class="card cb mb" style="border-color:var(--neg)">
       <div style="display:flex;gap:11px;align-items:flex-start;color:var(--neg)">
         ${ic('alert',18)}
         <div><b style="font-size:13.5px">Te quedarías sin fondos en ${nombreMes(negativos[0].ym)}</b>
         <div style="font-size:12.5px" class="mut">El saldo proyectado llega a ${S(negativos[0].acum)}. Conviene mover un gasto o reforzar ingresos antes de esa fecha.</div></div>
       </div></div>`:''}
-
+ 
     <div class="g g-73 mb">
       <div class="card">
         <div class="ch"><div><h3>Flujo del año</h3><p>Entradas contra salidas y obligaciones</p></div>
@@ -1084,7 +1105,7 @@ function vProyeccion(){
           </div>`).join('')}
         </div></div>
       </div>
-
+ 
       <div class="card">
         <div class="ch"><div><h3>Resumen del año</h3><p>${anioVisto}</p></div></div>
         <div class="cb cb-t">
@@ -1101,7 +1122,7 @@ function vProyeccion(){
         </div>
       </div>
     </div>
-
+ 
     <div class="card">
       <div class="ch"><div><h3>Mes por mes</h3><p>Saldo proyectado a partir de ${MESES[+act.slice(5)-1]}</p></div></div>
       <div class="cb cb-t" style="padding-left:0;padding-right:0;padding-bottom:4px">
@@ -1129,7 +1150,7 @@ function vProyeccion(){
         </table></div>
       </div>
     </div>
-
+ 
     ${obligaciones().length?`<div class="card" style="margin-top:14px">
       <div class="ch"><div><h3>Calendario de pagos</h3><p>Cuándo vence cada cuota y cada tarjeta</p></div></div>
       <div class="cb cb-t" style="padding-left:0;padding-right:0;padding-bottom:4px">
@@ -1147,7 +1168,7 @@ function vProyeccion(){
       </div>
     </div>`:''}`;
 }
-
+ 
 /* ════════ TARJETAS ════════ */
 function vTarjetas(){
   const dT=deudaTarjetas(), oblT=obligacionesMes(mesActual()).filter(o=>o.clase==='tarjeta'&&o.fecha>=hoy())
@@ -1200,7 +1221,7 @@ function borrarTarjeta(id){
   DB.movimientos=DB.movimientos.filter(m=>m.medioId!==id&&m.tarjetaId!==id);
   DB.tarjetas=DB.tarjetas.filter(t=>t.id!==id); pintar(); aviso('Tarjeta eliminada');
 }
-
+ 
 /* ════════ PRÉSTAMOS ════════ */
 function vPrestamos(){
   app().innerHTML=`
@@ -1238,7 +1259,7 @@ function borrarPrestamo(id){
   if(!confirm('¿Eliminar este préstamo? Los pagos ya registrados se mantienen.')) return;
   DB.prestamos=DB.prestamos.filter(p=>p.id!==id); pintar(); aviso('Préstamo eliminado');
 }
-
+ 
 /* ════════ RECURRENTES ════════ */
 function vRecurrentes(){
   app().innerHTML=`
@@ -1276,7 +1297,7 @@ function borrarRec(id){
   if(!confirm('¿Eliminar este recurrente?')) return;
   DB.recurrentes=DB.recurrentes.filter(x=>x.id!==id); pintar(); aviso('Recurrente eliminado');
 }
-
+ 
 /* ════════ BILLETERAS ════════ */
 function vBilleteras(){
   app().innerHTML=`
@@ -1309,12 +1330,32 @@ function borrarBilletera(id){
   DB.recurrentes=DB.recurrentes.filter(r=>r.medioId!==id);
   DB.billeteras=DB.billeteras.filter(b=>b.id!==id); pintar(); aviso('Billetera eliminada');
 }
-
+ 
 /* ════════ CONFIGURACIÓN ════════ */
 function vConfig(){
   const p=DB.perfil;
-  const tabs=[['general','General'],['categorias','Categorías'],['avisos','Avisos'],['datos','Datos y respaldo']];
+  const tabs=[['general','General'],['categorias','Categorías'],['monedas','Monedas'],['avisos','Avisos'],['datos','Datos y respaldo']];
   let c='';
+  if(setTab==='monedas'){
+    const base=monBase();
+    c=`<div class="card cb mb" style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+        <div class="hint" style="flex:1;min-width:220px">Tu moneda base es <b>${base.cod}</b> (la de tasa 1). Al registrar un movimiento en otra moneda se convierte a la base con la tasa que pongas aquí. Actualízalas cuando cambie el tipo de cambio.</div>
+        <button class="btn b-p b-s" onclick="formMoneda()">${ic('plus',14)}<span>Nueva moneda</span></button></div>
+      <div class="card"><div class="cb" style="padding:12px 0 4px"><div class="tw"><table class="tbl">
+        <thead><tr><th>Moneda</th><th class="hide-s">Símbolo</th><th class="r">Equivale a</th>
+          <th class="r hide-s" style="width:100px">Usos</th><th style="width:64px"></th></tr></thead>
+        <tbody>${DB.monedas.map(x=>{
+          const u=DB.movimientos.filter(m=>m.moneda===x.cod).length;
+          const esB=+x.tasa===1;
+          return `<tr><td><span class="dsc">${esc(x.cod)}${esB?'<span class="tag">base</span>':''}
+              <span class="sub2">${esc(x.nombre)}</span></span></td>
+            <td class="sm hide-s">${esc(x.simbolo)}</td>
+            <td class="r amt">${esB?'—':`${base.simbolo} ${(+x.tasa).toFixed(4)}`}</td>
+            <td class="r sm hide-s">${u}</td>
+            <td><div class="acts"><button class="ib" onclick="formMoneda('${x.cod}')">${ic('pencil',14)}</button>
+              ${esB?'':`<button class="ib" onclick="borrarMoneda('${x.cod}')">${ic('x',14)}</button>`}</div></td></tr>`;
+        }).join('')}</tbody></table></div></div></div>`;
+  }
   if(setTab==='general'){
     c=`<div class="card cb">
       <div class="srow"><div class="i"><b>Tu nombre</b><span>Se usa en el sistema y en los reportes</span></div>
@@ -1376,7 +1417,35 @@ function vConfig(){
   app().innerHTML=`<div class="snav">${tabs.map(([k,l])=>
     `<button class="${setTab===k?'on':''}" onclick="setTab='${k}';pintar()">${l}</button>`).join('')}</div>${c}`;
 }
-
+ 
+function formMoneda(cod){
+  const x=cod?DB.monedas.find(y=>y.cod===cod):{cod:'',nombre:'',simbolo:'',tasa:''};
+  const esB=cod&&+x.tasa===1;
+  abrir(cod?'Editar moneda':'Nueva moneda',`
+    <div class="two">
+      <div class="field"><label>Código</label><input id="d_c" maxlength="4" value="${esc(x.cod)}" placeholder="USD" ${esB?'readonly':''}></div>
+      <div class="field"><label>Símbolo</label><input id="d_s" maxlength="4" value="${esc(x.simbolo)}" placeholder="$"></div>
+    </div>
+    <div class="field"><label>Nombre</label><input id="d_n" value="${esc(x.nombre)}" placeholder="Dólar"></div>
+    <div class="field"><label>¿Cuánto vale 1 ${x.cod||'unidad'} en ${monBase().cod}?</label>
+      <input id="d_t" type="number" step="0.0001" min="0" value="${x.tasa}" placeholder="3.75" ${esB?'readonly':''}></div>
+    ${esB?'<div class="hint">Esta es tu moneda base, su tasa siempre es 1.</div>'
+        :'<div class="hint">Si pones 3.75, un movimiento de 100 se guardará como 375 en tu moneda base.</div>'}`,
+    ()=>{
+      const c=val('d_c').trim().toUpperCase(); if(!c){aviso('Escribe el código');return false;}
+      const t=+val('d_t'); if(!t||t<=0){aviso('Escribe cuánto vale');return false;}
+      if(!cod&&DB.monedas.some(y=>y.cod===c)){aviso('Esa moneda ya existe');return false;}
+      const d={cod:c,nombre:val('d_n')||c,simbolo:val('d_s')||c,tasa:t};
+      if(cod) Object.assign(DB.monedas.find(y=>y.cod===cod),d); else DB.monedas.push(d);
+      pintar(); aviso(cod?'Moneda actualizada':'Moneda creada'); return true;
+    });
+}
+function borrarMoneda(cod){
+  const u=DB.movimientos.filter(m=>m.moneda===cod).length;
+  if(!confirm(u?`${cod} se usó en ${u} movimientos. Esos importes ya están convertidos y no cambian. ¿Eliminar la moneda?`:`¿Eliminar ${cod}?`)) return;
+  DB.monedas=DB.monedas.filter(x=>x.cod!==cod); pintar(); aviso('Moneda eliminada');
+}
+ 
 function formCategoria(id){
   const c=id?DB.categorias.find(x=>x.id===id):{tipo:'Egreso',color:PALETA[0]};
   abrir(id?'Editar categoría':'Nueva categoría',`
@@ -1407,15 +1476,32 @@ function borrarCategoria(id){
   if(!confirm(u?`"${c.nombre}" se usa en ${u} movimientos. Quedarán sin categoría. ¿Continuar?`:`¿Eliminar "${c.nombre}"?`)) return;
   DB.categorias=DB.categorias.filter(x=>x.id!==id); pintar(); aviso('Categoría eliminada');
 }
-
+ 
 /* ════════ FORMULARIOS ════════ */
-let tipoSel='Egreso';
-function opcMedio(sel,soloB){
-  let h=`<optgroup label="Billeteras">${DB.billeteras.map(b=>
-    `<option value="${b.id}" ${sel===b.id?'selected':''}>${esc(b.nombre)}</option>`).join('')}</optgroup>`;
-  if(!soloB && DB.tarjetas.length)
-    h+=`<optgroup label="Tarjetas de crédito">${DB.tarjetas.map(t=>
-      `<option value="${t.id}" ${sel===t.id?'selected':''}>${esc(t.nombre)}</option>`).join('')}</optgroup>`;
+let tipoSel='Egreso', movEditando=null;
+const monBase=()=>DB.monedas.find(m=>+m.tasa===1)||DB.monedas[0];
+const moneda=cod=>DB.monedas.find(m=>m.cod===cod)||monBase();
+/* Opciones de medio de pago: cada una con su saldo, y las que no alcanzan se separan y bloquean */
+function opcMedio(sel,soloB,nec,movEdit){
+  nec=+nec||0;
+  const alcanza=[], cortos=[];
+  const push=(o,esT)=>{
+    const d=disponiblePara(o.id,movEdit);
+    (nec>0 && d<nec-0.001 ? cortos : alcanza).push({id:o.id,nombre:o.nombre,disp:d,tarjeta:esT});
+  };
+  DB.billeteras.forEach(b=>push(b,false));
+  if(!soloB) DB.tarjetas.forEach(t=>push(t,true));
+  const op=i=>`<option value="${i.id}" ${sel===i.id?'selected':''}>${esc(i.nombre)} — ${S(i.disp)}${i.tarjeta?' por usar':''}</option>`;
+  let h='';
+  if(alcanza.length){
+    const bs=alcanza.filter(i=>!i.tarjeta), ts=alcanza.filter(i=>i.tarjeta);
+    if(bs.length) h+=`<optgroup label="Billeteras">${bs.map(op).join('')}</optgroup>`;
+    if(ts.length) h+=`<optgroup label="Tarjetas de crédito">${ts.map(op).join('')}</optgroup>`;
+  }
+  if(cortos.length)
+    h+=`<optgroup label="Saldo insuficiente para ${S(nec)}">${cortos.map(i=>
+      `<option value="${i.id}" disabled>${esc(i.nombre)} — ${S(i.disp)}</option>`).join('')}</optgroup>`;
+  if(!alcanza.length&&!cortos.length) h='<option value="">Sin billeteras</option>';
   return h;
 }
 function opcCat(sel,tipo){
@@ -1424,22 +1510,32 @@ function opcCat(sel,tipo){
 }
 function formMov(id,tipo,medio){
   const m=id?DB.movimientos.find(x=>x.id===id):null;
+  movEditando=m||null;
   tipoSel=m?m.tipo:(tipo||'Egreso');
   if(tipoSel==='Pago') tipoSel='Egreso';
   if(!DB.billeteras.length){ aviso('Primero crea una billetera'); return formBilletera(); }
+  const base=monBase(), mCod=m?(m.moneda||base.cod):base.cod;
+  const mImp=m?(m.montoOrig!=null?m.montoOrig:m.monto):'';
   abrir(id?'Editar movimiento':'Nuevo movimiento',`
     <div class="seg">
       <button id="sI" onclick="setTipo('Ingreso')">${ic('down',15)}Ingreso</button>
       <button id="sE" onclick="setTipo('Egreso')">${ic('up',15)}Egreso</button>
       <button id="sT" onclick="setTipo('Transferencia')">${ic('swap',15)}Traslado</button></div>
     <div class="field"><label>Importe</label>
-      <input id="f_monto" type="number" step="0.01" inputmode="decimal" value="${m?m.monto:''}" placeholder="0.00"></div>
+      <div style="display:flex;gap:8px">
+        <input id="f_monto" type="number" step="0.01" inputmode="decimal" value="${mImp}" placeholder="0.00"
+          oninput="refrescarMedios()" style="flex:1">
+        <select id="f_mon" onchange="refrescarMedios()" style="width:106px;flex-shrink:0">
+          ${DB.monedas.map(x=>`<option value="${x.cod}" ${x.cod===mCod?'selected':''}>${x.simbolo} ${x.cod}</option>`).join('')}
+        </select>
+      </div>
+      <div id="conv" style="display:none;font-size:11.5px;color:var(--muted)"></div></div>
     <div class="field"><label id="labM">¿Con qué pagaste?</label>
-      <select id="f_medio">${opcMedio(m?m.medioId:medio, tipoSel==='Ingreso')}</select>
+      <select id="f_medio"></select>
       <div id="avT" style="display:none;font-size:12px;color:var(--info);background:var(--info-bg);padding:9px 11px;border-radius:8px">
         Con tarjeta no sale dinero de tus billeteras: sube tu deuda y la pagas en su fecha.</div></div>
     <div class="field" id="wDest" style="display:none"><label>¿A dónde lo pasas?</label>
-      <select id="f_dest">${opcMedio(m?m.destinoId:null,false)}</select>
+      <select id="f_dest"></select>
       <div id="avD" style="display:none;font-size:12px;color:var(--info);background:var(--info-bg);padding:9px 11px;border-radius:8px">
         Al elegir una tarjeta se registra como pago de esa tarjeta y baja tu deuda.</div></div>
     <div class="field"><label>Concepto</label>
@@ -1449,34 +1545,69 @@ function formMov(id,tipo,medio){
       <div class="field"><label>Fecha</label><input id="f_fecha" type="date" value="${m?m.fecha:hoy()}"></div>
     </div>`,
     ()=>{
-      const mo=+val('f_monto'); if(!mo||mo<=0){aviso('Escribe un importe');return false;}
+      const bruto=+val('f_monto'); if(!bruto||bruto<=0){aviso('Escribe un importe');return false;}
+      const mo=montoBase();                     /* convertido a tu moneda base */
+      const cod=val('f_mon'), tasa=+moneda(cod).tasa||1;
+      const extraMon = cod!==monBase().cod ? {moneda:cod,montoOrig:bruto,tasa} : {moneda:null,montoOrig:null,tasa:null};
       const org=val('f_medio');
+      if(!org){aviso('Elige con qué pagar');return false;}
+      if(tipoSel!=='Ingreso' && disponiblePara(org,m)<mo-0.001){
+        aviso('Esa opción no tiene saldo suficiente'); return false;
+      }
       if(tipoSel==='Transferencia'){
         const dst=val('f_dest');
         if(!dst){aviso('Elige la billetera de destino');return false;}
         if(dst===org){aviso('El origen y el destino no pueden ser el mismo');return false;}
         if(tarjeta(org)){aviso('Un traslado debe salir de una billetera, no de una tarjeta');return false;}
         const t=tarjeta(dst);
-        /* Trasladar a una tarjeta ES pagarla */
         const d = t
           ? {fecha:val('f_fecha')||hoy(),tipo:'Pago',monto:mo,descripcion:val('f_desc')||('Pago '+t.nombre),
-             categoria:'Tarjeta',medioId:org,tarjetaId:dst}
+             categoria:'Tarjeta',medioId:org,tarjetaId:dst,destinoId:null,...extraMon}
           : {fecha:val('f_fecha')||hoy(),tipo:'Transferencia',monto:mo,
              descripcion:val('f_desc')||`De ${medioNombre(org)} a ${medioNombre(dst)}`,
-             categoria:'Traslado',medioId:org,destinoId:dst};
-        if(id) Object.assign(DB.movimientos.find(x=>x.id===id),{destinoId:null,tarjetaId:null},d);
+             categoria:'Traslado',medioId:org,destinoId:dst,tarjetaId:null,...extraMon};
+        if(id) Object.assign(DB.movimientos.find(x=>x.id===id),d);
         else DB.movimientos.push({id:uid(),...d});
         pintar(); aviso(t?'Pago de tarjeta registrado':'Traslado registrado'); return true;
       }
       const d={fecha:val('f_fecha')||hoy(),tipo:tipoSel,monto:mo,descripcion:val('f_desc'),
-               categoria:val('f_cat'),medioId:org,destinoId:null};
+               categoria:val('f_cat'),medioId:org,destinoId:null,...extraMon};
       if(id) Object.assign(DB.movimientos.find(x=>x.id===id),d);
       else DB.movimientos.push({id:uid(),...d});
       pintar(); aviso(id?'Movimiento actualizado':(tipoSel==='Ingreso'?'Ingreso registrado':'Gasto registrado')); return true;
     });
-  setTipo(tipoSel, m?m.categoria:null, m?(m.destinoId||m.tarjetaId):null);
+  setTipo(tipoSel, m?m.categoria:null, m?(m.destinoId||m.tarjetaId):null, m?m.medioId:medio);
 }
-function setTipo(t,catSel,dstSel){
+/* Importe convertido a la moneda base */
+function montoBase(){
+  const b=+val('f_monto')||0, t=+moneda(val('f_mon')).tasa||1;
+  return Math.round(b*t*100)/100;
+}
+/* Al escribir el importe o cambiar de moneda, se recalculan las opciones de pago */
+function refrescarMedios(){
+  const nec = tipoSel==='Ingreso' ? 0 : montoBase();
+  const cod=val('f_mon'), base=monBase();
+  const cv=$('conv');
+  if(cv){
+    if(cod!==base.cod && +val('f_monto')>0){
+      cv.style.display='block';
+      cv.textContent=`≈ ${S(montoBase())} al tipo de cambio ${moneda(cod).tasa}`;
+    } else cv.style.display='none';
+  }
+  const sel=$('f_medio');
+  if(sel){
+    const prev=sel.value;
+    sel.innerHTML=opcMedio(prev,tipoSel==='Ingreso'||tipoSel==='Transferencia',nec,movEditando);
+    if(sel.value!==prev){                       /* la anterior ya no alcanza */
+      const primera=sel.querySelector('option:not([disabled])');
+      if(primera) sel.value=primera.value;
+    }
+    revT();
+  }
+  const d=$('f_dest');
+  if(d&&tipoSel==='Transferencia'){ const p=d.value; d.innerHTML=opcMedio(p,false,0,movEditando); revD(); }
+}
+function setTipo(t,catSel,dstSel,medSel){
   tipoSel=t;
   const i=$('sI'), e=$('sE'), tr=$('sT'); if(!i) return;
   i.className=t==='Ingreso'?'on-i':''; e.className=t==='Egreso'?'on-e':'';
@@ -1484,18 +1615,19 @@ function setTipo(t,catSel,dstSel){
   const esTra=t==='Transferencia';
   const sel=$('f_medio'), lab=$('labM'), wD=$('wDest'), wC=$('wCat');
   if(sel){
-    const act=sel.value;
     lab.textContent = t==='Ingreso'?'¿A dónde entró?':esTra?'¿De dónde sale?':'¿Con qué pagaste?';
-    sel.innerHTML=opcMedio(act, t==='Ingreso'||esTra);   /* traslado sale de billetera */
-    sel.onchange=revT; revT();
+    sel.innerHTML=opcMedio(medSel||sel.value, t==='Ingreso'||esTra,
+      t==='Ingreso'?0:montoBase(), movEditando);
+    sel.onchange=revT;
   }
   if(wD){
     wD.style.display=esTra?'flex':'none';
     const d=$('f_dest');
-    if(d&&esTra){ d.innerHTML=opcMedio(dstSel||d.value,false); d.onchange=revD; revD(); }
+    if(d&&esTra){ d.innerHTML=opcMedio(dstSel||d.value,false,0,movEditando); d.onchange=revD; revD(); }
   }
   if(wC) wC.style.display=esTra?'none':'flex';
   const c=$('f_cat'); if(c&&!esTra){ const prev=catSel||c.value; c.innerHTML=opcCat(prev,t); }
+  refrescarMedios();
 }
 function revT(){ const s=$('f_medio'), a=$('avT');
   if(s&&a) a.style.display = (tipoSel!=='Transferencia'&&tarjeta(s.value))?'block':'none'; }
@@ -1507,7 +1639,7 @@ function borrarMov(id){
     if(p&&p.pagadas>0){ p.pagadas--; p.proxima=conDia(D(p.proxima).getFullYear(),D(p.proxima).getMonth()-1,p.diaPago); } }
   DB.movimientos=DB.movimientos.filter(x=>x.id!==id); pintar(); aviso('Movimiento eliminado');
 }
-
+ 
 function formBilletera(id){
   const b=id?DB.billeteras.find(x=>x.id===id):null;
   abrir(id?'Editar billetera':'Nueva billetera',`
@@ -1529,7 +1661,7 @@ function pickIco(i){
   const h=$('b_i'); if(!h) return; h.value=i;
   document.querySelectorAll('#icp button').forEach(b=>b.classList.toggle('on',b.dataset.i===i));
 }
-
+ 
 function formTarjeta(id){
   const t=id?tarjeta(id):null;
   abrir(id?'Editar tarjeta':'Nueva tarjeta',`
@@ -1644,7 +1776,7 @@ function formRecurrente(id){
       pintar(); aviso(id?'Recurrente actualizado':'Recurrente creado'); return true;
     });
 }
-
+ 
 /* ════════ UI ════════ */
 const val=id=>{const e=$(id);return e?e.value:'';};
 let alGuardar=null;
@@ -1675,7 +1807,7 @@ function aviso(m){
   const t=$('toast'); t.textContent=m; t.classList.add('show');
   clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('show'),2200);
 }
-
+ 
 /* ════════ DATOS ════════ */
 function bajar(n,c,t){
   const a=document.createElement('a');
@@ -1708,7 +1840,7 @@ function reiniciar(){
   if(!confirm('Se borrará todo y volverá al ejemplo inicial. ¿Seguro?')) return;
   DB=JSON.parse(JSON.stringify(INICIAL)); normalizar(); pintar(); aviso('Todo reiniciado');
 }
-
+ 
 /* ════════ ARRANQUE ════════ */
 cargar();
 const gen=generarVencidos();
@@ -1717,3 +1849,6 @@ if(gen) setTimeout(()=>aviso(`${gen} movimiento${gen===1?'':'s'} recurrente${gen
 </script>
 </body>
 </html>
+ 
+
+
