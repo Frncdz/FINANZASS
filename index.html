@@ -412,7 +412,7 @@ function proximoDia(dia,ref){ref=ref||hoy();const r=D(ref);let f=conDia(r.getFul
 const diasHasta=f=>Math.round((D(f)-D(hoy()))/86400000);
 
 /* ════════ DEFAULTS ════════ */
-const PERFIL={nombre:'',simbolo:'S/',limiteMensual:0,diasAviso:7,tema:'claro'};
+const PERFIL={nombre:'',simbolo:'S/',limiteMensual:0,diasAviso:7,tema:'claro',cobrarIntereses:false};
 const ICONOS=['wallet','cash','card','bank','phone','coins','safe','chart'];
 const MAPI={'💵':'cash','📱':'phone','💬':'phone','🏦':'bank','💳':'card','🐷':'safe','👛':'wallet','💰':'coins','🏧':'bank','📦':'wallet','💼':'wallet'};
 const CATS=[
@@ -521,6 +521,27 @@ function saldo(id){
   }, +b.saldoInicial||0);
 }
 const dineroPropio=()=>DB.billeteras.reduce((t,b)=>t+saldo(b.id),0);
+
+/* Saldo total acumulado hasta una fecha (el dinero NO se reinicia cada mes) */
+function saldoHasta(fechaLim){
+  return DB.billeteras.reduce((tot,b)=>{
+    let s=+b.saldoInicial||0;
+    for(const m of DB.movimientos){
+      if(m.fecha>fechaLim) continue;
+      if(m.tipo==='Transferencia'){
+        if(m.medioId===b.id) s-=+m.monto;
+        if(m.destinoId===b.id) s+=+m.monto;
+        continue;
+      }
+      if(m.medioId!==b.id) continue;
+      s += m.tipo==='Ingreso' ? +m.monto : -(+m.monto);
+    }
+    return tot+s;
+  },0);
+}
+const finDeMes=ym=>{const[a,m]=ym.split('-').map(Number);return iso(new Date(a,m,0,12));};
+const saldoInicioMes=ym=>saldoHasta(sumarDias(ym+'-01',-1));   /* con lo que arrancas */
+const saldoFinMes=ym=>saldoHasta(finDeMes(ym));                /* con lo que cierras */
 /* Movimientos con fecha futura: aún no afectan tu saldo */
 const programados=()=>DB.movimientos.filter(m=>esFuturo(m.fecha));
 function netoProgramado(){
@@ -538,16 +559,34 @@ function estadoTarjeta(t){
   const cierreProx=proximoDia(t.diaCierre,sumarDias(hoy(),1));
   const sinFacturar=consumos.filter(m=>m.fecha>cierreUlt).reduce((a,m)=>a+ +m.monto,0);
   const porPagar=Math.max(0,deuda-sinFacturar);
-  const vence=proximoDia(t.diaPago);
-  return {deuda,porPagar,sinFacturar,vence,dias:diasHasta(vence),
+  /* El estado de cuenta cerrado vence en el primer día de pago DESPUÉS de ese cierre */
+  const vence=proximoDia(t.diaPago,cierreUlt);
+  const dias=diasHasta(vence);
+  const vencido = porPagar>0.01 && vence<hoy();
+  const diasAtraso = vencido ? -dias : 0;
+  const interes = (vencido&&DB.perfil.cobrarIntereses)
+    ? porPagar*((+t.tasaMora||0)/100)*(diasAtraso/30) : 0;
+  return {deuda,porPagar,sinFacturar,vence,dias,vencido,diasAtraso,interes,
+    totalExigible:porPagar+interes,
     disponible:Math.max(0,(+t.linea||0)-deuda), uso:t.linea?deuda/t.linea:0, cierreUlt,cierreProx};
 }
 const deudaTarjetas=()=>DB.tarjetas.reduce((a,t)=>a+estadoTarjeta(t).deuda,0);
 const creditoDisponible=()=>DB.tarjetas.reduce((a,t)=>a+estadoTarjeta(t).disponible,0);
 function estadoPrestamo(p){
   const restantes=Math.max(0,(+p.cuotas||0)-(+p.pagadas||0));
+  /* Cuotas cuya fecha ya pasó y siguen sin registrarse como pagadas */
+  let vencidas=0, f=p.proxima, primera=p.proxima;
+  while(f && f<hoy() && vencidas<restantes){
+    vencidas++;
+    f=conDia(D(f).getFullYear(),D(f).getMonth()+1,p.diaPago);
+  }
+  const montoVencido=vencidas*(+p.cuota||0);
+  const diasAtraso=vencidas?Math.max(0,-diasHasta(primera)):0;
+  const interes=(vencidas&&DB.perfil.cobrarIntereses)
+    ? montoVencido*((+p.moraMensual||0)/100)*(diasAtraso/30) : 0;
   return {restantes,pendiente:restantes*(+p.cuota||0),
-    avance:p.cuotas?(+p.pagadas||0)/p.cuotas:0, dias:diasHasta(p.proxima), terminado:restantes===0};
+    avance:p.cuotas?(+p.pagadas||0)/p.cuotas:0, dias:diasHasta(p.proxima), terminado:restantes===0,
+    vencidas,montoVencido,diasAtraso,interes};
 }
 const deudaPrestamos=()=>DB.prestamos.reduce((a,p)=>a+estadoPrestamo(p).pendiente,0);
 const deudaTotal=()=>deudaTarjetas()+deudaPrestamos();
@@ -562,7 +601,9 @@ function cuotasProgramadas(){
     const e=estadoPrestamo(p);
     let f=p.proxima;
     for(let i=0;i<e.restantes;i++){
-      out.push({fecha:f,monto:+p.cuota,nombre:p.nombre,clase:'prestamo',id:p.id,
+      const venc=f<hoy();
+      out.push({fecha:f,monto:+p.cuota,nombre:p.nombre,clase:'prestamo',id:p.id,vencido:venc,
+                interes:(venc&&i===0)?e.interes:0,
                 detalle:`Cuota ${(+p.pagadas||0)+i+1} de ${p.cuotas}`});
       f=conDia(D(f).getFullYear(),D(f).getMonth()+1,p.diaPago);
     }
@@ -574,18 +615,27 @@ function pagosTarjetaProgramados(){
   DB.tarjetas.forEach(t=>{
     const e=estadoTarjeta(t);
     if(e.porPagar>0.01)
-      out.push({fecha:e.vence,monto:e.porPagar,nombre:t.nombre,clase:'tarjeta',id:t.id,detalle:'Facturado'});
+      out.push({fecha:e.vence,monto:e.porPagar,nombre:t.nombre,clase:'tarjeta',id:t.id,
+                vencido:e.vencido,interes:e.interes,
+                detalle:e.vencido?`Vencido hace ${e.diasAtraso} días`:'Facturado'});
     if(e.sinFacturar>0.01){
       const fp=proximoDia(t.diaPago,sumarDias(e.cierreProx,1));
-      out.push({fecha:fp,monto:e.sinFacturar,nombre:t.nombre,clase:'tarjeta',id:t.id,
+      out.push({fecha:fp,monto:e.sinFacturar,nombre:t.nombre,clase:'tarjeta',id:t.id,vencido:false,interes:0,
                 detalle:`Cierra el ${fechaCorta(e.cierreProx)}`});
     }
   });
   return out;
 }
 const obligaciones=()=>[...cuotasProgramadas(),...pagosTarjetaProgramados()].sort((a,b)=>a.fecha.localeCompare(b.fecha));
-const obligacionesMes=ym=>obligaciones().filter(o=>mesDe(o.fecha)===ym);
-const totalObligacionesMes=ym=>obligacionesMes(ym).reduce((a,o)=>a+o.monto,0);
+/* Lo vencido no se queda en el pasado: arrastra al mes corriente hasta que se pague */
+function obligacionesMes(ym){
+  const act=mesActual();
+  return obligaciones().filter(o=> mesDe(o.fecha)===ym || (ym===act && o.fecha<ym+'-01'));
+}
+const totalObligacionesMes=ym=>obligacionesMes(ym).reduce((a,o)=>a+o.monto+(o.interes||0),0);
+const vencidas=()=>obligaciones().filter(o=>o.vencido);
+const totalVencido=()=>vencidas().reduce((a,o)=>a+o.monto+(o.interes||0),0);
+const totalIntereses=()=>vencidas().reduce((a,o)=>a+(o.interes||0),0);
 
 /* Recurrentes proyectados hacia adelante, sin crear movimientos */
 function recurrentesProyectados(hastaYM){
@@ -614,12 +664,17 @@ function proyeccionAnual(anio){
     const t=totalesMes(ym);
     const rI=rec.filter(r=>mesDe(r.fecha)===ym&&r.tipo==='Ingreso').reduce((a,r)=>a+r.monto,0);
     const rE=rec.filter(r=>mesDe(r.fecha)===ym&&r.tipo==='Egreso').reduce((a,r)=>a+r.monto,0);
-    const o=obl.filter(x=>mesDe(x.fecha)===ym).reduce((a,x)=>a+x.monto,0);
+    /* al mes corriente se le suma todo lo vencido de meses anteriores */
+    const o=obl.filter(x=>mesDe(x.fecha)===ym||(ym===act&&x.fecha<ym+'-01'))
+                .reduce((a,x)=>a+x.monto+(x.interes||0),0);
     const ing=t.ing+rI, egr=t.egr+rE, flujo=ing-egr-o;
-    const futuro = ym>act, esActual = ym===act;
+    const futuro=ym>act, esActual=ym===act, pasado=ym<act;
     if(ym>=act) acum+=flujo;
-    filas.push({ym,mes:m,ing,egr,obl:o,flujo,acum:(ym>=act?acum:null),futuro,esActual,
-                pasado:ym<act, vacio:!ing&&!egr&&!o});
+    filas.push({ym,mes:m,ing,egr,obl:o,flujo,
+      /* meses pasados: saldo real; futuros: proyectado */
+      acum: pasado ? (t.ing||t.egr?saldoFinMes(ym):null) : acum,
+      inicio: pasado ? saldoInicioMes(ym) : null,
+      futuro,esActual,pasado, vacio:!ing&&!egr&&!o});
   }
   return filas;
 }
@@ -800,8 +855,9 @@ function vInicio(){
   const cI=pctCambio(t.ing,ant.ing), cE=pctCambio(t.egr,ant.egr);
   const cats=porCategoria(mesActual()).slice(0,5);
   const maxC=Math.max(1,...cats.map(c=>c.total));
-  const obls=obligacionesMes(mesActual()).filter(o=>o.fecha>=hoy());
-  const oblMes=obls.reduce((a,o)=>a+o.monto,0);
+  const obls=obligacionesMes(mesActual()).filter(o=>o.fecha>=hoy()||o.vencido);
+  const oblMes=obls.reduce((a,o)=>a+o.monto+(o.interes||0),0);
+  const venc=vencidas(), tVenc=totalVencido(), tInt=totalIntereses();
   const prog=programados(), nProg=netoProgramado();
 
   app().innerHTML=`
@@ -827,6 +883,21 @@ function vInicio(){
         <div class="f">${oblMes>0?`${obls.length} vencimiento${obls.length===1?'':'s'} en ${MESES[+mesActual().slice(5)-1]}`:'Nada vence este mes'}</div>
       </div>
     </div>
+
+    ${venc.length?`<div class="card cb mb" style="border-color:var(--neg)">
+      <div style="display:flex;gap:11px;align-items:flex-start">
+        <span style="color:var(--neg);margin-top:1px">${ic('alert',18)}</span>
+        <div style="flex:1;min-width:0">
+          <b style="font-size:13.5px;color:var(--neg)">Tienes ${venc.length} pago${venc.length===1?'':'s'} vencido${venc.length===1?'':'s'} por ${S(tVenc)}</b>
+          <div style="font-size:12.5px;margin-top:2px" class="mut">
+            Sigue${venc.length===1?'':'n'} sumando a este mes hasta que ${venc.length===1?'lo pagues':'los pagues'}${tInt>0?`. Interés acumulado: <b style="color:var(--neg)">${S(tInt)}</b>`:''}.
+          </div>
+          <div style="margin-top:9px;display:flex;gap:6px;flex-wrap:wrap">
+            ${venc.map(o=>`<button class="btn b-o b-s" onclick="${o.clase==='tarjeta'?`formPagoTarjeta('${o.id}')`:`formPagoCuota('${o.id}')`}">
+              ${esc(o.nombre)} · ${S0(o.monto+(o.interes||0))}</button>`).join('')}
+          </div>
+        </div>
+      </div></div>`:''}
 
     <div class="g g-73 mb">
       <div class="card">
@@ -901,6 +972,9 @@ function vInicio(){
 /* ════════ HISTORIAL ════════ */
 function vHistorial(){
   const t=totalesMes(mesVisto);
+  const ini=saldoInicioMes(mesVisto);
+  const esFut=mesVisto>mesActual();
+  const fin=esFut?null:(mesVisto===mesActual()?dineroPropio():saldoFinMes(mesVisto));
   const lista=DB.movimientos.filter(m=>mesDe(m.fecha)===mesVisto)
     .sort((a,b)=>b.fecha.localeCompare(a.fecha)||b.id.localeCompare(a.id));
   app().innerHTML=`
@@ -916,6 +990,28 @@ function vHistorial(){
         <div><div class="k">Diferencia</div><div class="v" style="color:${t.neto>=0?'var(--pos)':'var(--neg)'}">${t.neto>=0?'+':'−'}${S0(Math.abs(t.neto))}</div></div>
       </div>
     </div>
+
+    <div class="card cb mb" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+      <div style="flex:1;min-width:130px">
+        <div class="lab">Vienes con</div>
+        <div class="num" style="font-size:19px;font-weight:600;margin-top:2px">${S(ini)}</div>
+        <div style="font-size:11.5px" class="mut">saldo al cerrar ${nombreMes(mesRelDe(mesVisto,-1))}</div>
+      </div>
+      <div style="color:var(--faint)">${ic('chevR',18)}</div>
+      <div style="flex:1;min-width:130px">
+        <div class="lab">Movimiento del mes</div>
+        <div class="num" style="font-size:19px;font-weight:600;margin-top:2px;color:${t.neto>=0?'var(--pos)':'var(--neg)'}">${t.neto>=0?'+':'−'}${S(Math.abs(t.neto))}</div>
+        <div style="font-size:11.5px" class="mut">${lista.length} movimiento${lista.length===1?'':'s'}</div>
+      </div>
+      <div style="color:var(--faint)">${ic('chevR',18)}</div>
+      <div style="flex:1;min-width:130px">
+        <div class="lab">${esFut?'Quedarías con':'Te queda'}</div>
+        <div class="num" style="font-size:19px;font-weight:600;margin-top:2px;color:${fin!==null&&fin<0?'var(--neg)':'var(--text)'}">${fin===null?'—':S(fin)}</div>
+        <div style="font-size:11.5px" class="mut">${esFut?'mes aún no iniciado':'pasa al mes siguiente'}</div>
+      </div>
+    </div>
+
+    ${t.tra>0?`<div class="hint mb">Trasladaste <b>${S(t.tra)}</b> entre tus billeteras. No suma como ingreso ni gasto: solo cambió de bolsillo.</div>`:''}
     ${t.pag>0?`<div class="hint mb">Además pagaste <b>${S(t.pag)}</b> a tus tarjetas. No suma como gasto: ya se contó al comprar.</div>`:''}
     <div class="card">
       <div class="ch"><h3>${lista.length} movimiento${lista.length===1?'':'s'}</h3>
@@ -925,6 +1021,11 @@ function vHistorial(){
           :vacio('calendar',`Sin movimientos en ${nombreMes(mesVisto)}.`,`<button class="btn b-p b-s" onclick="formMov()">Registrar uno</button>`)}
       </div>
     </div>`;
+}
+function mesRelDe(ym,n){
+  let [a,m]=ym.split('-').map(Number); m+=n;
+  while(m<1){m+=12;a--;} while(m>12){m-=12;a++;}
+  return `${a}-${String(m).padStart(2,'0')}`;
 }
 function moverMes(n){
   let [a,m]=mesVisto.split('-').map(Number);
@@ -1076,8 +1177,9 @@ function tarjetaDet(t){
       <button class="ib" style="color:rgba(255,255,255,.6)" onclick="formTarjeta('${t.id}')">${ic('pencil',14)}</button></div>
     <div class="b">
       ${e.porPagar>0.01?`
-        <div class="note n-${u}"><div class="k">Debes pagar</div><div class="v">${S(e.porPagar)}</div>
-          <div class="s">${textoDias(e.dias)} · ${fechaCorta(e.vence)}</div></div>
+        <div class="note n-${e.vencido?'neg':u}"><div class="k">${e.vencido?'Vencido':'Debes pagar'}</div>
+          <div class="v">${S(e.totalExigible)}</div>
+          <div class="s">${e.vencido?`Venció hace ${e.diasAtraso} días (${fechaCorta(e.vence)})${e.interes>0?` · incluye ${S(e.interes)} de interés`:''}`:`${textoDias(e.dias)} · ${fechaCorta(e.vence)}`}</div></div>
         <button class="btn b-p b-s b-w" style="margin-bottom:11px" onclick="formPagoTarjeta('${t.id}')">Registrar pago</button>`
       :`<div class="note n-pos"><div class="k">Al día</div><div class="s">Nada facturado por pagar</div></div>`}
       ${e.sinFacturar>0.01?`<div class="note n-flat"><div class="k">Gastado este ciclo</div><div class="v">${S(e.sinFacturar)}</div>
@@ -1117,6 +1219,10 @@ function prestamoDet(p){
       <button class="ib" onclick="formPrestamo('${p.id}')">${ic('pencil',14)}</button></div>
     <div class="b">
       ${e.terminado?`<div class="note n-pos"><div class="k">Terminado</div><div class="s">Pagaste las ${p.cuotas} cuotas</div></div>`
+      :e.vencidas?`<div class="note n-neg"><div class="k">${e.vencidas} cuota${e.vencidas===1?'':'s'} vencida${e.vencidas===1?'':'s'}</div>
+          <div class="v">${S(e.montoVencido+e.interes)}</div>
+          <div class="s">${e.diasAtraso} días de atraso${e.interes>0?` · incluye ${S(e.interes)} de mora`:''}</div></div>
+        <button class="btn b-p b-s b-w" style="margin-bottom:11px" onclick="formPagoCuota('${p.id}')">Registrar pago de cuota</button>`
       :`<div class="note n-${u}"><div class="k">Próxima cuota</div><div class="v">${S(p.cuota)}</div>
           <div class="s">${textoDias(e.dias)} · ${fechaCorta(p.proxima)}</div></div>
         <button class="btn b-p b-s b-w" style="margin-bottom:11px" onclick="formPagoCuota('${p.id}')">Registrar pago de cuota</button>`}
@@ -1245,6 +1351,9 @@ function vConfig(){
       <div class="srow"><div class="i"><b>Avisarme con anticipación</b><span>Días antes de que venza una tarjeta o una cuota</span></div>
         <div class="c"><select onchange="DB.perfil.diasAviso=+this.value;guardar();pintar()">
           ${[3,5,7,10,15].map(d=>`<option value="${d}" ${p.diasAviso===d?'selected':''}>${d} días antes</option>`).join('')}</select></div></div>
+      <div class="srow"><div class="i"><b>Calcular intereses por atraso</b>
+        <span>Si lo activas, cada tarjeta o préstamo vencido suma interés según la tasa mensual que le pusiste. Los pagos vencidos se arrastran al mes corriente aunque esto esté apagado.</span></div>
+        <div class="sw ${p.cobrarIntereses?'on':''}" onclick="DB.perfil.cobrarIntereses=!DB.perfil.cobrarIntereses;guardar();pintar()"><i></i></div></div>
       <div class="srow"><div class="i"><b>Cómo se muestran</b>
         <span>Aparecen en Próximos pagos y como contador en el menú. En rojo si faltan 3 días o menos, en ámbar dentro de tu ventana de aviso.</span></div></div>
     </div>`;
@@ -1430,11 +1539,13 @@ function formTarjeta(id){
     <div class="two">
       <div class="field"><label>Día de cierre</label><input id="t_c" type="number" min="1" max="31" value="${t?t.diaCierre:25}"></div>
       <div class="field"><label>Día de pago</label><input id="t_p" type="number" min="1" max="31" value="${t?t.diaPago:15}"></div></div>
-    <div class="hint">Ambos días vienen en tu estado de cuenta.</div>`,
+    <div class="field"><label>Interés por atraso <span class="mut" style="font-weight:400">— % mensual, opcional</span></label>
+      <input id="t_i" type="number" step="0.01" min="0" value="${t?(t.tasaMora||0):0}" placeholder="0"></div>
+    <div class="hint">El cierre y el día de pago vienen en tu estado de cuenta. El interés solo se aplica si lo activas en Configuración → Avisos.</div>`,
     ()=>{
       const n=val('t_n').trim(); if(!n){aviso('Ponle un nombre');return false;}
       const l=+val('t_l'); if(!l||l<=0){aviso('Escribe la línea de crédito');return false;}
-      const d={nombre:n,banco:val('t_b'),linea:l,
+      const d={nombre:n,banco:val('t_b'),linea:l,tasaMora:Math.max(0,+val('t_i')||0),
         diaCierre:Math.min(31,Math.max(1,+val('t_c')||25)),diaPago:Math.min(31,Math.max(1,+val('t_p')||15))};
       if(id) Object.assign(tarjeta(id),d); else DB.tarjetas.push({id:uid(),...d});
       pintar(); aviso(id?'Tarjeta actualizada':'Tarjeta creada'); return true;
@@ -1473,7 +1584,9 @@ function formPrestamo(id){
       <div class="field"><label>Día de pago</label><input id="l_d" type="number" min="1" max="31" value="${p?p.diaPago:10}"></div>
       <div class="field"><label>Próxima cuota</label><input id="l_x" type="date" value="${p?p.proxima:proximoDia(10)}"></div></div>
     <div class="field"><label>Se paga desde</label>
-      <select id="l_b">${DB.billeteras.map(b=>`<option value="${b.id}" ${p&&p.billeteraId===b.id?'selected':''}>${esc(b.nombre)}</option>`).join('')}</select></div>`,
+      <select id="l_b">${DB.billeteras.map(b=>`<option value="${b.id}" ${p&&p.billeteraId===b.id?'selected':''}>${esc(b.nombre)}</option>`).join('')}</select></div>
+    <div class="field"><label>Interés por atraso <span class="mut" style="font-weight:400">— % mensual, opcional</span></label>
+      <input id="l_i" type="number" step="0.01" min="0" value="${p?(p.moraMensual||0):0}" placeholder="0"></div>`,
     ()=>{
       const n=val('l_n').trim(), c=+val('l_c');
       if(!n){aviso('Ponle un nombre');return false;}
@@ -1481,7 +1594,7 @@ function formPrestamo(id){
       const dia=Math.min(31,Math.max(1,+val('l_d')||10));
       const d={nombre:n,entidad:val('l_e'),cuota:c,cuotas:Math.max(1,+val('l_t')||1),
         pagadas:Math.max(0,+val('l_p')||0),diaPago:dia,proxima:val('l_x')||proximoDia(dia),
-        billeteraId:val('l_b'),activo:true};
+        moraMensual:Math.max(0,+val('l_i')||0),billeteraId:val('l_b'),activo:true};
       if(id) Object.assign(DB.prestamos.find(x=>x.id===id),d); else DB.prestamos.push({id:uid(),...d});
       pintar(); aviso(id?'Préstamo actualizado':'Préstamo creado'); return true;
     });
