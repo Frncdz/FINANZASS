@@ -1,6 +1,3 @@
-
-
-Sistema financiero · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -47,7 +44,7 @@ svg.ic{display:block;flex-shrink:0}
 .num{font-family:'Archivo',sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.2px}
 .mut{color:var(--muted)}
 .lab{font-size:10px;text-transform:uppercase;letter-spacing:1.1px;font-weight:600;color:var(--faint)}
- 
+
 /* ══ LAYOUT ══ */
 .layout{display:flex;min-height:100vh}
 .side{width:216px;flex-shrink:0;background:var(--paper);border-right:1px solid var(--line);
@@ -67,7 +64,7 @@ svg.ic{display:block;flex-shrink:0}
   min-width:17px;height:17px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 5px}
 .nav a.on .bdg{background:var(--paper);color:var(--ink)}
 .side-ft{padding:10px;border-top:1px solid var(--hair)}
- 
+
 .content{flex:1;min-width:0;display:flex;flex-direction:column}
 .topbar{background:var(--page);position:sticky;top:0;z-index:30;padding:18px 26px 10px}
 .topbar .in{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
@@ -76,7 +73,7 @@ svg.ic{display:block;flex-shrink:0}
 .tacts{display:flex;gap:8px;align-items:center}
 .body{padding:14px 26px 40px;flex:1}
 .bottomnav{display:none}
- 
+
 /* ══ COMPONENTES ══ */
 .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh)}
 .ch{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px 0}
@@ -89,7 +86,7 @@ svg.ic{display:block;flex-shrink:0}
 .g-stat{grid-template-columns:repeat(4,1fr)}
 .g-73{grid-template-columns:1.55fr 1fr}
 .g-2{grid-template-columns:1fr 1fr}
- 
+
 /* stat */
 .stat{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;box-shadow:var(--sh)}
 .stat.dark{background:var(--ink);border-color:var(--ink);color:var(--paper)}
@@ -106,7 +103,7 @@ svg.ic{display:block;flex-shrink:0}
 .c-up{background:var(--pos-bg);color:var(--pos)} .c-dn{background:var(--neg-bg);color:var(--neg)}
 .stat.dark .c-up{background:rgba(79,180,137,.18);color:#7FD4AF}
 .stat.dark .c-dn{background:rgba(217,112,92,.18);color:#EFA294}
- 
+
 /* chart */
 .chart{display:flex;align-items:flex-end;gap:2px;height:150px;padding-top:6px}
 .cg{flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;min-width:0}
@@ -118,7 +115,7 @@ html[data-theme="dark"] .cbars i.a{background:var(--ink-soft)}
 .leg{display:flex;gap:13px}
 .leg span{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted);font-weight:500}
 .leg i{width:9px;height:9px;border-radius:2px}
- 
+
 /* listas */
 .lrow{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--hair)}
 .lrow:last-child{border-bottom:none}
@@ -129,7 +126,7 @@ html[data-theme="dark"] .cbars i.a{background:var(--ink-soft)}
 .lrow .i span{font-size:11.5px;color:var(--muted)}
 .lrow .v{font-family:'Archivo';font-variant-numeric:tabular-nums;font-weight:600;font-size:14px;white-space:nowrap}
 .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
- 
+
 /* tabla */
 .tw{overflow-x:auto}
 .tbl{width:100%;border-collapse:collapse}
@@ -154,7 +151,7 @@ html[data-theme="dark"] .cbars i.a{background:var(--ink-soft)}
 .acts{display:flex;gap:2px;justify-content:flex-end;opacity:0;transition:.12s}
 tr:hover .acts{opacity:1}
 @media(hover:none){.acts{opacity:1}}
- 
+
 /* botones */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 15px;border-radius:9px;
   font-size:13.5px;font-weight:550;border:1px solid transparent;transition:.12s;white-space:nowrap}
@@ -172,7 +169,7 @@ tr:hover .acts{opacity:1}
 .ib{width:28px;height:28px;border-radius:7px;display:inline-flex;align-items:center;justify-content:center;
   color:var(--faint);transition:.12s}
 .ib:hover{background:var(--sunk);color:var(--text)}
- 
+
 /* alertas */
 .al{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--hair)}
 .al:last-child{border-bottom:none}
@@ -180,7 +177,7 @@ tr:hover .acts{opacity:1}
 .al .i b{font-size:13.5px;font-weight:550;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .al .i span{font-size:11.5px;color:var(--muted)}
 .al .v{font-family:'Archivo';font-variant-numeric:tabular-nums;font-weight:600;font-size:13.5px;white-space:nowrap}
- 
+
 /* mini card */
 .mc{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--sh);overflow:hidden}
 .mc .h{padding:13px 15px;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;
@@ -204,7 +201,7 @@ tr:hover .acts{opacity:1}
 .n-pos{background:var(--pos-bg);color:var(--pos)}
 .n-flat{background:var(--sunk);color:var(--text)}
 .ft{font-size:11px;color:var(--faint);margin-top:11px;padding-top:10px;border-top:1px solid var(--hair)}
- 
+
 /* mes */
 .mbar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:14px}
 .mnav{display:flex;gap:4px}
@@ -218,7 +215,7 @@ tr:hover .acts{opacity:1}
 .msum div:last-child{border-right:none}
 .msum .k{font-size:9.5px;text-transform:uppercase;letter-spacing:1px;color:var(--faint);font-weight:600}
 .msum .v{font-family:'Archivo';font-variant-numeric:tabular-nums;font-size:14px;font-weight:600;margin-top:1px}
- 
+
 /* config */
 .snav{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px;background:var(--paper);padding:4px;
   border:1px solid var(--line);border-radius:10px;width:fit-content;max-width:100%;overflow-x:auto}
@@ -240,7 +237,7 @@ tr:hover .acts{opacity:1}
 .icp button{width:40px;height:40px;border-radius:9px;border:1px solid var(--line);background:var(--paper);
   display:flex;align-items:center;justify-content:center;color:var(--muted)}
 .icp button.on{border-color:var(--ink);background:var(--sunk);color:var(--text)}
- 
+
 /* form */
 .field{display:flex;flex-direction:column;gap:5px;margin-bottom:13px}
 label{font-size:12px;font-weight:550;color:var(--text)}
@@ -255,7 +252,7 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
 .seg button.on-e{background:var(--neg-bg);border-color:var(--neg);color:var(--neg)}
 .seg button.on-t{background:var(--info-bg);border-color:var(--info);color:var(--info)}
 .seg button{padding:10px 8px;font-size:13px}
- 
+
 .ov{position:fixed;inset:0;background:rgba(20,21,19,.55);backdrop-filter:blur(2px);display:flex;
   align-items:flex-end;justify-content:center;z-index:200}
 .md{background:var(--paper);border-radius:16px 16px 0 0;width:100%;max-width:440px;max-height:92vh;overflow-y:auto}
@@ -266,7 +263,7 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
 .mf{padding:13px 18px calc(18px + env(safe-area-inset-bottom));display:flex;gap:9px}
 .mf .btn{flex:1}
 @media(min-width:640px){.ov{align-items:center;padding:20px}.md{border-radius:14px}}
- 
+
 .empty{text-align:center;padding:36px 18px;color:var(--muted)}
 .empty .ico{width:40px;height:40px;border-radius:10px;background:var(--sunk);display:flex;align-items:center;
   justify-content:center;margin:0 auto 12px;color:var(--faint)}
@@ -276,7 +273,7 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
   padding:10px 18px;border-radius:10px;font-weight:550;font-size:13px;z-index:300;transition:.24s;box-shadow:var(--sh2)}
 .toast.show{transform:translate(-50%,0)}
 .kbd{font-size:10px;padding:1px 5px;border:1px solid currentColor;border-radius:3px;opacity:.5}
- 
+
 /* ══ RESPONSIVE ══ */
 @media(max-width:1180px){ .g-stat{grid-template-columns:repeat(2,1fr)} .g-73{grid-template-columns:1fr} }
 @media(max-width:1023px){
@@ -340,7 +337,7 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
       <button class="btn b-o b-w b-s" onclick="toggleTema()" id="btnTema"></button>
     </div>
   </aside>
- 
+
   <div class="content">
     <header class="topbar"><div class="in">
       <div class="ttl"><h1 id="pgT"></h1><p id="pgS"></p></div>
@@ -349,11 +346,11 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
     <main class="body" id="app"></main>
   </div>
 </div>
- 
+
 <nav class="bottomnav" id="bnav"></nav>
 <div id="modal"></div>
 <div class="toast" id="toast"></div>
- 
+
 <script>
 /* ════════ ICONOS ════════ */
 const P={
@@ -394,7 +391,7 @@ const P={
 };
 function ic(n,s){return `<svg class="ic" width="${s||16}" height="${s||16}" viewBox="0 0 24 24" fill="none"
   stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${P[n]||''}</svg>`;}
- 
+
 /* ════════ ALMACENAMIENTO ════════ */
 const KEY='mi_dinero_v2';
 let memoria=null;
@@ -413,7 +410,7 @@ function ultimoDia(dia,ref){ref=ref||hoy();const r=D(ref);let f=conDia(r.getFull
 function proximoDia(dia,ref){ref=ref||hoy();const r=D(ref);let f=conDia(r.getFullYear(),r.getMonth(),dia);
   if(f<ref)f=conDia(r.getFullYear(),r.getMonth()+1,dia);return f;}
 const diasHasta=f=>Math.round((D(f)-D(hoy()))/86400000);
- 
+
 /* ════════ DEFAULTS ════════ */
 const PERFIL={nombre:'',simbolo:'S/',limiteMensual:0,diasAviso:7,tema:'claro',cobrarIntereses:false};
 const ICONOS=['wallet','cash','card','bank','phone','coins','safe','chart'];
@@ -442,7 +439,7 @@ const MONEDAS=[
   {cod:'USD',nombre:'Dólar',simbolo:'$',tasa:3.75},
   {cod:'EUR',nombre:'Euro',simbolo:'€',tasa:4.05},
 ];
- 
+
 const INICIAL={
   perfil:{...PERFIL,limiteMensual:2000},
   categorias:JSON.parse(JSON.stringify(CATS)),
@@ -475,7 +472,7 @@ const INICIAL={
     {id:uid(),concepto:'Internet',tipo:'Egreso',monto:99,categoria:'Servicios',medioId:'w4',frecuencia:'Mensual',proxima:sumarDias(hoy(),6),activo:true},
   ],
 };
- 
+
 let DB;
 function normalizar(){
   DB.billeteras ||= []; DB.movimientos ||= []; DB.recurrentes ||= [];
@@ -493,7 +490,7 @@ function cargar(){
   normalizar();
 }
 function guardar(){ store.set(JSON.stringify(DB)); }
- 
+
 /* ════════ FORMATO ════════ */
 const sim=()=>DB.perfil.simbolo||'S/';
 const S=n=>sim()+' '+(+n||0).toLocaleString('es-PE',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -505,7 +502,7 @@ const nombreMes=ym=>{const[a,m]=ym.split('-');return MESES[+m-1]+' '+a;};
 const fechaCorta=f=>{const[a,m,d]=f.split('-');return `${d} ${MESES[+m-1].slice(0,3)}`;};
 const mesActual=()=>hoy().slice(0,7);
 function mesRel(n){const d=new Date();d.setDate(1);d.setMonth(d.getMonth()+n);return d.toISOString().slice(0,7);}
- 
+
 /* ════════ CÁLCULOS ════════ */
 const billetera=id=>DB.billeteras.find(b=>b.id===id);
 const tarjeta=id=>DB.tarjetas.find(t=>t.id===id);
@@ -513,7 +510,7 @@ const medioNombre=id=>{const b=billetera(id);if(b)return b.nombre;const t=tarjet
 const medioIcono=id=>{const b=billetera(id);if(b)return b.icono||'wallet';return tarjeta(id)?'card':'wallet';};
 const catObj=n=>DB.categorias.find(c=>c.nombre===n);
 const catColor=n=>{const c=catObj(n);return c?c.color:'#9B9C93';};
- 
+
 const esFuturo=f=>f>hoy();
 /* Saldo REAL de hoy: solo cuenta lo que ya ocurrió */
 function saldo(id){
@@ -530,7 +527,7 @@ function saldo(id){
   }, +b.saldoInicial||0);
 }
 const dineroPropio=()=>DB.billeteras.reduce((t,b)=>t+saldo(b.id),0);
- 
+
 /* Saldo total acumulado hasta una fecha (el dinero NO se reinicia cada mes) */
 function saldoHasta(fechaLim){
   return DB.billeteras.reduce((tot,b)=>{
@@ -559,7 +556,7 @@ function netoProgramado(){
     return m.tipo==='Ingreso' ? t + +m.monto : t - +m.monto;
   },0);
 }
- 
+
 function estadoTarjeta(t){
   const consumos=DB.movimientos.filter(m=>m.tipo==='Egreso'&&m.medioId===t.id&&!esFuturo(m.fecha));
   const pagos=DB.movimientos.filter(m=>m.tipo==='Pago'&&m.tarjetaId===t.id&&!esFuturo(m.fecha));
@@ -599,7 +596,7 @@ function estadoPrestamo(p){
 }
 const deudaPrestamos=()=>DB.prestamos.reduce((a,p)=>a+estadoPrestamo(p).pendiente,0);
 const deudaTotal=()=>deudaTarjetas()+deudaPrestamos();
- 
+
 /* Cuánto puedes pagar con este medio.
    Al editar un movimiento se le devuelve su propio importe, porque ya está descontado. */
 function disponiblePara(id,movEdit){
@@ -610,7 +607,7 @@ function disponiblePara(id,movEdit){
     s += +movEdit.monto||0;
   return s;
 }
- 
+
 /* ════════ OBLIGACIONES CON FECHA ════════
    Una deuda no es un monto suelto: vence un día concreto.
    Aquí se arma el calendario real de lo que hay que pagar y cuándo. */
@@ -656,7 +653,7 @@ const totalObligacionesMes=ym=>obligacionesMes(ym).reduce((a,o)=>a+o.monto+(o.in
 const vencidas=()=>obligaciones().filter(o=>o.vencido);
 const totalVencido=()=>vencidas().reduce((a,o)=>a+o.monto+(o.interes||0),0);
 const totalIntereses=()=>vencidas().reduce((a,o)=>a+(o.interes||0),0);
- 
+
 /* Recurrentes proyectados hacia adelante, sin crear movimientos */
 function recurrentesProyectados(hastaYM){
   const out=[];
@@ -670,35 +667,73 @@ function recurrentesProyectados(hastaYM){
   });
   return out;
 }
- 
+
 /* Proyección de los 12 meses del año */
-function proyeccionAnual(anio){
-  const hastaYM=`${anio}-12`;
-  const rec=recurrentesProyectados(hastaYM);
-  const obl=obligaciones();
+/* ════════ PLANIFICACIÓN HACIA ADELANTE ════════
+   Un mes futuro se arma con: lo que registraste con esa fecha + tus recurrentes
+   + las cuotas y tarjetas que vencen ahí. Del mes en curso solo cuenta lo que
+   TODAVÍA no pasó, porque lo ya ocurrido está dentro de tu saldo de hoy. */
+function detalleMes(ym){
+  const act=mesActual(), esActual=ym===act, futuro=ym>act;
+  const soloPend=esActual;                    /* del mes en curso, solo lo que falta */
+  const items=[];
+  DB.movimientos.forEach(m=>{
+    if(mesDe(m.fecha)!==ym) return;
+    if(soloPend && m.fecha<=hoy()) return;    /* ya ocurrió, ya está en tu saldo */
+    if(m.tipo==='Pago'||m.prestamoId) return; /* eso lo aporta el calendario de deudas */
+    if(m.tipo==='Transferencia') return;      /* no cambia tu total */
+    items.push({fecha:m.fecha,concepto:m.descripcion||m.categoria||'Sin concepto',
+      monto:+m.monto,clase:m.tipo==='Ingreso'?'ing':'egr',origen:'registrado',cat:m.categoria});
+  });
+  recurrentesProyectados(ym).forEach(r=>{
+    if(mesDe(r.fecha)!==ym) return;
+    if(soloPend && r.fecha<=hoy()) return;
+    items.push({fecha:r.fecha,concepto:r.concepto,monto:+r.monto,
+      clase:r.tipo==='Ingreso'?'ing':'egr',origen:'recurrente',cat:r.categoria});
+  });
+  obligaciones().forEach(o=>{
+    const enMes = mesDe(o.fecha)===ym || (esActual && o.fecha<ym+'-01');
+    if(!enMes) return;
+    items.push({fecha:o.fecha<ym+'-01'?ym+'-01':o.fecha,concepto:o.nombre,
+      monto:o.monto+(o.interes||0),clase:'obl',origen:o.clase,detalle:o.detalle,vencido:o.vencido});
+  });
+  items.sort((a,b)=>a.fecha.localeCompare(b.fecha));
+  const ing=items.filter(i=>i.clase==='ing').reduce((a,i)=>a+i.monto,0);
+  const egr=items.filter(i=>i.clase==='egr').reduce((a,i)=>a+i.monto,0);
+  const obl=items.filter(i=>i.clase==='obl').reduce((a,i)=>a+i.monto,0);
+  return {ym,items,ing,egr,obl,flujo:ing-egr-obl,esActual,futuro,pasado:ym<act};
+}
+/* Con cuánto llegas al inicio de ese mes */
+function saldoProyectadoInicio(ym){
   const act=mesActual();
-  let acum=dineroPropio();
+  if(ym<=act) return ym===act?dineroPropio():saldoInicioMes(ym);
+  let s=dineroPropio(), m=act;
+  while(m<ym){ s+=detalleMes(m).flujo; m=mesRelDe(m,1); }
+  return s;
+}
+const saldoProyectadoFin=ym=>saldoProyectadoInicio(ym)+detalleMes(ym).flujo;
+
+function proyeccionAnual(anio){
+  const act=mesActual();
   const filas=[];
   for(let m=1;m<=12;m++){
     const ym=`${anio}-${String(m).padStart(2,'0')}`;
-    const t=totalesMes(ym);
-    const rI=rec.filter(r=>mesDe(r.fecha)===ym&&r.tipo==='Ingreso').reduce((a,r)=>a+r.monto,0);
-    const rE=rec.filter(r=>mesDe(r.fecha)===ym&&r.tipo==='Egreso').reduce((a,r)=>a+r.monto,0);
-    /* al mes corriente se le suma todo lo vencido de meses anteriores */
-    const o=obl.filter(x=>mesDe(x.fecha)===ym||(ym===act&&x.fecha<ym+'-01'))
-                .reduce((a,x)=>a+x.monto+(x.interes||0),0);
-    const ing=t.ing+rI, egr=t.egr+rE, flujo=ing-egr-o;
-    const futuro=ym>act, esActual=ym===act, pasado=ym<act;
-    if(ym>=act) acum+=flujo;
-    filas.push({ym,mes:m,ing,egr,obl:o,flujo,
-      /* meses pasados: saldo real; futuros: proyectado */
-      acum: pasado ? (t.ing||t.egr?saldoFinMes(ym):null) : acum,
-      inicio: pasado ? saldoInicioMes(ym) : null,
-      futuro,esActual,pasado, vacio:!ing&&!egr&&!o});
+    const pasado=ym<act;
+    if(pasado){
+      const t=totalesMes(ym);
+      filas.push({ym,mes:m,ing:t.ing,egr:t.egr,obl:0,flujo:t.ing-t.egr,
+        acum:(t.ing||t.egr)?saldoFinMes(ym):null,futuro:false,esActual:false,pasado:true,
+        vacio:!t.ing&&!t.egr});
+    }else{
+      const d=detalleMes(ym);
+      filas.push({ym,mes:m,ing:d.ing,egr:d.egr,obl:d.obl,flujo:d.flujo,
+        acum:saldoProyectadoFin(ym),futuro:ym>act,esActual:ym===act,pasado:false,
+        vacio:!d.ing&&!d.egr&&!d.obl});
+    }
   }
   return filas;
 }
- 
+
 function totalesMes(ym){
   let ing=0,egr=0,pag=0,tra=0;
   for(const m of DB.movimientos){
@@ -720,7 +755,7 @@ function porCategoria(ym){
     .sort((a,b)=>b.total-a.total);
 }
 const pctCambio=(h,a)=> a>0 ? (h-a)/a : (h>0?1:0);
- 
+
 function recordatorios(){
   const l=[];
   DB.tarjetas.forEach(t=>{const e=estadoTarjeta(t);
@@ -740,7 +775,7 @@ function textoDias(d){
   if(d===1) return 'vence mañana';
   return `en ${d} días`;
 }
- 
+
 const PASOS={Semanal:{d:7},Quincenal:{d:15},Mensual:{m:1},Bimestral:{m:2},Trimestral:{m:3},Semestral:{m:6},Anual:{m:12}};
 function siguienteFecha(f,frec){
   const p=PASOS[frec]||PASOS.Mensual; const d=D(f);
@@ -767,7 +802,7 @@ function generarVeces(id,veces){
   for(let i=0;i<veces;i++){ crearDesde(r,r.proxima); r.proxima=siguienteFecha(r.proxima,r.frecuencia); }
   pintar(); aviso(`${veces} ${veces===1?'movimiento generado':'movimientos generados'}`);
 }
- 
+
 function aplicarTema(){
   document.documentElement.setAttribute('data-theme', DB.perfil.tema==='oscuro'?'dark':'light');
 }
@@ -775,7 +810,7 @@ function toggleTema(){
   DB.perfil.tema = DB.perfil.tema==='oscuro'?'claro':'oscuro';
   aplicarTema(); guardar(); pintar();
 }
- 
+
 /* ════════ NAVEGACIÓN ════════ */
 const VISTAS=[
   {v:'inicio',t:'Resumen',i:'home',s:'Tu situación de un vistazo'},
@@ -788,10 +823,10 @@ const VISTAS=[
   {v:'config',t:'Configuración',i:'cog',s:'Ajusta el sistema a tu manera'},
 ];
 const BNAV=['inicio','historial','proyeccion','config'];
-let vista='inicio', mesVisto=mesActual(), setTab='general', anioVisto=+hoy().slice(0,4);
+let vista='inicio', mesVisto=mesActual(), setTab='general', anioVisto=+hoy().slice(0,4), mesPlan=null;
 const app=()=>document.getElementById('app');
 const $=id=>document.getElementById(id);
- 
+
 function pintarNav(){
   const pend=recordatorios().filter(r=>r.dias<=(DB.perfil.diasAviso||7)).length;
   $('logoMk').innerHTML=ic('chart',16);
@@ -819,7 +854,7 @@ function bItem(v){
   return `<a class="${vista===v?'on':''}" onclick="irA('${v}')">${ic(x.i,19)}<span>${x.t}</span></a>`;
 }
 function irA(v){ vista=v; window.scrollTo(0,0); pintar(); }
- 
+
 function pintar(){
   guardar(); pintarNav();
   const x=VISTAS.find(y=>y.v===vista);
@@ -831,7 +866,7 @@ function pintar(){
   ({inicio:vInicio,historial:vHistorial,proyeccion:vProyeccion,tarjetas:vTarjetas,prestamos:vPrestamos,
     recurrentes:vRecurrentes,billeteras:vBilleteras,config:vConfig}[vista])();
 }
- 
+
 /* ════════ TABLA MOVIMIENTOS ════════ */
 function tablaMovs(lista,acc){
   acc = acc!==false;
@@ -862,7 +897,7 @@ function tablaMovs(lista,acc){
 function vacio(icono,texto,btn){
   return `<div class="empty"><div class="ico">${ic(icono,20)}</div><p>${texto}</p>${btn||''}</div>`;
 }
- 
+
 /* ════════ RESUMEN ════════ */
 function vInicio(){
   const t=totalesMes(mesActual()), ant=totalesMes(mesRel(-1));
@@ -880,7 +915,7 @@ function vInicio(){
   const oblMes=obls.reduce((a,o)=>a+o.monto+(o.interes||0),0);
   const venc=vencidas(), tVenc=totalVencido(), tInt=totalIntereses();
   const prog=programados(), nProg=netoProgramado();
- 
+
   app().innerHTML=`
     <div class="g g-stat mb">
       <div class="stat dark">
@@ -904,7 +939,7 @@ function vInicio(){
         <div class="f">${oblMes>0?`${obls.length} vencimiento${obls.length===1?'':'s'} en ${MESES[+mesActual().slice(5)-1]}`:'Nada vence este mes'}</div>
       </div>
     </div>
- 
+
     ${venc.length?`<div class="card cb mb" style="border-color:var(--neg)">
       <div style="display:flex;gap:11px;align-items:flex-start">
         <span style="color:var(--neg);margin-top:1px">${ic('alert',18)}</span>
@@ -919,7 +954,7 @@ function vInicio(){
           </div>
         </div>
       </div></div>`:''}
- 
+
     <div class="g g-73 mb">
       <div class="card">
         <div class="ch"><div><h3>Entradas y salidas</h3><p>Últimos 6 meses</p></div>
@@ -932,7 +967,7 @@ function vInicio(){
             <span>${MESES[+d.m.slice(5)-1].slice(0,3)}</span></div>`).join('')}</div>
         </div>
       </div>
- 
+
       <div class="card">
         <div class="ch"><div><h3>Próximos pagos</h3><p>${recs.length?recs.length+' pendiente'+(recs.length===1?'':'s'):'Nada por vencer'}</p></div></div>
         <div class="cb cb-t">
@@ -947,7 +982,7 @@ function vInicio(){
         </div>
       </div>
     </div>
- 
+
     <div class="g g-73">
       <div class="card">
         <div class="ch"><div><h3>Movimientos recientes</h3><p>Lo último registrado</p></div>
@@ -957,7 +992,7 @@ function vInicio(){
             :vacio('list','Aún no registras movimientos.',`<button class="btn b-p b-s" onclick="formMov()">Registrar el primero</button>`)}
         </div>
       </div>
- 
+
       <div>
         ${lim?`<div class="card cb mb">
           <div style="display:flex;justify-content:space-between;align-items:baseline">
@@ -968,7 +1003,7 @@ function vInicio(){
           <div style="display:flex;justify-content:space-between;font-size:12px" class="mut">
             <span><b class="num" style="color:var(--text)">${S(t.egr)}</b> gastado</span><span>de ${S0(lim)}</span></div>
         </div>`:''}
- 
+
         ${DB.tarjetas.length?`<div class="card mb">
           <div class="ch"><h3>Tarjetas</h3><button class="btn b-o b-s" onclick="irA('tarjetas')">Ver</button></div>
           <div class="cb cb-t">${DB.tarjetas.map(t2=>{const e=estadoTarjeta(t2);
@@ -976,7 +1011,7 @@ function vInicio(){
               <div class="i"><b>${esc(t2.nombre)}</b><span>${S0(e.disponible)} por usar</span></div>
               <span class="v ${e.porPagar>0?'neg':'mut'}">${e.porPagar>0?S0(e.porPagar):'Al día'}</span></div>`;}).join('')}</div>
         </div>`:''}
- 
+
         ${cats.length?`<div class="card">
           <div class="ch"><div><h3>En qué se te va</h3><p>${nombreMes(mesActual())}</p></div></div>
           <div class="cb cb-t">${cats.map(c=>`<div style="margin-bottom:11px">
@@ -989,7 +1024,7 @@ function vInicio(){
       </div>
     </div>`;
 }
- 
+
 /* ════════ HISTORIAL ════════ */
 function vHistorial(){
   const t=totalesMes(mesVisto);
@@ -1011,7 +1046,7 @@ function vHistorial(){
         <div><div class="k">Diferencia</div><div class="v" style="color:${t.neto>=0?'var(--pos)':'var(--neg)'}">${t.neto>=0?'+':'−'}${S0(Math.abs(t.neto))}</div></div>
       </div>
     </div>
- 
+
     <div class="card cb mb" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
       <div style="flex:1;min-width:130px">
         <div class="lab">Vienes con</div>
@@ -1031,7 +1066,7 @@ function vHistorial(){
         <div style="font-size:11.5px" class="mut">${esFut?'mes aún no iniciado':'pasa al mes siguiente'}</div>
       </div>
     </div>
- 
+
     ${t.tra>0?`<div class="hint mb">Trasladaste <b>${S(t.tra)}</b> entre tus billeteras. No suma como ingreso ni gasto: solo cambió de bolsillo.</div>`:''}
     ${t.pag>0?`<div class="hint mb">Además pagaste <b>${S(t.pag)}</b> a tus tarjetas. No suma como gasto: ya se contó al comprar.</div>`:''}
     <div class="card">
@@ -1053,9 +1088,10 @@ function moverMes(n){
   m+=n; if(m<1){m=12;a--;} if(m>12){m=1;a++;}
   mesVisto=`${a}-${String(m).padStart(2,'0')}`; pintar();
 }
- 
+
 /* ════════ PROYECCIÓN ANUAL ════════ */
 function vProyeccion(){
+  if(!mesPlan) mesPlan=mesRelDe(mesActual(),1);
   const f=proyeccionAnual(anioVisto);
   const act=mesActual();
   const tI=f.reduce((a,x)=>a+x.ing,0), tE=f.reduce((a,x)=>a+x.egr,0), tO=f.reduce((a,x)=>a+x.obl,0);
@@ -1066,7 +1102,7 @@ function vProyeccion(){
   const mejor=conDatos.slice().sort((a,b)=>b.flujo-a.flujo)[0];
   const peor=conDatos.slice().sort((a,b)=>a.flujo-b.flujo)[0];
   const negativos=f.filter(x=>x.acum!==null&&x.acum<0);
- 
+
   app().innerHTML=`
     <div class="mbar">
       <div class="mnav">
@@ -1080,16 +1116,18 @@ function vProyeccion(){
         <div><div class="k">Balance</div><div class="v" style="color:${bal>=0?'var(--pos)':'var(--neg)'}">${bal>=0?'+':'−'}${S0(Math.abs(bal))}</div></div>
       </div>
     </div>
- 
+
     <div class="hint mb">Los meses <b>pasados</b> son datos reales. Los <b>futuros</b> se estiman con tus recurrentes activos, las cuotas de préstamos y los pagos de tarjeta ya comprometidos. Los meses sin nada quedan vacíos.</div>
- 
+
+    ${panelPlan()}
+
     ${negativos.length?`<div class="card cb mb" style="border-color:var(--neg)">
       <div style="display:flex;gap:11px;align-items:flex-start;color:var(--neg)">
         ${ic('alert',18)}
         <div><b style="font-size:13.5px">Te quedarías sin fondos en ${nombreMes(negativos[0].ym)}</b>
         <div style="font-size:12.5px" class="mut">El saldo proyectado llega a ${S(negativos[0].acum)}. Conviene mover un gasto o reforzar ingresos antes de esa fecha.</div></div>
       </div></div>`:''}
- 
+
     <div class="g g-73 mb">
       <div class="card">
         <div class="ch"><div><h3>Flujo del año</h3><p>Entradas contra salidas y obligaciones</p></div>
@@ -1105,7 +1143,7 @@ function vProyeccion(){
           </div>`).join('')}
         </div></div>
       </div>
- 
+
       <div class="card">
         <div class="ch"><div><h3>Resumen del año</h3><p>${anioVisto}</p></div></div>
         <div class="cb cb-t">
@@ -1122,7 +1160,7 @@ function vProyeccion(){
         </div>
       </div>
     </div>
- 
+
     <div class="card">
       <div class="ch"><div><h3>Mes por mes</h3><p>Saldo proyectado a partir de ${MESES[+act.slice(5)-1]}</p></div></div>
       <div class="cb cb-t" style="padding-left:0;padding-right:0;padding-bottom:4px">
@@ -1135,9 +1173,9 @@ function vProyeccion(){
             <th class="r">Flujo</th>
             <th class="r">Saldo proyectado</th>
           </tr></thead>
-          <tbody>${f.map(x=>`<tr style="${x.esActual?'background:var(--sunk)':''}${x.vacio?';opacity:.45':''}">
-            <td><span class="dsc" style="font-weight:${x.esActual?'700':'550'}">${MESES[x.mes-1]}
-              ${x.esActual?'<span class="tag">hoy</span>':x.futuro?'':''}</span>
+          <tbody>${f.map(x=>`<tr onclick="mesPlan='${x.ym}';pintar()" style="cursor:pointer;${x.ym===mesPlan?'background:var(--sunk)':x.esActual?'background:var(--raise)':''}${x.vacio?';opacity:.45':''}">
+            <td><span class="dsc" style="font-weight:${x.esActual||x.ym===mesPlan?'700':'550'}">${MESES[x.mes-1]}
+              ${x.esActual?'<span class="tag">hoy</span>':''}${x.ym===mesPlan&&!x.esActual?'<span class="tag inf">viendo</span>':''}</span>
               <span class="sub2">${x.pasado?'real':x.esActual?'en curso':'proyectado'}</span></td>
             <td class="r amt ${x.ing?'pos':'mut'}">${x.ing?S0(x.ing):'—'}</td>
             <td class="r amt hide-s ${x.egr?'neg':'mut'}">${x.egr?S0(x.egr):'—'}</td>
@@ -1150,7 +1188,7 @@ function vProyeccion(){
         </table></div>
       </div>
     </div>
- 
+
     ${obligaciones().length?`<div class="card" style="margin-top:14px">
       <div class="ch"><div><h3>Calendario de pagos</h3><p>Cuándo vence cada cuota y cada tarjeta</p></div></div>
       <div class="cb cb-t" style="padding-left:0;padding-right:0;padding-bottom:4px">
@@ -1168,7 +1206,73 @@ function vProyeccion(){
       </div>
     </div>`:''}`;
 }
- 
+
+/* Panel: cómo llegaría un mes concreto */
+function panelPlan(){
+  const d=detalleMes(mesPlan);
+  const ini=saldoProyectadoInicio(mesPlan);
+  const fin=ini+d.flujo;
+  const ings=d.items.filter(i=>i.clase==='ing');
+  const sale=d.items.filter(i=>i.clase!=='ing');
+  const orig={registrado:'registrado',recurrente:'se repite',tarjeta:'tarjeta',prestamo:'cuota'};
+  const linea=i=>`<div class="lrow" style="padding:7px 0">
+      <span class="mono" style="width:52px;flex-shrink:0">${fechaCorta(i.fecha)}</span>
+      <div class="i"><b>${esc(i.concepto)}</b>
+        <span>${esc(orig[i.origen]||i.origen)}${i.detalle?' · '+esc(i.detalle):''}${i.vencido?' · vencido':''}</span></div>
+      <span class="v ${i.clase==='ing'?'pos':'neg'}">${i.clase==='ing'?'+':'−'}${S(i.monto)}</span>
+    </div>`;
+  return `<div class="card mb">
+    <div class="ch">
+      <div><h3>¿Cómo me irá en ${nombreMes(mesPlan)}?</h3>
+        <p>Todo lo previsto para ese mes, con antelación</p></div>
+      <div class="mnav">
+        <button class="nv" onclick="mesPlan=mesRelDe(mesPlan,-1);pintar()">${ic('chevL',15)}</button>
+        <button class="nv" onclick="mesPlan=mesRelDe(mesPlan,1);pintar()">${ic('chevR',15)}</button>
+      </div>
+    </div>
+    <div class="cb cb-t">
+      <div class="g" style="grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:10px;margin-bottom:16px">
+        <div class="stat" style="box-shadow:none;padding:12px 13px">
+          <div class="top" style="margin-bottom:6px"><span class="k">Llegas con</span></div>
+          <div class="v" style="font-size:20px">${S0(ini)}</div></div>
+        <div class="stat" style="box-shadow:none;padding:12px 13px">
+          <div class="top" style="margin-bottom:6px"><span class="k">Vas a recibir</span></div>
+          <div class="v pos" style="font-size:20px">${S0(d.ing)}</div></div>
+        <div class="stat" style="box-shadow:none;padding:12px 13px">
+          <div class="top" style="margin-bottom:6px"><span class="k">Vas a pagar</span></div>
+          <div class="v neg" style="font-size:20px">${S0(d.egr+d.obl)}</div></div>
+        <div class="stat ${fin>=0?'dark':''}" style="${fin<0?'border-color:var(--neg)':''};padding:12px 13px">
+          <div class="top" style="margin-bottom:6px"><span class="k">Te quedaría</span></div>
+          <div class="v" style="font-size:20px;${fin<0?'color:var(--neg)':''}">${S0(fin)}</div></div>
+      </div>
+
+      ${d.items.length?`
+      <div class="g g-2" style="gap:18px">
+        <div>
+          <div class="lab" style="margin-bottom:4px">Entra · ${S(d.ing)}</div>
+          ${ings.length?ings.map(linea).join(''):`<div class="sm" style="padding:9px 0">Nada previsto</div>`}
+        </div>
+        <div>
+          <div class="lab" style="margin-bottom:4px">Sale · ${S(d.egr+d.obl)}</div>
+          ${sale.length?sale.map(linea).join(''):`<div class="sm" style="padding:9px 0">Nada previsto</div>`}
+        </div>
+      </div>`
+      :`<div class="sm" style="padding:6px 0 12px">Aún no hay nada previsto para ${nombreMes(mesPlan)}. Agrega tus ingresos y gastos esperados para verlo.</div>`}
+
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap">
+        <button class="btn b-o b-s" onclick="planificar('Ingreso')">${ic('down',14)}<span>Sumar ingreso previsto</span></button>
+        <button class="btn b-o b-s" onclick="planificar('Egreso')">${ic('plus',14)}<span>Sumar gasto previsto</span></button>
+        ${fin<0?`<span class="sm" style="color:var(--neg);align-self:center">${ic('alert',13)} Te quedarías corto ese mes</span>`:''}
+      </div>
+    </div>
+  </div>`;
+}
+/* Registra pensando en ese mes: propone su día 1 (o hoy si es el mes en curso) */
+function planificar(tipo){
+  const f = mesPlan===mesActual() ? hoy() : mesPlan+'-01';
+  formMov(null,tipo,null,f);
+}
+
 /* ════════ TARJETAS ════════ */
 function vTarjetas(){
   const dT=deudaTarjetas(), oblT=obligacionesMes(mesActual()).filter(o=>o.clase==='tarjeta'&&o.fecha>=hoy())
@@ -1221,7 +1325,7 @@ function borrarTarjeta(id){
   DB.movimientos=DB.movimientos.filter(m=>m.medioId!==id&&m.tarjetaId!==id);
   DB.tarjetas=DB.tarjetas.filter(t=>t.id!==id); pintar(); aviso('Tarjeta eliminada');
 }
- 
+
 /* ════════ PRÉSTAMOS ════════ */
 function vPrestamos(){
   app().innerHTML=`
@@ -1259,7 +1363,7 @@ function borrarPrestamo(id){
   if(!confirm('¿Eliminar este préstamo? Los pagos ya registrados se mantienen.')) return;
   DB.prestamos=DB.prestamos.filter(p=>p.id!==id); pintar(); aviso('Préstamo eliminado');
 }
- 
+
 /* ════════ RECURRENTES ════════ */
 function vRecurrentes(){
   app().innerHTML=`
@@ -1297,7 +1401,7 @@ function borrarRec(id){
   if(!confirm('¿Eliminar este recurrente?')) return;
   DB.recurrentes=DB.recurrentes.filter(x=>x.id!==id); pintar(); aviso('Recurrente eliminado');
 }
- 
+
 /* ════════ BILLETERAS ════════ */
 function vBilleteras(){
   app().innerHTML=`
@@ -1330,7 +1434,7 @@ function borrarBilletera(id){
   DB.recurrentes=DB.recurrentes.filter(r=>r.medioId!==id);
   DB.billeteras=DB.billeteras.filter(b=>b.id!==id); pintar(); aviso('Billetera eliminada');
 }
- 
+
 /* ════════ CONFIGURACIÓN ════════ */
 function vConfig(){
   const p=DB.perfil;
@@ -1417,7 +1521,7 @@ function vConfig(){
   app().innerHTML=`<div class="snav">${tabs.map(([k,l])=>
     `<button class="${setTab===k?'on':''}" onclick="setTab='${k}';pintar()">${l}</button>`).join('')}</div>${c}`;
 }
- 
+
 function formMoneda(cod){
   const x=cod?DB.monedas.find(y=>y.cod===cod):{cod:'',nombre:'',simbolo:'',tasa:''};
   const esB=cod&&+x.tasa===1;
@@ -1445,7 +1549,7 @@ function borrarMoneda(cod){
   if(!confirm(u?`${cod} se usó en ${u} movimientos. Esos importes ya están convertidos y no cambian. ¿Eliminar la moneda?`:`¿Eliminar ${cod}?`)) return;
   DB.monedas=DB.monedas.filter(x=>x.cod!==cod); pintar(); aviso('Moneda eliminada');
 }
- 
+
 function formCategoria(id){
   const c=id?DB.categorias.find(x=>x.id===id):{tipo:'Egreso',color:PALETA[0]};
   abrir(id?'Editar categoría':'Nueva categoría',`
@@ -1476,7 +1580,7 @@ function borrarCategoria(id){
   if(!confirm(u?`"${c.nombre}" se usa en ${u} movimientos. Quedarán sin categoría. ¿Continuar?`:`¿Eliminar "${c.nombre}"?`)) return;
   DB.categorias=DB.categorias.filter(x=>x.id!==id); pintar(); aviso('Categoría eliminada');
 }
- 
+
 /* ════════ FORMULARIOS ════════ */
 let tipoSel='Egreso', movEditando=null;
 const monBase=()=>DB.monedas.find(m=>+m.tasa===1)||DB.monedas[0];
@@ -1508,7 +1612,7 @@ function opcCat(sel,tipo){
   return DB.categorias.filter(c=>c.tipo===tipo)
     .map(c=>`<option value="${esc(c.nombre)}" ${sel===c.nombre?'selected':''}>${esc(c.nombre)}</option>`).join('');
 }
-function formMov(id,tipo,medio){
+function formMov(id,tipo,medio,fechaSug){
   const m=id?DB.movimientos.find(x=>x.id===id):null;
   movEditando=m||null;
   tipoSel=m?m.tipo:(tipo||'Egreso');
@@ -1542,7 +1646,7 @@ function formMov(id,tipo,medio){
       <input id="f_desc" value="${m?esc(m.descripcion):''}" placeholder="Ej. Almuerzo, recibo de luz"></div>
     <div class="two">
       <div class="field" id="wCat"><label>Categoría</label><select id="f_cat"></select></div>
-      <div class="field"><label>Fecha</label><input id="f_fecha" type="date" value="${m?m.fecha:hoy()}"></div>
+      <div class="field"><label>Fecha</label><input id="f_fecha" type="date" value="${m?m.fecha:(fechaSug||hoy())}"></div>
     </div>`,
     ()=>{
       const bruto=+val('f_monto'); if(!bruto||bruto<=0){aviso('Escribe un importe');return false;}
@@ -1639,7 +1743,7 @@ function borrarMov(id){
     if(p&&p.pagadas>0){ p.pagadas--; p.proxima=conDia(D(p.proxima).getFullYear(),D(p.proxima).getMonth()-1,p.diaPago); } }
   DB.movimientos=DB.movimientos.filter(x=>x.id!==id); pintar(); aviso('Movimiento eliminado');
 }
- 
+
 function formBilletera(id){
   const b=id?DB.billeteras.find(x=>x.id===id):null;
   abrir(id?'Editar billetera':'Nueva billetera',`
@@ -1661,7 +1765,7 @@ function pickIco(i){
   const h=$('b_i'); if(!h) return; h.value=i;
   document.querySelectorAll('#icp button').forEach(b=>b.classList.toggle('on',b.dataset.i===i));
 }
- 
+
 function formTarjeta(id){
   const t=id?tarjeta(id):null;
   abrir(id?'Editar tarjeta':'Nueva tarjeta',`
@@ -1776,7 +1880,7 @@ function formRecurrente(id){
       pintar(); aviso(id?'Recurrente actualizado':'Recurrente creado'); return true;
     });
 }
- 
+
 /* ════════ UI ════════ */
 const val=id=>{const e=$(id);return e?e.value:'';};
 let alGuardar=null;
@@ -1807,7 +1911,7 @@ function aviso(m){
   const t=$('toast'); t.textContent=m; t.classList.add('show');
   clearTimeout(tT); tT=setTimeout(()=>t.classList.remove('show'),2200);
 }
- 
+
 /* ════════ DATOS ════════ */
 function bajar(n,c,t){
   const a=document.createElement('a');
@@ -1840,7 +1944,7 @@ function reiniciar(){
   if(!confirm('Se borrará todo y volverá al ejemplo inicial. ¿Seguro?')) return;
   DB=JSON.parse(JSON.stringify(INICIAL)); normalizar(); pintar(); aviso('Todo reiniciado');
 }
- 
+
 /* ════════ ARRANQUE ════════ */
 cargar();
 const gen=generarVencidos();
@@ -1849,6 +1953,3 @@ if(gen) setTimeout(()=>aviso(`${gen} movimiento${gen===1?'':'s'} recurrente${gen
 </script>
 </body>
 </html>
- 
-
-
