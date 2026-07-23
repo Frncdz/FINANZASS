@@ -250,6 +250,8 @@ html[data-theme="dark"] input:focus,html[data-theme="dark"] select:focus{box-sha
   background:var(--paper);color:var(--muted);display:flex;align-items:center;justify-content:center;gap:7px}
 .seg button.on-i{background:var(--pos-bg);border-color:var(--pos);color:var(--pos)}
 .seg button.on-e{background:var(--neg-bg);border-color:var(--neg);color:var(--neg)}
+.seg button.on-t{background:var(--info-bg);border-color:var(--info);color:var(--info)}
+.seg button{padding:10px 8px;font-size:13px}
 
 .ov{position:fixed;inset:0;background:rgba(20,21,19,.55);backdrop-filter:blur(2px);display:flex;
   align-items:flex-end;justify-content:center;z-index:200}
@@ -429,6 +431,7 @@ const CATS=[
   {id:'c13',nombre:'Préstamo',tipo:'Egreso',color:'#5A6169'},
   {id:'c14',nombre:'Tarjeta',tipo:'Egreso',color:'#5B5470'},
   {id:'c15',nombre:'Otros',tipo:'Egreso',color:'#75766E'},
+  {id:'c16',nombre:'Traslado',tipo:'Egreso',color:'#3C5A73'},
 ];
 const PALETA=['#1F6B4F','#3C5A73','#9E3B2C','#8A6414','#5B5470','#8C3F5C','#6B7B3A','#6E5844','#42557E','#7A5480','#A85C3C','#5A6169'];
 
@@ -507,7 +510,13 @@ const esFuturo=f=>f>hoy();
 function saldo(id){
   const b=billetera(id); if(!b) return 0;
   return DB.movimientos.reduce((t,m)=>{
-    if(m.medioId!==id||esFuturo(m.fecha)) return t;
+    if(esFuturo(m.fecha)) return t;
+    if(m.tipo==='Transferencia'){          /* sale de una, entra a otra */
+      if(m.medioId===id) return t - +m.monto;
+      if(m.destinoId===id) return t + +m.monto;
+      return t;
+    }
+    if(m.medioId!==id) return t;
     return m.tipo==='Ingreso' ? t + +m.monto : t - +m.monto;
   }, +b.saldoInicial||0);
 }
@@ -515,7 +524,10 @@ const dineroPropio=()=>DB.billeteras.reduce((t,b)=>t+saldo(b.id),0);
 /* Movimientos con fecha futura: aún no afectan tu saldo */
 const programados=()=>DB.movimientos.filter(m=>esFuturo(m.fecha));
 function netoProgramado(){
-  return programados().reduce((t,m)=> m.tipo==='Ingreso'? t + +m.monto : t - +m.monto, 0);
+  return programados().reduce((t,m)=>{
+    if(m.tipo==='Transferencia') return t;   /* no cambia tu total */
+    return m.tipo==='Ingreso' ? t + +m.monto : t - +m.monto;
+  },0);
 }
 
 function estadoTarjeta(t){
@@ -613,14 +625,15 @@ function proyeccionAnual(anio){
 }
 
 function totalesMes(ym){
-  let ing=0,egr=0,pag=0;
+  let ing=0,egr=0,pag=0,tra=0;
   for(const m of DB.movimientos){
     if(mesDe(m.fecha)!==ym) continue;
     if(m.tipo==='Ingreso') ing+=+m.monto;
     else if(m.tipo==='Pago') pag+=+m.monto;
+    else if(m.tipo==='Transferencia') tra+=+m.monto;   /* mueve, no gasta */
     else egr+=+m.monto;
   }
-  return {ing,egr,pag,neto:ing-egr};
+  return {ing,egr,pag,tra,neto:ing-egr};
 }
 function porCategoria(ym){
   const map={};
@@ -756,15 +769,16 @@ function tablaMovs(lista,acc){
       <th class="r" style="width:112px">Importe</th>
       ${acc?'<th style="width:64px"></th>':''}
     </tr></thead><tbody>${lista.map(m=>{
-      const ing=m.tipo==='Ingreso', pg=m.tipo==='Pago', fut=esFuturo(m.fecha);
-      const dst=pg?' → '+((tarjeta(m.tarjetaId)||{}).nombre||'tarjeta'):'';
+      const ing=m.tipo==='Ingreso', pg=m.tipo==='Pago', tr=m.tipo==='Transferencia', fut=esFuturo(m.fecha);
+      const dst=pg?' → '+((tarjeta(m.tarjetaId)||{}).nombre||'tarjeta')
+              :tr?' → '+esc(medioNombre(m.destinoId)):'';
       return `<tr style="${fut?'opacity:.62':''}">
         <td class="mono">${fechaCorta(m.fecha)}</td>
-        <td><span class="dsc">${esc(m.descripcion||m.categoria||'Sin descripción')}${m.recurrenteId?'<span class="tag">auto</span>':''}${pg?'<span class="tag inf">pago</span>':''}${fut?'<span class="tag inf">programado</span>':''}</span>
-          <span class="sub2">${esc(m.categoria||'')} · ${esc(medioNombre(m.medioId))}</span></td>
-        <td class="sm hide-s"><span class="cdot" style="background:${catColor(m.categoria)}"></span>${esc(m.categoria||'—')}</td>
+        <td><span class="dsc">${esc(m.descripcion||m.categoria||'Sin descripción')}${m.recurrenteId?'<span class="tag">auto</span>':''}${pg?'<span class="tag inf">pago</span>':''}${tr?'<span class="tag inf">traslado</span>':''}${fut?'<span class="tag inf">programado</span>':''}</span>
+          <span class="sub2">${esc(m.categoria||'')} · ${esc(medioNombre(m.medioId))}${dst}</span></td>
+        <td class="sm hide-s">${tr?'<span class="mut">Entre billeteras</span>':`<span class="cdot" style="background:${catColor(m.categoria)}"></span>${esc(m.categoria||'—')}`}</td>
         <td class="sm hide-s">${esc(medioNombre(m.medioId))}${dst}</td>
-        <td class="r amt ${ing?'pos':pg?'inf':'neg'}">${ing?'+':'−'}${S(m.monto)}</td>
+        <td class="r amt ${ing?'pos':(pg||tr)?'inf':'neg'}">${ing?'+':tr?'':'−'}${S(m.monto)}</td>
         ${acc?`<td><div class="acts">${pg?'':`<button class="ib" onclick="formMov('${m.id}')">${ic('pencil',14)}</button>`}
           <button class="ib" onclick="borrarMov('${m.id}')">${ic('x',14)}</button></div></td>`:''}
       </tr>`;}).join('')}</tbody></table></div>`;
@@ -1302,47 +1316,81 @@ function opcCat(sel,tipo){
 function formMov(id,tipo,medio){
   const m=id?DB.movimientos.find(x=>x.id===id):null;
   tipoSel=m?m.tipo:(tipo||'Egreso');
+  if(tipoSel==='Pago') tipoSel='Egreso';
   if(!DB.billeteras.length){ aviso('Primero crea una billetera'); return formBilletera(); }
   abrir(id?'Editar movimiento':'Nuevo movimiento',`
     <div class="seg">
       <button id="sI" onclick="setTipo('Ingreso')">${ic('down',15)}Ingreso</button>
-      <button id="sE" onclick="setTipo('Egreso')">${ic('up',15)}Egreso</button></div>
+      <button id="sE" onclick="setTipo('Egreso')">${ic('up',15)}Egreso</button>
+      <button id="sT" onclick="setTipo('Transferencia')">${ic('swap',15)}Traslado</button></div>
     <div class="field"><label>Importe</label>
       <input id="f_monto" type="number" step="0.01" inputmode="decimal" value="${m?m.monto:''}" placeholder="0.00"></div>
     <div class="field"><label id="labM">¿Con qué pagaste?</label>
       <select id="f_medio">${opcMedio(m?m.medioId:medio, tipoSel==='Ingreso')}</select>
       <div id="avT" style="display:none;font-size:12px;color:var(--info);background:var(--info-bg);padding:9px 11px;border-radius:8px">
         Con tarjeta no sale dinero de tus billeteras: sube tu deuda y la pagas en su fecha.</div></div>
+    <div class="field" id="wDest" style="display:none"><label>¿A dónde lo pasas?</label>
+      <select id="f_dest">${opcMedio(m?m.destinoId:null,false)}</select>
+      <div id="avD" style="display:none;font-size:12px;color:var(--info);background:var(--info-bg);padding:9px 11px;border-radius:8px">
+        Al elegir una tarjeta se registra como pago de esa tarjeta y baja tu deuda.</div></div>
     <div class="field"><label>Concepto</label>
       <input id="f_desc" value="${m?esc(m.descripcion):''}" placeholder="Ej. Almuerzo, recibo de luz"></div>
     <div class="two">
-      <div class="field"><label>Categoría</label><select id="f_cat"></select></div>
+      <div class="field" id="wCat"><label>Categoría</label><select id="f_cat"></select></div>
       <div class="field"><label>Fecha</label><input id="f_fecha" type="date" value="${m?m.fecha:hoy()}"></div>
     </div>`,
     ()=>{
       const mo=+val('f_monto'); if(!mo||mo<=0){aviso('Escribe un importe');return false;}
+      const org=val('f_medio');
+      if(tipoSel==='Transferencia'){
+        const dst=val('f_dest');
+        if(!dst){aviso('Elige la billetera de destino');return false;}
+        if(dst===org){aviso('El origen y el destino no pueden ser el mismo');return false;}
+        if(tarjeta(org)){aviso('Un traslado debe salir de una billetera, no de una tarjeta');return false;}
+        const t=tarjeta(dst);
+        /* Trasladar a una tarjeta ES pagarla */
+        const d = t
+          ? {fecha:val('f_fecha')||hoy(),tipo:'Pago',monto:mo,descripcion:val('f_desc')||('Pago '+t.nombre),
+             categoria:'Tarjeta',medioId:org,tarjetaId:dst}
+          : {fecha:val('f_fecha')||hoy(),tipo:'Transferencia',monto:mo,
+             descripcion:val('f_desc')||`De ${medioNombre(org)} a ${medioNombre(dst)}`,
+             categoria:'Traslado',medioId:org,destinoId:dst};
+        if(id) Object.assign(DB.movimientos.find(x=>x.id===id),{destinoId:null,tarjetaId:null},d);
+        else DB.movimientos.push({id:uid(),...d});
+        pintar(); aviso(t?'Pago de tarjeta registrado':'Traslado registrado'); return true;
+      }
       const d={fecha:val('f_fecha')||hoy(),tipo:tipoSel,monto:mo,descripcion:val('f_desc'),
-               categoria:val('f_cat'),medioId:val('f_medio')};
+               categoria:val('f_cat'),medioId:org,destinoId:null};
       if(id) Object.assign(DB.movimientos.find(x=>x.id===id),d);
       else DB.movimientos.push({id:uid(),...d});
       pintar(); aviso(id?'Movimiento actualizado':(tipoSel==='Ingreso'?'Ingreso registrado':'Gasto registrado')); return true;
     });
-  setTipo(tipoSel, m?m.categoria:null);
+  setTipo(tipoSel, m?m.categoria:null, m?(m.destinoId||m.tarjetaId):null);
 }
-function setTipo(t,catSel){
+function setTipo(t,catSel,dstSel){
   tipoSel=t;
-  const i=$('sI'), e=$('sE'); if(!i) return;
+  const i=$('sI'), e=$('sE'), tr=$('sT'); if(!i) return;
   i.className=t==='Ingreso'?'on-i':''; e.className=t==='Egreso'?'on-e':'';
-  const sel=$('f_medio'), lab=$('labM');
+  if(tr) tr.className=t==='Transferencia'?'on-t':'';
+  const esTra=t==='Transferencia';
+  const sel=$('f_medio'), lab=$('labM'), wD=$('wDest'), wC=$('wCat');
   if(sel){
     const act=sel.value;
-    lab.textContent = t==='Ingreso'?'¿A dónde entró?':'¿Con qué pagaste?';
-    sel.innerHTML=opcMedio(act, t==='Ingreso');
+    lab.textContent = t==='Ingreso'?'¿A dónde entró?':esTra?'¿De dónde sale?':'¿Con qué pagaste?';
+    sel.innerHTML=opcMedio(act, t==='Ingreso'||esTra);   /* traslado sale de billetera */
     sel.onchange=revT; revT();
   }
-  const c=$('f_cat'); if(c){ const prev=catSel||c.value; c.innerHTML=opcCat(prev,t); }
+  if(wD){
+    wD.style.display=esTra?'flex':'none';
+    const d=$('f_dest');
+    if(d&&esTra){ d.innerHTML=opcMedio(dstSel||d.value,false); d.onchange=revD; revD(); }
+  }
+  if(wC) wC.style.display=esTra?'none':'flex';
+  const c=$('f_cat'); if(c&&!esTra){ const prev=catSel||c.value; c.innerHTML=opcCat(prev,t); }
 }
-function revT(){ const s=$('f_medio'), a=$('avT'); if(s&&a) a.style.display = tarjeta(s.value)?'block':'none'; }
+function revT(){ const s=$('f_medio'), a=$('avT');
+  if(s&&a) a.style.display = (tipoSel!=='Transferencia'&&tarjeta(s.value))?'block':'none'; }
+function revD(){ const s=$('f_dest'), a=$('avD'); if(s&&a) a.style.display = tarjeta(s.value)?'block':'none'; }
 function borrarMov(id){
   if(!confirm('¿Eliminar este movimiento?')) return;
   const m=DB.movimientos.find(x=>x.id===id);
